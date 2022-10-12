@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="dara_mallas.list">
+      <field name="name">dara_mallas list</field>
+      <field name="model">dara_mallas.dara_mallas</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="dara_mallas.action_window">
+      <field name="name">dara_mallas window</field>
+      <field name="res_model">dara_mallas.dara_mallas</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="dara_mallas.action_server">
+      <field name="name">dara_mallas server</field>
+      <field name="model_id" ref="model_dara_mallas_dara_mallas"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="dara_mallas" id="dara_mallas.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="dara_mallas.menu_1" parent="dara_mallas.menu_root"/>
+    <menuitem name="Menu 2" id="dara_mallas.menu_2" parent="dara_mallas.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="dara_mallas.menu_1_list" parent="dara_mallas.menu_1"
+              action="dara_mallas.action_window"/>
+    <menuitem name="Server to list" id="dara_mallas" parent="dara_mallas.menu_2"
+              action="dara_mallas.action_server"/>
+-->
+  </data>
+</odoo>

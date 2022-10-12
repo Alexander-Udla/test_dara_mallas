@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dara_mallas_dara_mallas,dara_mallas.dara_mallas,model_dara_mallas_dara_mallas,base.group_user,1,1,1,1
