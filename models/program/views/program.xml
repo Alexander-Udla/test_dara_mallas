@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		  <!-- Anual curricular planning FORM  -->
+		
+  	    <record id="dara_mallas_program_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.program.form</field>
+                <field name="model">dara_mallas.program</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <form>
+                	<sheet>
+								<group col="2" >
+											<h1>
+											<field name="period_id"  placeholder="Periodo"/>
+											</h1>
+											
+									</group>
+								<group col="2" >
+										
+												<field name="college_id"/>
+												<field name="name"/>
+												<field name="name_en"/>
+												<field name="long_name"/> 
+												<field name="duration_type"/>
+												<field name="program_min_pga"/>
+												<field name="description"/>
+												
+												
+												<field name="code_ids">
+													<tree editable="bottom">
+														<field name="name" readonly="1" force_save="1"/>
+														<field name="type"/>		
+														<field name="journey_id"/>
+														<field name="mode_id"/>
+														<field name="saes_code_id"/>
+													
+													</tree>
+												</field>
+												
+												<field name="specializations_ids"/>
+										
+										
+								</group>
+            		    
+            		    </sheet>
+                </form>     	            	  
+                </field>
+        </record> 
+        
+        <!-- Study Field    TREE  -->
+       <record id="dara_mallas_program_tree" model="ir.ui.view">
+                <field name="name">view.dara_mallas.program.tree</field>
+                <field name="model">dara_mallas.program</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <tree>
+                	<field name="college_id"/>
+                	<field name="code_ids" widget="many2many_tags"/>
+					<field name="name"/>
+              		<field name="description"/>
+					<field name="period_id" />
+              		
+                </tree>     	            	  
+                </field>
+        </record> 
+        
+   
+		<record id="dara_mallas_program_search" model="ir.ui.view">
+                <field name="name">Program Search</field>
+                <field name="model">dara_mallas.program</field>
+                <field name="arch" type="xml">
+                	<search>
+						<field name="college_id"/>
+	                	<field name="code_ids" widget="many2many_tags"/>
+						<field name="name"/>
+	              		<field name="description"/>
+								
+					</search>				            		    	
+           </field>
+        </record> 
+
+  		<!-- Study Field  ACTION OPEN -->
+        <record id="action_open_program" model="ir.actions.act_window">
+           <field name="name">Campos de Estudio</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dara_mallas.program</field>
+            <field name="view_mode">tree,form</field> 
+            <field name="filter" eval="True"/>
+ 			<field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Administre el registro de la campos de estudio
+              </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record>
+	
+
+
+</data>
+		<menuitem id="dara_programs_tree_menu" name="Programas" parent="dara_programs_menu" sequence="1"/> 
+    <menuitem id="dara_programs" name="Programas" parent="dara_programs_tree_menu" action="action_open_program" sequence="20"/>
+</openerp>	

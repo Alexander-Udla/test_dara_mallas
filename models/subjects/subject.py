@@ -48,15 +48,22 @@ class rule_score(models.Model):
     
     name=fields.Char("Calificacion")  
 
+
+class elective_line(models.Model):
+    _name="dara_mallas.elective_line"
+     
+    period_id=fields.Many2one("dara_mallas.period")
+    subject_id=fields.Many2one("dara_mallas.subject")
+
+    elective_ids=fields.One2many("dara_mallas.elective",inverse_name="elective_line_id")
+
 class elective(models.Model):
     _name="dara_mallas.elective"
-     
-    period_id=fields.Many2one("dara_mallas.period") 
-    subject_id=fields.Many2one("dara_mallas.subject")
-    subject_code=fields.Char("Sigla", related="subject_id.code")
+   
     elective_subject_id=fields.Many2one("dara_mallas.subject")
     elective_subject_code=fields.Char("Sigla",related="elective_subject_id.code")
 
+    elective_line_id=fields.Many2one("dara_mallas.elective_line")
 
 class itinerary(models.Model):
     _name="dara_mallas.itinerary"

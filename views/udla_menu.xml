@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+	<!-- siglas -->
+	<menuitem id="dara_programs_menu" name="Programas" groups="dara_admin" sequence="1"/>
+	<menuitem id="dara_subjects_menu" name="Asignaturas" groups="dara_admin" sequence="2"/>
+
+
+
+</data>
+
+</odoo>

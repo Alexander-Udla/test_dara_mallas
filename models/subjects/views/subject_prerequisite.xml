@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		  <!-- Anual curricular planning FORM  -->
+		
+  	    <record id="dara_mallas_prerequisite_line_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.prerequisite_line.form</field>
+                <field name="model">dara_mallas.prerequisite_line</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                      <form>
+                        <sheet>
+                          <group col="2" >
+                              
+                              <field name="period_id"/>
+                              <field name="subject_id"/>
+                            
+                              
+                              
+                          </group>
+                          <notebook>
+                          <page string="Prerrequisitos ">
+                                <field name="subject_prerequisite_ids">
+                                  <tree editable="bottom">
+                                    <field name ="seq"/>
+                                    <field name="conector" widget="radio"  options="{'horizontal': true}"/>
+                                    <field name="lparen"/>
+                                    <field name="test_code"/>
+                                    <field name="test_score"/>
+                                    
+                                    <field name="prerequisite_subject_code" readonly="1"/>
+                                    <field name="prerequisite_subject_id" string="Asignatura"/>
+                                    <field name="grade_id"/>
+                                    <field name="score_id"/>
+                                    <field name ="rparen"/>
+                                    <field name="prerequsite_type"   />
+                                    <field name="prerequisite_line_id" invisible="1"/>
+                                  </tree>
+                                </field>
+                            </page>
+                      </notebook>
+                                      
+                          
+                          </sheet>
+                      </form>     	            	  
+                </field>
+        </record> 
+        
+        <!-- Study Field    TREE  -->
+       <record id="dara_mallas_prerequisite_line_tree" model="ir.ui.view">
+                <field name="name">view.dara_mallas.prerequisite_line.tree</field>
+                <field name="model">dara_mallas.prerequisite_line</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <tree>
+					
+                        <field name="period_id"/>
+                        <field name="subject_id"/>
+                        <field name="subject_prerequisite_ids" widget="many2many_tags" />
+				
+                </tree>     	            	  
+                </field>
+        </record> 
+        
+   
+
+
+  		<!-- Study Field  ACTION OPEN -->
+        <record id="action_open_prerequisite_line" model="ir.actions.act_window">
+           <field name="name">Prerequisitos Sigla</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dara_mallas.prerequisite_line</field>
+            <field name="view_mode">tree,form</field> 
+            <field name="filter" eval="True"/>
+ 			      <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Administre el registro de Prerrequisitos Sigla
+              </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record>
+	
+
+
+</data>
+
+		<menuitem id="dara_subject_prerequisite" name="Prerrequisitos" parent="dara_subjects_tree_menu" action="action_open_prerequisite_line" sequence="20"/>
+
+</openerp>	

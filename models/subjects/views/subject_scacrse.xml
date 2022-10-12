@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		  <!-- Anual curricular planning FORM  -->
+		
+  	    <record id="dara_mallas_subject_scacrse_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_scacrse.form</field>
+                <field name="model">dara_mallas.subject_scacrse</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <form>
+                	<sheet>
+                	
+                	<group>
+                	
+						<group col="2" string="Datos Generales" >
+						
+								<field name="college_id" required="1"/>
+								<field name="subject_id" required="1"/>
+	              		  	 	<field name="area_id" required="1"/>
+						</group>
+						<group col="1" string="Periodo">
+								<h1>
+								<field name="period_id" nolabel="1" placeholder="Periodo"/>
+								</h1>
+								<h1>
+								<field name="hours_validation" nolabel="1" readonly="1" force_save="1" style="color:red ! important;"  />
+								</h1>
+						</group>
+              		 </group>
+              		 
+              		  <group col="6" string='Modalidad'>
+	              		  	<field name="face_to_face"/>
+	              		  	<field name="hybrid"/>
+	              		  	<field name="online"/>
+              		  </group>
+              		  <notebook>
+              		  <page string="Componentes PRESENCIAL" attrs="{'invisible':[('face_to_face','=',False)]}" >
+              		  
+	              		  <group col="4" rowspan="2" string="Horas de docencia">
+	            		  		<field name="academic_hours" />
+	            		  		<field name="lab_practicing_hours" />
+	            		  		<field name="externship_hours" string="H. Externado" />
+	            		  		<field name="total_academic_hours" />
+
+								<field name="additional_hours_whistle" required="1" string="H. adicionales silabo"/>
+	 					  </group>
+	              		  
+	              		  <group col="4" string="Horas de Aplicacion">
+		            		  	<field name="application_hours"/>
+		            		  	<field name="practicing_hours"/>
+		            		  	<field name="community_service_hours"/>
+		            		  	<field name="lab_application_hours"/>
+	            		    	<field name="asisted_hours" readonly="1" force_save="1"/>
+	
+	            		   </group>
+	            		   
+	            		   <group string="Horas autonomas">
+	            		    	<field name="autonomus_hours" />
+	            		    	<field name="learning_organization"/>
+	            		  	</group>
+	              		               		  
+	              		  
+	              		  	<group string="Horas de Titulación">
+	            		  		<field name="tit_hours"/>
+	            		  	</group>
+	            		  	
+              		  </page>
+              		  
+              		  <page string="Componentes HIBRIDAS" attrs="{'invisible':[('hybrid','=',False)]}">
+		              	<group col="4" string="Horas de docencia">	  	
+		              		  	<field name="hybrid_academic_hours"/>
+								<field name="hybrid_virtual_academic_hours"/>
+								<field name="hybrid_lab_practicing_hours"/>
+								<field name="hybrid_externship_hours"/>
+								<field name="hybrid_total_academic_hours"/>
+
+								<field name="additional_hours_whistle" required="1" string="H. adicionales silabo"/>
+						</group>
+						<group col="4" string="Horas de Aplicación">	  	
+		                		<field name="hybrid_application_hours"/>
+								<field name="hybrid_practicing_hours"/>
+								<field name="hybrid_community_service_hours"/>
+								<field name="hybrid_lab_application_hours"/>
+								<field name="hybrid_asisted_hours"/>
+						</group>
+						<group string="Horas de Autónomas">	  	
+								<field name="hybrid_autonomus_hours"/>
+						</group>
+						<group string="Horas de titulación">								
+								<field name="hybrid_tit_hours"/>
+						</group>
+              		  
+              		  </page>
+              		  
+              		  <page string="Componentes ONLINE" attrs="{'invisible':[('online','=',False)]}">
+		              	<group col="4" string="Horas de docencia">	  	
+		              		  	<field name="online_academic_hours"/>
+						</group>
+						<group col="4" string="Horas de Aplicación">	  	
+		                		<field name="online_application_hours"/>
+								<field name="online_practicing_hours"/>
+								<field name="online_community_service_hours"/>
+								<field name="online_lab_application_hours"/>
+								<field name="online_asisted_hours"/>
+						</group>
+						<group  string="Horas de Autónomas">	  	
+								<field name="online_autonomus_hours"/>
+						</group>
+						
+						<group  string="SESIONES">								
+								<field name="online_sesions"/>
+						</group>
+                     	
+						<group  string="Horas de titulación">								
+								<field name="online_tit_hours"/>
+						</group>
+                     		  
+              		  </page>
+              		      	
+              		  <page string="Creditos / Sesiones">
+						<group col="2" string="Creditos">  	
+								<field name="teaching_credits"/>
+								<field name="lab_credits" />
+								<field name="externship_credits"/>
+								<field name="credits" string="Total Creditos" />
+								
+								
+						</group>
+						<group col="4" string="Sesiones"> 
+								<field name="teaching_sesions"/>
+								<field name="internship_hours"/>
+								<field name="lab_sesions"/>  
+								<field name="lab_weeks"/>
+								<field name="externship_sesions"/> 
+								<field name="externship_weeks"/>
+								<field name="sesions" string="Total Sesiones"/>
+						</group>
+						
+						<group string="Sesiones Online" attrs="{'invisible':[('online','=',False)]}">
+								<field name="online_sesions"/>
+						</group>
+              		  
+              		  </page>
+              		 
+              		  
+
+   
+              		  <page string="Banner">
+								<group col="4">
+									
+									<field name="uec_credit_id" required="1" string="UEC Credito"/>
+									<field name="billed_id" required="1" string="Cobrado"/>
+									<field name="status_id" required="1" string="Estado"/>
+									<field name="repeat_limit" required="1" />
+								
+								</group>
+              		  
+              		  
+              		  </page>
+              		 
+              		  </notebook>
+            		  <p></p>
+            		  
+            		  
+            		
+            		  <group col="4">
+            		  		<field name="total_hours" required="1"  />
+	            		
+            		  		
+            		  		
+            		  </group>
+            		
+            		 
+            		    
+            		    
+            		    </sheet>
+            		
+                </form>     	            	  
+                </field>
+        </record> 
+        
+        <!-- Curricular plannnig    TREE  -->
+       <record id="dara_mallas_subject_scacrse_tree" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_scacrse.tree</field>
+                <field name="model">dara_mallas.subject_scacrse</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <tree>
+            		    <field name="subject_id"/>
+            		    <field name="period_id" />
+            		    
+            		      
+            		    
+                </tree>     	            	  
+                </field>
+        </record> 
+
+        <record id="action_open_subject_scacrse" model="ir.actions.act_window">
+           <field name="name">Datos Suplementarios Sigla</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dara_mallas.subject_scacrse</field>
+            <field name="view_mode">tree,form</field> 
+            <field name="filter" eval="True"/>
+ 			<field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Administre el registro de DAtos suplementarios
+              </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record>
+        <record id="action_open_subject_scacrse" model="ir.actions.act_window">
+           <field name="name">Datos Suplementarios Sigla</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dara_mallas.subject_scacrse</field>
+            <field name="view_mode">tree,form</field> 
+            <field name="filter" eval="True"/>
+ 			<field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Administre el registro de DAtos suplementarios
+              </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record>
+
+		
+   
+	
+	</data> 	
+	
+	<menuitem id="dara_subjects_scacrse" name="Datos Suplementarios" parent="dara_subjects_tree_menu" action="action_open_subject_scacrse" sequence="30"/>
+
+
+</openerp>	

@@ -6,15 +6,16 @@ Created on Mar 18, 2019
 from odoo import fields, models
 
 class subject_scacrse(models.Model):
-    _name="dara_mallas.ssubject_scacrse"
+    _name="dara_mallas.subject_scacrse"
     
+    period_id=fields.Many2one("dara_mallas.period")
     subject_id=fields.Many2one('dara_mallas.subject')
     college_id=fields.Many2one("dara_mallas.college", string="Facultad / Escuela")
     area_id=fields.Many2one("dara_mallas.subject_department", string="Área")
     status_id=fields.Many2one("dara_mallas.subject_status","Estado")
     uec_credit_id=fields.Many2one("dara_mallas.uec_credit",'UEC o Credito')
     billed_id=fields.Many2one("dara_mallas.billed","Cobro")
-    
+    repeat_limit=fields.Integer("Limite repeticion")
 
     #======================================================
     #                      Componentes PRESENCIAL
@@ -96,6 +97,30 @@ class subject_scacrse(models.Model):
     #===========================================================================
     total_hours=fields.Integer("Horas Totales")
 
+    #===========================================================================
+    # CREDITOS    
+    #===========================================================================
+    credits=fields.Float("Total Creditos",track_visibility='always')  #TOTAL DE CREDITOS
+    teaching_credits=fields.Float("Creditos Docencia")
+    externship_credits=fields.Float("Creditos Externado")
+    lab_credits=fields.Float("Creditos laboratorios",track_visibility='always')
+    #===========================================================================
+    # SESIONES 
+    #===========================================================================
+    sesions=fields.Float("Sesiones",track_visibility='always') #TOTAL DE SESIONES
+    teaching_sesions=fields.Float("Sesiones docencia")
+    externship_sesions=fields.Float("Sesiones externado")
+    lab_sesions=fields.Float("Sesiones laboratorio")
+
+    #internado y externado
+    externship_hours=fields.Integer("Horas de externado")
+    internship_hours=fields.Integer("Horas de internado")
+    
+    #===========================================================================
+    # SEMANAS EXTERNADO Y LABORATORIO
+    #===========================================================================
+    externship_weeks=fields.Integer("Semanas Externado")
+    lab_weeks=fields.Integer("Semanas Laboratorio")
 
     #MENSAJE DE ERROR
     hours_validation=fields.Char("Validacion")

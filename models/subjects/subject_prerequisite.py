@@ -6,11 +6,11 @@ Created on Mar 18, 2019
 from odoo import fields, models
 
 class subject_prerequisite_line(models.Model):
-    _name="dara_mallas.subject_prerequisite_line"
+    _name="dara_mallas.prerequisite_line"
 
     period_id=fields.Many2one("dara_mallas.period")
     subject_id=fields.Many2one('dara_mallas.subject')
-    subject_prerequisite_ids = fields.One2many("dara_mallas.prerequisite",inverse_name="subject_prerequisite_line_id")
+    subject_prerequisite_ids = fields.One2many("dara_mallas.prerequisite",inverse_name="prerequisite_line_id")
 
 class subject_prerequisite(models.Model):
     _name="dara_mallas.prerequisite"
@@ -19,7 +19,6 @@ class subject_prerequisite(models.Model):
     
     prerequisite_subject_id=fields.Many2one("dara_mallas.subject")
     prerequisite_subject_code=fields.Char("Sigla",related="prerequisite_subject_id.code")
-    group_id=fields.Many2one("dara_mallas.group_rule")
     condition=fields.Char("Condiciones")
     conector=fields.Selection([('Y','Y'),('O','O')],"Conector")
     or_conector=fields.Boolean("O")
@@ -32,6 +31,6 @@ class subject_prerequisite(models.Model):
     seq = fields.Integer("Seq")
     prerequsite_type=fields.Selection([('malla','Malla'),('homologacion','Homologacion')],"Tipo",default='malla')
 
-    subject_prerequisite_line_id=fields.Many2one("dara_mallas.subject_prerequisite_line")
+    prerequisite_line_id=fields.Many2one("dara_mallas.prerequisite_line")
 
     

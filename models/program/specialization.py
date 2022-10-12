@@ -16,6 +16,7 @@ class specializations(models.Model):
     name=fields.Char("Especialización")
     color=fields.Char("Color")
     major_ids=fields.One2many("dara_mallas.specialization_major", inverse_name="specialization_id")
+    program_id=fields.Many2one("dara_mallas.program")
  
 class specialization_major(models.Model):
     _name="dara_mallas.specialization_major"

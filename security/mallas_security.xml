@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        
+        <record model="res.groups" id="dara_admin">
+            <field name="name">Administrar mallas</field>
+        </record>
+    
+    </data>
+</odoo>
+

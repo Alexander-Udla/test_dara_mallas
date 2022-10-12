@@ -6,7 +6,6 @@ class subject_attributes(models.Model):
     name = fields.Char("Código")
     description = fields.Char("Descripción")
 
-    @api.multi
     def name_get(self):
         res = []
         for element in self:

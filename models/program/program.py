@@ -41,7 +41,7 @@ class program(models.Model):
     program_min_pga=fields.Float("PGA minimo de programa")
     college_id=fields.Many2one("dara_mallas.college", string="Facultad / Escuela")
 
-    specializations_ids=fields.One2many("dara_mallas.specialization",inverse_name="program_id")
+    specializations_ids=fields.One2many("dara_mallas.specialization",inverse_name="program_id") 
 
     #=======================================
     #                 catalogo de programas
@@ -50,3 +50,7 @@ class program(models.Model):
     period_id=fields.Many2one("dara_mallas.period","Periodo de catálogo")
     
     
+class saes_code(models.Model):
+    _name="dara_mallas.saes_code"
+    
+    name=fields.Char("Codigo SAES")
