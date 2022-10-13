@@ -39,7 +39,10 @@
         'models/subjects/views/subject_grade.xml',
         'models/subjects/views/subject_grade_mode.xml',
         'models/subjects/views/subject_attributes.xml',
+        'models/subjects/views/subject_rule.xml',
         'models/program/views/program.xml',
+        'models/areas/views/area.xml',
+        'models/areas/views/area_homologation.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
