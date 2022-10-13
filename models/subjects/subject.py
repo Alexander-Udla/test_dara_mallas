@@ -65,11 +65,21 @@ class elective(models.Model):
 
     elective_line_id=fields.Many2one("dara_mallas.elective_line")
 
+
+class itinerary_line(models.Model):
+    _name="dara_mallas.itinerary_line"
+     
+    period_id=fields.Many2one("dara_mallas.period")
+    subject_id=fields.Many2one("dara_mallas.subject")
+
+    itinerary_ids=fields.One2many("dara_mallas.itinerary",inverse_name="itinerary_line_id")
+
 class itinerary(models.Model):
     _name="dara_mallas.itinerary"
 
-    subject_id=fields.Many2one("dara_mallas.subject")
-    subject_code=fields.Char("Sigla", related="subject_id.code")
+   
     itinerary_subject_id=fields.Many2one("dara_mallas.subject")
     itinerary_subject_code=fields.Char("Sigla",related="itinerary_subject_id.code")
     specialization_id=fields.Many2one("dara_mallas.specialization")
+
+    itinerary_line_id=fields.Many2one("dara_mallas.itinerary_line")

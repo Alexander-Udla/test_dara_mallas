@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from . import subject_prerequisite
+from . import subject_corequisite
 from . import subject
 from . import subject_scadtl
 from . import subject_scacrse
 from . import subject_name
 from . import subject_department
-from . import subject_corequisite
 from . import subject_class
 from . import subject_attributes
 from . import grade

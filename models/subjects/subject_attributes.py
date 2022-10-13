@@ -17,12 +17,20 @@ class subject_attributes(models.Model):
             res.append((element.id, name))
         return res
 
+class subject_attributes_line(models.Model):
+    _name="dara_mallas.subject_attributes_line" 
+    
+    subject_attributes_id = fields.Many2one("dara_mallas.subject_attributes")
+    subject_attributes_des = fields.Char("Descripción",related="subject_attributes_id.description")
+
+    subject_attributes_subject_id = fields.Many2one("dara_mallas.subject_attributes_subject")
 class subject_attributes_subject(models.Model):
     _name="dara_mallas.subject_attributes_subject" 
     
     subject_id=fields.Many2one("dara_mallas.subject")
-    subject_attributes_id = fields.Many2one("dara_mallas.subject_attributes")
     period_id=fields.Many2one("dara_mallas.period")
+    subject_attributes_line_ids = fields.One2many("dara_mallas.subject_attributes_line",inverse_name="subject_attributes_subject_id")
+
 
 
  

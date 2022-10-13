@@ -34,6 +34,11 @@
         'models/subjects/views/subject_scadtl.xml',
         'models/subjects/views/subject_prerequisite.xml',
         'models/subjects/views/subject_elective.xml',
+        'models/subjects/views/subject_itinerary.xml',
+        'models/subjects/views/subject_corequisite.xml',
+        'models/subjects/views/subject_grade.xml',
+        'models/subjects/views/subject_grade_mode.xml',
+        'models/subjects/views/subject_attributes.xml',
         'models/program/views/program.xml',
     ],
     # only loaded in demonstration mode

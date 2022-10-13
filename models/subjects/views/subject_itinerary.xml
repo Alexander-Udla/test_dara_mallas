@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		  <!-- Anual curricular planning FORM  -->
+		
+  	    <record id="dara_mallas_itinerary_line_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.itinerary_line.form</field>
+                <field name="model">dara_mallas.itinerary_line</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <form>
+                	<sheet>
+            		    <group col="2" >
+              		  		
+              		  		<field name="subject_id"/>
+                        <field name="period_id"/>
+              		  		
+              		  		
+              		  </group>
+              	<notebook>
+                          <page string="Itinerarios">
+                                <field name="itinerary_ids">
+                                  <tree editable="bottom">
+                                    <field name ="itinerary_subject_id"/>
+                                    <field name="itinerary_subject_code"/>
+                                    <field name="specialization_id"/>
+                                    <field name="itinerary_line_id" invisible="1"/>
+                                  </tree>
+                                </field>
+                            </page>
+                      </notebook>
+						            		    
+            		    
+            		    </sheet>
+                </form>     	            	  
+                </field>
+        </record> 
+        
+        <!-- Study Field    TREE  -->
+       <record id="dara_mallas_itinerary_line_tree" model="ir.ui.view">
+                <field name="name">view.dara_mallas.itinerary_line.tree</field>
+                <field name="model">dara_mallas.itinerary_line</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <tree>
+					
+                       <field name="subject_id"/>
+                        <field name="period_id"/>
+                        <field name="itinerary_ids" widget="many2many_tags" />
+				
+                </tree>     	            	  
+                </field>
+        </record> 
+        
+   
+
+
+  		<!-- Study Field  ACTION OPEN -->
+        <record id="action_open_itinerary_line" model="ir.actions.act_window">
+           <field name="name">Itinerarios de Sigla</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dara_mallas.itinerary_line</field>
+            <field name="view_mode">tree,form</field> 
+            <field name="filter" eval="True"/>
+ 			      <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Administre el registro de Itinerarios de sigla
+              </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record>
+	
+
+
+</data>
+
+		<menuitem id="dara_itinerary_line" name="Itinerarios" parent="dara_subjects_tree_menu" action="action_open_itinerary_line" sequence="20"/>
+
+</openerp>	
