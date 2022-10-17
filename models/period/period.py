@@ -3,4 +3,5 @@ class period(models.Model):
    
     _name="dara_mallas.period"
      
-    name=fields.Char("Periodo academico")
+    name = fields.Char("Periodo academico")
+    description = fields.Char("Descripción")

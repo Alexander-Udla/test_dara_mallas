@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		  <!-- Anual curricular planning FORM  -->
+		
+  	    <record id="dara_mallas_college_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.college.form</field>
+                <field name="model">dara_mallas.college</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <form>
+                	<sheet>
+            		    <group col="2" >
+                        <field name="code"/>
+              		  		<field name="name"/>
+              		  		<field name="name_short"/>
+              		  		
+              		  		
+              		  </group>
+              	
+						            		    
+            		    
+            		    </sheet>
+                </form>     	            	  
+                </field>
+        </record> 
+        
+        <!-- Study Field    TREE  -->
+       <record id="dara_mallas_college_tree" model="ir.ui.view">
+                <field name="name">view.dara_mallas.college.tree</field>
+                <field name="model">dara_mallas.college</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <tree>
+                        <field name="code"/>
+                      <field name="name"/>
+                      <field name="name_short"/>
+				
+                </tree>     	            	  
+                </field>
+        </record> 
+        
+   
+
+
+  		<!-- Study Field  ACTION OPEN -->
+        <record id="action_open_college" model="ir.actions.act_window">
+           <field name="name">Facultad / Escuela</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dara_mallas.college</field>
+            <field name="view_mode">tree,form</field> 
+            <field name="filter" eval="True"/>
+ 			      <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Administre el registro de Facultad / Escuela
+              </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	 
+              </p>
+            </field>
+         </record>
+	
+
+
+</data>
+
+		<menuitem id="dara_colleges" name="Facultad / Escuela" parent="dara_config_menu" action="action_open_college" sequence="20"/>
+
+</openerp>	

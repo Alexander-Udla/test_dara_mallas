@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 class subject(models.Model):
    
     _name="dara_mallas.subject"
@@ -10,6 +11,21 @@ class subject(models.Model):
     code=fields.Char("Sigla", default='ccc-nnnn')
     course_number=fields.Char("Course", size=4, default="nnnn")
     subject_name_id=fields.Many2one("dara_mallas.subject_name")
+
+    @api.onchange('subject_name_id','course_number')
+    def onchange_subject_code(self):
+        subject_name="xxxx"
+        course_number="nnnn"
+        if self.subject_name_id:
+            subject_name=self.subject_name_id.code
+        if self.course_number:
+            if len(self.course_number)<4:
+                raise UserError("Course number debe tener 4 digitos")
+            course_number=self.course_number
+        
+        
+        
+        self.code=subject_name+course_number 
 
 class subject_rule(models.Model):
     _name="dara_mallas.subject_rule"

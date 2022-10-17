@@ -9,6 +9,9 @@
 	<!-- siglas -->
 	<menuitem id="dara_subjects_menu" name="Asignaturas" groups="dara_admin" sequence="3"/>
 
+	<!-- configuracion -->
+	<menuitem id="dara_config_menu" name="Configuración" groups="dara_admin" sequence="4"/>
+
 
 
 </data>
