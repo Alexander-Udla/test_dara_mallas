@@ -10,6 +10,6 @@ class subject_scadtl(models.Model):
     
     subject_id=fields.Many2one('dara_mallas.subject')
     weighing_id=fields.Many2one('dara_mallas.weighing')
-    #coordinador_id
+    coordinador_id = fields.Many2one('dara_mallas.coordinator','Coordinador')
     program_code_id = fields.Many2one('dara_mallas.program_code')
     period_id=fields.Many2one("dara_mallas.period")

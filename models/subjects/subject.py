@@ -34,13 +34,25 @@ class subject_rule(models.Model):
     subject_id=fields.Many2one("dara_mallas.subject")
     subject_homologation_ids = fields.One2many("dara_mallas.homologation",inverse_name="subject_rule_id")
 
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s - %s' % (str(rec.subject_id.code),str(rec.subject_id.name))))
+        return result
+
 class subject_rule_line(models.Model):
     _name="dara_mallas.subject_rule_line"
 
     subject_rule_id=fields.Many2one("dara_mallas.subject_rule")
     subject_rule_period=fields.Char("Periodo",related="subject_rule_id.period_id.name")
 
-    area_homologation_id=fields.Many2one("dara_mallas.area_homologation") 
+    area_homologation_id=fields.Many2one("dara_mallas.area_homologation")
+
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s - %s' % (str(rec.subject_rule_id.subject_id.code),str(rec.subject_rule_id.subject_id.name))))
+        return result
 
 
 
@@ -51,7 +63,6 @@ class homologation(models.Model):
     homologation_subject_id=fields.Many2one("dara_mallas.subject",track_visibility='always')
     homologation_subject_code=fields.Char("Sigla",related="homologation_subject_id.code",track_visibility='always')
     subject_rule_rule_id = fields.Many2one("dara_mallas.subject_rule",track_visibility='always')
-    subject_rule_id = fields.Many2one("dara_mallas.subject_rule",track_visibility='always')
     subject_attributes_id = fields.Many2one("dara_mallas.subject_attributes")
     group_id=fields.Many2one("dara_mallas.group_rule",track_visibility='always') 
     condition=fields.Char("Condiciones",track_visibility='always')
@@ -59,6 +70,18 @@ class homologation(models.Model):
     min_score=fields.Integer("Puntaje Minimo",track_visibility='always')
     max_score=fields.Integer("Puntaje maximo",track_visibility='always')
     rule_min_score_id=fields.Many2one('dara_mallas.rule_score', string="Calificacion minima")
+
+    subject_rule_id = fields.Many2one("dara_mallas.subject_rule",track_visibility='always')
+
+    def name_get(self):
+        result = []
+        for rec in self:
+            if rec.homologation_subject_id:
+                result.append((rec.id,'%s - %s' % (str(rec.homologation_subject_id.code),str(rec.homologation_subject_id.name))))
+            if rec.test:
+                result.append((rec.id,'%s' % (str(rec.test))))
+
+        return result
 
 class group_rule(models.Model):
     _name="dara_mallas.group_rule"

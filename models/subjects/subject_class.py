@@ -16,3 +16,9 @@ class subject_class_line(models.Model):
     period_id=fields.Many2one("dara_mallas.period") 
     subject_id=fields.Many2one("dara_mallas.subject") 
     subject_class_id=fields.Many2one("dara_mallas.subject_class") 
+
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s' % (str(rec.subject_class_id.name))))
+        return result

@@ -23,6 +23,12 @@ class grade_line(models.Model):
     grade_id=fields.Many2one("dara_mallas.grade")
     grade_description=fields.Char("Descripción",related="grade_id.description")
     grade_line_subject_id=fields.Many2one("dara_mallas.grade_line_subject")
+    
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s' % (str(rec.grade_id.name))))
+        return result
 class grade_line_subject(models.Model):
     _name='dara_mallas.grade_line_subject'
     
@@ -48,6 +54,12 @@ class grade_mode_line(models.Model):
     grade_mode_description=fields.Char("Descripción",related="grade_mode_id.description")
     grade_mode_line_subject_id=fields.Many2one("dara_mallas.grade_mode_line_subject")
 
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s' % (str(rec.grade_mode_id.name))))
+        return result
+
 class grade_mode_line_subject(models.Model):
     _name='dara_mallas.grade_mode_line_subject'
     
@@ -60,6 +72,12 @@ class subject_status(models.Model):
     
     name=fields.Char("Status")
     description=fields.Char("Descripcion")
+
+class banner_grade(models.Model):
+    _name="dara_mallas.banner_grade"
+    
+    code=fields.Char("Code") 
+    name=fields.Char("Descripcion")
 
 
 

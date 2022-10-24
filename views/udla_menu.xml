@@ -3,14 +3,18 @@
 <data>
 	<!-- programas -->
 	<menuitem id="dara_programs_menu" name="Programas" groups="dara_admin" sequence="1"/>
+
+	<!-- mallas -->
+	<menuitem id="dara_study_plan_menu" name="Mallas" groups="dara_admin" sequence="2"/>
+
 	<!-- areas -->
-	<menuitem id="dara_areas_menu" name="Areas" groups="dara_admin" sequence="2"/>
+	<menuitem id="dara_areas_menu" name="Areas" groups="dara_admin" sequence="3"/>
 
 	<!-- siglas -->
-	<menuitem id="dara_subjects_menu" name="Asignaturas" groups="dara_admin" sequence="3"/>
+	<menuitem id="dara_subjects_menu" name="Asignaturas" groups="dara_admin" sequence="4"/>
 
 	<!-- configuracion -->
-	<menuitem id="dara_config_menu" name="Configuración" groups="dara_admin" sequence="4"/>
+	<menuitem id="dara_config_menu" name="Configuración" groups="dara_admin" sequence="5"/>
 
 
 

@@ -33,4 +33,15 @@ class subject_prerequisite(models.Model):
 
     prerequisite_line_id=fields.Many2one("dara_mallas.prerequisite_line")
 
+    def name_get(self):
+        result = []
+        for rec in self:
+            if rec.prerequisite_subject_id:
+                result.append((rec.id,'%s - %s' % (str(rec.prerequisite_subject_id.code),str(rec.prerequisite_subject_id.name))))
+            elif rec.test_code:
+                result.append((rec.id,'%s' % (str(rec.test_code))))
+            else:
+                pass
+        return result
+
     

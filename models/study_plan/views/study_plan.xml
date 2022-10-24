@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		  <!-- Anual curricular planning FORM  -->
+		
+  	    <record id="dara_mallas_study_plan_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.study_plan.form</field>
+                <field name="model">dara_mallas.study_plan</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <form>
+
+                
+                	<sheet>
+            		  <group>
+	            		  <field name="college_id"/>
+	            		  <field name="program_id" string="Programa"/>
+                    <field name="program_name_en" /> 
+	            		  <field name="program_codes_ids" widget="many2many_tags"/> 
+	            		  <h3><field name="period_id" string="Perido de la MALLA"/></h3>
+            		  </group>
+            		   <notebook>
+                                    <page string="Información General"> 
+                                          <group col="4" >
+                                                <field name="grade_id"/>
+                                                <field name="area_id"/>
+                                              <!-- <field name="sniese_program_id"/> -->
+                                                  <field name="with_students"/>
+                                                  <field name="study_plan_class_id" string="Clase de malla"/>
+                                                  <field name="banner_grade_id" string="Grado / Titulo"/>
+                                                  <field name="coordinator_id" string="Coordinador" />
+                                                  <!-- <field name="dean_id" string="Decano" readonly="1"/> -->
+                                                  <field name="hours_max" string="Horas máximas"/>
+                                                  <field name="hours_min" string="Horas mínimas"/>
+                                                  <field name="campus_id" string="Campus"/>
+                                                  <!-- <field name="subjects_qs_id" string="Subject QS"/>  -->
+                                                  <!-- <field name="subjects_th_id" string="Subject TH"/>  -->
+                                            </group>
+                                      </page>
+                                      <!-- <page string="Modalidad de Titulación"> 
+                                            <field name="graduation_mode_ids" >
+                                              <tree editable="bottom">
+                                                    <field name="graduation_mode_id"/>
+                                              </tree>
+                                            </field>
+                                      </page> -->
+                                      <!-- <page string="Requisitos de Graduacion"> 
+                                            <field name="no_course_ids" >
+                                              <tree editable="bottom">
+                                                    <field name="subject_attributes_code" readonly="1"/>
+                                                    <field name="subject_attributes_no_course_id" />
+                                                    <field name="subject_id" />
+                                              </tree>
+                                            </field>
+                                      </page> -->
+                                      <page string="Publicaciones Web"> 
+                                            <group col="2" >
+                                                <field name="mallas_web" />
+                                            </group>
+                                             
+                                      </page>
+                                     
+                              </notebook>
+              		  		<field name="study_plan_lines_ids">
+              		  			<tree editable="bottom">
+                                                <field name="line_order"/>
+              		  				<!-- <field name="level_id"/> -->
+              		  				<field name="area_homologation_code"/>
+              		  				<field name="area_homologation_id"/>
+                                                <field name="area_subject_rule_line_ids" widget="many2many_kanban"/>
+                                                           
+
+              		  				<!-- <field name="study_field_id"/> -->
+              		  				<!-- <field name="organization_unit_id"/>  -->
+              		  			</tree>
+              		  		
+              		  		</field>
+
+
+              	
+						
+            		    </sheet>
+
+                </form>     	            	  
+                </field>
+        </record> 
+
+        
+        <!-- Curricular plannnig    TREE  -->
+	    <record id="dara_mallas_study_plan_tree" model="ir.ui.view">
+	                <field name="name">view.dara_mallas.study_plan.tree</field>
+	                <field name="model">dara_mallas.study_plan</field>
+	                <field name="priority" eval="30" />
+	                <field name="arch" type="xml">
+	                <tree>
+	                	
+	            		 <field name="college_id"/>
+	            		 <field name="program_codes_ids" widget="many2many_tags"/>
+	            		
+	            		 <field name="program_id"/>
+	            		 <field name="period_id"/>
+	            		 <field name="study_plan_class_id"/>
+	              		 <field name="state"/>
+	              		 <field name="with_students"/>
+	              		 <field name="mallas_web"/>
+	              		  		
+	            		   
+	            		    
+	                </tree>     	            	  
+	                </field>
+	        </record> 
+		<record id="dara_mallas_study_plan_search" model="ir.ui.view">
+	                <field name="name">Study Plan Search</field>
+	                <field name="model">dara_mallas.study_plan</field>
+	                <field name="arch" type="xml">
+	                	<search>
+	                	  	<field name="college_id"/>
+	            		  	<field name="program_codes_ids"/>
+	              		   <field name="program_id"/>
+	            		   <field name="period_id"/>
+	            		
+	            		   <field name="state"/>
+	            		   <field name="study_plan_class_id"/>
+									
+						</search>				            		    	
+	           </field>
+	        </record> 
+
+
+
+  		<!-- Curricular plannig  ACTION OPEN -->
+        <record id="action_open_all_study_plan" model="ir.actions.act_window">
+           <field name="name">Mallas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dara_mallas.study_plan</field>
+            <field name="view_mode">tree,form</field> 
+            <field name="filter" eval="True"/>
+    		<field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Administre el registro de la planificacion curricular anual
+              </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record>
+ 		
+		</data>
+	  <menuitem id="dara_study_plan_tree_menu" name="Mallas" parent="dara_study_plan_menu" sequence="2" />
+		<menuitem id="dara_study_plans" name="Todas" parent="dara_study_plan_tree_menu" action="action_open_all_study_plan" sequence="20"/>
+
+	
+	
+
+</openerp>	

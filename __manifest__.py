@@ -41,11 +41,13 @@
         'models/subjects/views/subject_attributes.xml',
         'models/subjects/views/subject_rule.xml',
         'models/subjects/views/subject_department.xml',
+        'models/subjects/views/subject_schedule_class.xml',
         'models/program/views/program.xml',
         'models/areas/views/area.xml',
         'models/areas/views/area_homologation.xml',
         'models/period/views/period.xml',
         'models/college/views/college.xml',
+        'models/study_plan/views/study_plan.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
