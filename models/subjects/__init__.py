@@ -14,3 +14,4 @@ from . import grade
 from . import uec_billed
 from . import weighing
 from . import subject_schedule_class
+from . import subject_inherit

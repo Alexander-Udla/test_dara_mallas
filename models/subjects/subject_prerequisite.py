@@ -12,6 +12,11 @@ class subject_prerequisite_line(models.Model):
     subject_id=fields.Many2one('dara_mallas.subject')
     subject_prerequisite_ids = fields.One2many("dara_mallas.prerequisite",inverse_name="prerequisite_line_id")
 
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s - %s / %s' % (str(rec.subject_id.code),str(rec.subject_id.name),str(rec.period_id.name))))
+        return result
 class subject_prerequisite(models.Model):
     _name="dara_mallas.prerequisite"
     _order="seq" 

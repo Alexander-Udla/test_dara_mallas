@@ -30,6 +30,7 @@
         'views/views.xml',
         'views/templates.xml',
         'models/subjects/views/subject.xml',
+        'models/subjects/views/subject_inherit.xml',
         'models/subjects/views/subject_scacrse.xml',
         'models/subjects/views/subject_scadtl.xml',
         'models/subjects/views/subject_prerequisite.xml',
@@ -48,6 +49,7 @@
         'models/period/views/period.xml',
         'models/college/views/college.xml',
         'models/study_plan/views/study_plan.xml',
+        'models/study_plan/views/study_plan_line.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		  <!-- Anual curricular planning FORM  -->
+		
+  	    <record id="dara_mallas_subject_inherit_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_inherit.form</field>
+                <field name="model">dara_mallas.subject_inherit</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <form>
+                	<sheet>
+                  <group col="4" string="Asignatura" >
+              		  		
+              		  		<field name="subject_id"/>
+              		  		<field name="name"/>
+                        <field name="name_en"/>
+                        <field name="short_name"/>
+                        <field name="code"/>
+                        <field name="course_number"/>
+                        <field name="subject_name_id"/>
+              		  		
+              		  		
+              		  </group>
+                  <group>
+                  
+                	
+						<group col="2" string="Datos Generales" >
+						
+								<field name="subject_scacrse_id" />
+								<field name="scad_college_id" required="1"/>
+								<field name="scad_subject_id" required="1"/>
+	              <field name="scad_area_id" required="1"/>
+						</group>
+						<group col="1" string="Periodo">
+								<h1>
+								<field name="scad_period_id" nolabel="1" placeholder="Periodo"/>
+								</h1>
+								<h1>
+								<field name="scad_hours_validation" nolabel="1" readonly="1" force_save="1" style="color:red ! important;"  />
+								</h1>
+						</group>
+              		 </group>
+              		 
+              		  <group col="6" string='Modalidad'>
+	              		  	<field name="scad_face_to_face"/>
+	              		  	<field name="scad_hybrid"/>
+	              		  	<field name="scad_online"/>
+              		  </group>
+              		  <notebook>
+              		  <page string="Componentes PRESENCIAL" attrs="{'invisible':[('scad_face_to_face','=',False)]}" >
+              		  
+	              		  <group col="4" rowspan="2" string="Horas de docencia">
+	            		  		<field name="scad_academic_hours" />
+	            		  		<field name="scad_lab_practicing_hours" />
+	            		  		<field name="scad_externship_hours" string="H. Externado" />
+	            		  		<field name="scad_total_academic_hours" />
+
+                        <field name="scad_additional_hours_whistle" required="1" string="H. adicionales silabo"/>
+                      </group>
+	              		  
+	              		  <group col="4" string="Horas de Aplicacion">
+		            		  	<field name="scad_application_hours"/>
+		            		  	<field name="scad_practicing_hours"/>
+		            		  	<field name="scad_community_service_hours"/>
+		            		  	<field name="scad_lab_application_hours"/>
+	            		    	<field name="scad_asisted_hours" readonly="1" force_save="1"/>
+	
+	            		   </group>
+	            		   
+	            		   <group string="Horas autonomas">
+	            		    	<field name="scad_autonomus_hours" />
+	            		    	<field name="scad_learning_organization"/>
+	            		  	</group>
+	              		               		  
+	              		  
+	              		  	<group string="Horas de Titulación">
+	            		  		<field name="scad_tit_hours"/>
+	            		  	</group>
+	            		  	
+              		  </page>
+              		  
+              		  <page string="Componentes HIBRIDAS" attrs="{'invisible':[('scad_hybrid','=',False)]}">
+                          <group col="4" string="Horas de docencia">	  	
+                                <field name="scad_hybrid_academic_hours"/>
+                            <field name="scad_hybrid_virtual_academic_hours"/>
+                            <field name="scad_hybrid_lab_practicing_hours"/>
+                            <field name="scad_hybrid_externship_hours"/>
+                            <field name="scad_hybrid_total_academic_hours"/>
+
+                            <field name="scad_additional_hours_whistle" required="1" string="H. adicionales silabo"/>
+                        </group>
+                        <group col="4" string="Horas de Aplicación">	  	
+                                    <field name="scad_hybrid_application_hours"/>
+                            <field name="scad_hybrid_practicing_hours"/>
+                            <field name="scad_hybrid_community_service_hours"/>
+                            <field name="scad_hybrid_lab_application_hours"/>
+                            <field name="scad_hybrid_asisted_hours"/>
+                        </group>
+                        <group string="Horas de Autónomas">	  	
+                            <field name="scad_hybrid_autonomus_hours"/>
+                        </group>
+                        <group string="Horas de titulación">								
+                            <field name="scad_hybrid_tit_hours"/>
+                        </group>
+                          
+                    </page>
+              		  
+              		  <page string="Componentes ONLINE" attrs="{'invisible':[('scad_online','=',False)]}">
+                            <group col="4" string="Horas de docencia">	  	
+                                <field name="scad_online_academic_hours"/>
+                            </group>
+                            <group col="4" string="Horas de Aplicación">	  	
+                                        <field name="scad_online_application_hours"/>
+                                <field name="scad_online_practicing_hours"/>
+                                <field name="scad_online_community_service_hours"/>
+                                <field name="scad_online_lab_application_hours"/>
+                                <field name="scad_online_asisted_hours"/>
+                            </group>
+                            <group  string="Horas de Autónomas">	  	
+                                <field name="scad_online_autonomus_hours"/>
+                            </group>
+                            
+                            <group  string="SESIONES">								
+                                <field name="scad_online_sesions"/>
+                            </group>
+                                      
+                            <group  string="Horas de titulación">								
+                                <field name="scad_online_tit_hours"/>
+                            </group>
+                     		  
+              		  </page>
+              		      	
+              		  <page string="Creditos / Sesiones">
+                      <group col="2" string="Creditos">  	
+                          <field name="scad_teaching_credits"/>
+                          <field name="scad_lab_credits" />
+                          <field name="scad_externship_credits"/>
+                          <field name="scad_credits" string="Total Creditos" />
+                          
+                          
+                      </group>
+                      <group col="4" string="Sesiones"> 
+                          <field name="scad_teaching_sesions"/>
+                          <field name="scad_internship_hours"/>
+                          <field name="scad_lab_sesions"/>  
+                          <field name="scad_lab_weeks"/>
+                          <field name="scad_externship_sesions"/> 
+                          <field name="scad_externship_weeks"/>
+                          <field name="scad_sesions" string="Total Sesiones"/>
+                      </group>
+                      
+                      <group string="Sesiones Online" attrs="{'invisible':[('scad_online','=',False)]}">
+                          <field name="scad_online_sesions"/>
+                      </group>
+              		  
+              		  </page>
+              		 
+              		  
+
+   
+              		  <page string="Banner">
+                            <group col="4">
+                              
+                              <field name="scad_uec_credit_id" required="1" string="UEC Credito"/>
+                              <field name="scad_billed_id" required="1" string="Cobrado"/>
+                              <field name="scad_status_id" required="1" string="Estado"/>
+                              <field name="scad_repeat_limit" required="1" />
+                            
+                            </group>
+              		  </page>
+              		  <page string="SCADTL">
+                                <group col="2" >
+                                        <field name="subject_scadtl_id"/>
+                                        <field name="scadt_subject_id"/>
+                                        <field name="scadt_weighing_id"/>
+                                        <field name="scadt_coordinador_id"/>
+                                        <field name="scadt_program_code_id"/>
+                                        <field name="scadt_period_id"/>
+                                        
+                                </group>
+              		  </page>
+              		 
+              		 
+              		  </notebook>
+            		  <p></p>
+            		  
+            		  
+            		
+            		  <group col="4">
+            		  		<field name="scad_total_hours" required="1"  />
+	            		
+            		  		
+            		  		
+            		  </group>
+                    <notebook>
+                            <page string="PREREQUISITOS">
+                                <group col="2" >
+                              
+                                    <field name="prerequisite_line_id"/>
+                                    <field name="preq_period_id"/>
+                                    <field name="preq_subject_id"/>
+                                    <field name="preq_subject_code"/>
+                                </group>
+                                <notebook>
+                                      <page string="Prerrequisitos ">
+                                            <field name="preq_subject_prerequisite_ids">
+                                              <tree editable="bottom">
+                                                <field name ="seq"/>
+                                                <field name="conector" widget="radio"  options="{'horizontal': true}"/>
+                                                <field name="lparen"/>
+                                                <field name="test_code"/>
+                                                <field name="test_score"/>
+                                                
+                                                <field name="prerequisite_subject_code" readonly="1"/>
+                                                <field name="prerequisite_subject_id" string="Asignatura"/>
+                                                <field name="grade_id"/>
+                                                <field name="score_id"/>
+                                                <field name ="rparen"/>
+                                                <field name="prerequsite_type"   />
+                                                <field name="prerequisite_line_id" invisible="1"/>
+                                              </tree>
+                                            </field>
+                                        </page>
+                                </notebook>
+                            
+                            </page>
+
+
+                            <page string="CORREQUISITOS">
+                                <group col="2" >
+                              
+                                    <field name="corequisite_line_id"/>
+                                    <field name="core_period_id"/>
+                                    <field name="core_subject_id"/>
+                                    <field name="core_subject_code"/>
+                                </group>
+                                <notebook>
+                                      <page string="Correquisitos">
+                                            <field name="core_corequisite_ids">
+                                              <tree editable="bottom">
+                                                      <field name ="corequisite_subject_id"/>
+                                                      <field name="corequisite_subject_code"/>
+                                                      <field name="corequisite_line_id" invisible="1"/>
+                                              </tree>
+                                            </field>
+                                        </page>
+                                </notebook>
+                            
+                            </page>
+
+                            <page string="ATRIBUTOS">
+                                <group col="2" >
+                              
+                                    <field name="subject_attributes_id"/>
+                                    <field name="attr_period_id"/>
+                                    <field name="attr_subject_id"/>
+                                    <field name="attr_subject_code"/>
+                                </group>
+                                <notebook>
+                                      <page string="Atributos">
+                                            <field name="attr_subject_attributes_line_ids">
+                                              <tree editable="bottom">
+                                                      <field name ="subject_attributes_id"/>
+                                                      <field name="subject_attributes_des"/>
+                                                      <field name="subject_attributes_subject_id" invisible="1"/>
+                                              </tree>
+                                            </field>
+                                        </page>
+                                </notebook>
+                            
+                            </page>
+
+
+                            <page string="HOMOLOGACIONES">
+                                <group col="2" >
+                              
+                                    <field name="subject_rule_id"/>
+                                    <field name="homo_period_id"/>
+                                    <field name="homo_subject_id"/>
+                                    <field name="homo_subject_code"/>
+                                </group>
+                                <notebook>
+                                      <page string="Homologaciones">
+                                            <field name="homo_subject_homologation_ids">
+                                              <tree editable="bottom">
+                                                      <field name="homologation_subject_code"/>
+                                                      <field name="homologation_subject_id" string="Asignatura"/>
+                                                      <field name="subject_rule_rule_id" string="Regla"/>
+                                                      <field name="group_id"/>
+                                                      <field name="rule_min_score_id"/>
+                                                      <field name="condition"/>
+                                                      <field name="test"/>
+                                                      <field name="min_score"/>
+                                                      <field name="max_score"/>
+                                                      <field name="subject_rule_id" invisible="1"/>
+                                                      <field name="subject_attributes_id" />
+                                              </tree>
+                                            </field>
+                                        </page>
+                                </notebook>
+                            
+                            </page>
+              		  
+                    
+                            <page string="ITINERARIOS">
+                                <group col="2" >
+                              
+                                    <field name="itinerary_id"/>
+                                    <field name="itin_period_id"/>
+                                    <field name="itin_subject_id"/>
+                                    <field name="itin_subject_code"/>
+                                </group>
+                                <notebook>
+                                      <page string="Itinerarios">
+                                            <field name="itin_itinerary_ids">
+                                              <tree editable="bottom">
+                                                      <field name ="itinerary_subject_id"/>
+                                                      <field name="itinerary_subject_code"/>
+                                                      <field name="specialization_id"/>
+                                                      <field name="itinerary_line_id" invisible="1"/>
+                                              </tree>
+                                            </field>
+                                        </page>
+                                </notebook>
+                            
+                            </page>
+
+
+                            <page string="ELECTIVAS">
+                                <group col="2" >
+                              
+                                    <field name="elective_id"/>
+                                    <field name="elec_period_id"/>
+                                    <field name="elec_subject_id"/>
+                                    <field name="elec_subject_code"/>
+                                </group>
+                                <notebook>
+                                      <page string="Electivas">
+                                            <field name="elec_elective_ids">
+                                              <tree editable="bottom">
+                                                      <field name ="elective_subject_id"/>
+                                                      <field name="elective_subject_code"/>
+                                                      <field name="elective_line_id" invisible="1"/>
+                                              </tree>
+                                            </field>
+                                        </page>
+                                </notebook>
+                            
+                            </page>
+                    </notebook>
+
+
+            		 
+              	
+						            		    
+            		    
+            		    </sheet>
+                </form>     	            	  
+                </field>
+        </record> 
+        
+        <!-- Study Field    TREE  -->
+       <record id="dara_mallas_subject_inherit_tree" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_inherit.tree</field>
+                <field name="model">dara_mallas.subject_inherit</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <tree>
+					
+                        <field name="subject_scacrse_id" />
+                        <field name="scad_college_id" required="1"/>
+                        <field name="scad_subject_id" required="1"/>
+                        <field name="scad_period_id" required="1"/>
+				
+                </tree>     	            	  
+                </field>
+        </record> 
+        
+   
+
+
+  		<!-- Study Field  ACTION OPEN -->
+        <record id="action_open_subject_inherit" model="ir.actions.act_window">
+           <field name="name">Siglas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dara_mallas.subject_inherit</field>
+            <field name="view_mode">tree,form</field> 
+            <field name="filter" eval="True"/>
+ 			      <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Administre el registro de las siglas
+              </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record>
+	
+
+
+</data>
+
+    <menuitem id="dara_subject_inherits_tree_menu" name="Asignaturas Complete" parent="dara_subjects_menu" sequence="2" />
+		<menuitem id="dara_subject_inherits" name="Sigla" parent="dara_subject_inherits_tree_menu" action="action_open_subject_inherit" sequence="20"/>
+
+</openerp>	

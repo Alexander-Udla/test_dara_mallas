@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		  <!-- Anual curricular planning FORM  -->
+		
+  	    <record id="dara_mallas_study_plan_line_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.study_plan_line.form</field>
+                <field name="model">dara_mallas.study_plan_line</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <form>
+                	<sheet>
+            		  <group col="2" >
+              		  		
+              		  		<field name="line_order"/>
+                        <field name="area_homologation_id"/>
+                        <field name="area_homologation_code"/>
+                        <field name="area_subject_inherit_area_ids">
+                                                <tree >
+                                                     <field name="line_order"/>
+                                                     <field name="subject_code"/>
+                                                      <field name="subject_inherit_id"/>
+                                                      <field name="study_field_id"/>
+                                                      <field name="organization_unit_id"/>
+                                                     
+                                                </tree>
+              		  		    </field>
+              		  		
+              		  		
+              		  </group>
+              	
+						            		    
+            		    
+            		    </sheet>
+                </form>     	            	  
+                </field>
+        </record> 
+        
+       
+
+
+  	
+
+
+</data>
+
+   
+</openerp>	

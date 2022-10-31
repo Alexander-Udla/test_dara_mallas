@@ -43,8 +43,10 @@ class subject_rule(models.Model):
 class subject_rule_line(models.Model):
     _name="dara_mallas.subject_rule_line"
 
+    line_order=fields.Integer("No.")
     subject_rule_id=fields.Many2one("dara_mallas.subject_rule")
     subject_rule_period=fields.Char("Periodo",related="subject_rule_id.period_id.name")
+    name=fields.Char("Sigla",related="subject_rule_id.subject_id.code")
 
     area_homologation_id=fields.Many2one("dara_mallas.area_homologation")
 

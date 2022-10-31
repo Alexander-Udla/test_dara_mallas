@@ -19,11 +19,14 @@
               		  		
               		  </group>
               	<notebook>
-                          <page string="Reglas">
-                                <field name="subject_rule_line_ids">
+                          <page string="Asignaturas">
+                                <field name="subject_inherit_area_ids">
                                   <tree editable="bottom">
-                                    <field name ="subject_rule_period"/>
-                                    <field name="subject_rule_id"/>
+                                    <field name ="line_order"/>
+                                    <field name ="subject_code"/>
+                                    <field name="subject_inherit_id"/>
+                                    <field name="study_field_id"/>
+                                    <field name="organization_unit_id"/>
                                     <field name="area_homologation_id" invisible="1"/>
                                   </tree>
                                 </field>
@@ -46,7 +49,7 @@
 					
                        <field name="area_id"/>
                         <field name="period_id"/>
-                        <field name="subject_rule_line_ids" widget="many2many_tags" />
+                        <field name="subject_inherit_area_ids" widget="many2many_tags" />
 				
                 </tree>     	            	  
                 </field>

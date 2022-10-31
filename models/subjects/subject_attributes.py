@@ -31,7 +31,11 @@ class subject_attributes_subject(models.Model):
     period_id=fields.Many2one("dara_mallas.period")
     subject_attributes_line_ids = fields.One2many("dara_mallas.subject_attributes_line",inverse_name="subject_attributes_subject_id")
 
-
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s - %s / %s' % (str(rec.subject_id.code),str(rec.subject_id.name),str(rec.period_id.name))))
+        return result
 
  
 

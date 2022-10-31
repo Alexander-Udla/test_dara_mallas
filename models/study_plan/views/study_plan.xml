@@ -62,20 +62,36 @@
                                       </page>
                                      
                               </notebook>
-              		  		<field name="study_plan_lines_ids">
-              		  			<tree editable="bottom">
-                                                <field name="line_order"/>
-              		  				<!-- <field name="level_id"/> -->
-              		  				<field name="area_homologation_code"/>
-              		  				<field name="area_homologation_id"/>
-                                                <field name="area_subject_rule_line_ids" widget="many2many_kanban"/>
-                                                           
-
-              		  				<!-- <field name="study_field_id"/> -->
-              		  				<!-- <field name="organization_unit_id"/>  -->
-              		  			</tree>
+                              <notebook>
+                                    <page string="Vista reducida"> 
+                                        <field name="study_plan_lines_simple_ids">
+                                                <tree delete="false" create="false" edit="false">
+                                                     <field name="period_id"/>
+                                                      <field name="area_id"/>
+                                                      <field name="period_subject_id"/>
+                                                      <field name="subject_id" />
+                                                </tree>
+              		  		      </field>
+                                      </page>
+                                     
+                                      <page string="Vista General"> 
+                                          <field name="study_plan_lines_ids" >
+                                                <tree editable="bottom">
+                                                      <field name="line_order"/>
+                                                      <!-- <field name="level_id"/> -->
+                                                      <field name="area_homologation_code"/>
+                                                      <field name="area_homologation_id"/>
+                                                      <field name="area_subject_inherit_area_ids" widget="many2many_tags"/>
+                                                            
+                                                      <!-- <field name="study_field_id"/> -->
+                                                      <!-- <field name="organization_unit_id"/>  -->
+                                                </tree>
+              		  		      </field>
+                                             
+                                      </page>
+                                     
+                              </notebook>
               		  		
-              		  		</field>
 
 
               	

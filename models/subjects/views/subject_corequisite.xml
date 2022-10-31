@@ -19,7 +19,7 @@
               		  		
               		  </group>
               	<notebook>
-                          <page string="Itinerarios">
+                          <page string="Correquisitos">
                                 <field name="corequisite_ids">
                                   <tree editable="bottom">
                                     <field name ="corequisite_subject_id"/>

@@ -5,7 +5,7 @@ Created on Mar 13, 2019
 '''
 
 from odoo import models, fields,api
-
+from lxml import etree
 import logging
 
 
@@ -38,6 +38,8 @@ class study_plan(models.Model):
     #plo_ids=fields.One2many("dara_mallas.plo",inverse_name='study_plan_id') 
     
     study_plan_lines_ids=fields.One2many("dara_mallas.study_plan_line",inverse_name="study_plan_id")
+    study_plan_lines_simple_ids=fields.One2many("dara_mallas.study_plan_line_simple",inverse_name="study_plan_id")
+    
     state=fields.Selection((('borrador','Borrador'),('vigente','Vigente'),('registro','NO vigente')), string="Estado")
     file=fields.Binary("Archivo")
     file_name=fields.Char("nombre de archivo")
@@ -87,8 +89,24 @@ class study_plan(models.Model):
             result.append((rec.id,'%s - %s' % (str(rec.program_id.name),str(rec.period_id.name))))
         return result
       
+    
 
-   
+    @api.onchange('study_plan_lines_ids') 
+    def onchange_study_plan_lines_ids(self):
+        self.write({
+                                        'study_plan_lines_simple_ids':[(6, 0, [])]
+                    })
+        for item in self.study_plan_lines_ids:
+            for item_two in item.area_subject_inherit_area_ids:
+                self.write({
+                                        'study_plan_lines_simple_ids':[(0,0,{ 
+                                                    'subject_id':item_two.subject_id.id,
+                                                    'period_subject_id':item_two.subject_scarse_period_id.id,
+                                                    'period_id':item.area_homologation_id.period_id.id,
+                                                    'area_id':item.area_homologation_id.area_id.id
+                                                    })]
+                                    })
+
  
 
 
@@ -99,7 +117,7 @@ class study_plan_line(models.Model):
     line_order=fields.Integer("No.")
     area_homologation_id=fields.Many2one("dara_mallas.area_homologation", string="Areas")
     area_homologation_code=fields.Char("Codigo Area",related="area_homologation_id.area_id.code")
-    area_subject_rule_line_ids=fields.One2many(related="area_homologation_id.subject_rule_line_ids")
+    area_subject_inherit_area_ids=fields.One2many(related="area_homologation_id.subject_inherit_area_ids")
     #level_id=fields.Many2one("dara_mallas.level")
     #study_field_id=fields.Many2one("dara_mallas.study_field")
     #study_field_order_number=fields.Integer("Orden para malla",related="study_field_id.number", store=True)
@@ -109,7 +127,17 @@ class study_plan_line(models.Model):
     #organization_unit_id=fields.Many2one("dara_mallas.organization_unit") 
     #period_id=fields.Many2one("dara_mallas.period")
     
-   
+class study_plan_line_simple(models.Model):
+    _name = "dara_mallas.study_plan_line_simple"
+
+    period_id=fields.Many2one("dara_mallas.period")
+    area_id=fields.Many2one("dara_mallas.area")
+    period_subject_id=fields.Many2one("dara_mallas.period")
+    subject_id=fields.Many2one("dara_mallas.subject")
+
+    study_plan_id=fields.Many2one("dara_mallas.study_plan")
+
+
    
 class level(models.Model):
     _name="dara_mallas.level"
