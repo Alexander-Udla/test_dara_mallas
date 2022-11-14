@@ -25,6 +25,7 @@
 												<field name="long_name"/> 
 												<field name="duration_type"/>
 												<field name="program_min_pga"/>
+												<field name="program_min_cali"/>
 												<field name="description"/>
 												
 												

@@ -54,13 +54,27 @@
                 <field name="priority" eval="25" />
                 <field name="arch" type="xml">
                 <tree>
-					
-                        <field name="period_id"/>
+                        <field name="subject_code"/>
                         <field name="subject_id"/>
+                        <field name="period_id"/>
                         <field name="subject_prerequisite_ids" widget="many2many_tags" />
 				
                 </tree>     	            	  
                 </field>
+        </record> 
+
+        <!-- search -->
+
+         <record id="udla_mallas_subject_prerequisitos_search" model="ir.ui.view">
+                <field name="name">Subject Prerrequisitos</field>
+                <field name="model">dara_mallas.prerequisite_line</field>
+                <field name="arch" type="xml">
+                	<search>
+                        <field name="subject_code"/>
+                        <field name="subject_id"/>
+                        <field name="period_id"/>
+					        </search>				            		    	
+           </field>
         </record> 
         
    

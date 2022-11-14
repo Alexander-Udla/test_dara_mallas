@@ -32,9 +32,16 @@ class grade_line(models.Model):
 class grade_line_subject(models.Model):
     _name='dara_mallas.grade_line_subject'
     
-    period_id=fields.Many2one("dara_mallas.period")
-    subject_id=fields.Many2one('dara_mallas.subject')
-    grade_line_ids=fields.One2many("dara_mallas.grade_line",inverse_name="grade_line_subject_id")
+    period_id=fields.Many2one("dara_mallas.period",'Periodo')
+    subject_id=fields.Many2one('dara_mallas.subject','Asignatura')
+    subject_code=fields.Char(related="subject_id.code")
+    grade_line_ids=fields.One2many("dara_mallas.grade_line",inverse_name="grade_line_subject_id",string="Nivel")
+
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s - %s' % (str(rec.subject_id.code),str(rec.subject_id.name))))
+        return result
 #===============================================================================
 # El siguiente modelo contiene  el modo de calificacion 
 # S. Standard  
@@ -63,9 +70,10 @@ class grade_mode_line(models.Model):
 class grade_mode_line_subject(models.Model):
     _name='dara_mallas.grade_mode_line_subject'
     
-    grade_mode_line_ids=fields.One2many("dara_mallas.grade_mode_line",inverse_name="grade_mode_line_subject_id")
-    subject_id=fields.Many2one('dara_mallas.subject')
-    period_id=fields.Many2one("dara_mallas.period")
+    grade_mode_line_ids=fields.One2many("dara_mallas.grade_mode_line",inverse_name="grade_mode_line_subject_id",string="Tipo Calificación")
+    subject_id=fields.Many2one('dara_mallas.subject','Asignatura')
+    subject_code=fields.Char(related="subject_id.code")
+    period_id=fields.Many2one("dara_mallas.period",'Periodo')
 
 class subject_status(models.Model):
     _name="dara_mallas.subject_status"

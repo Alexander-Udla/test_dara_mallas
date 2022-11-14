@@ -11,6 +11,8 @@ class subject(models.Model):
     code=fields.Char("Sigla", default='ccc-nnnn')
     course_number=fields.Char("Course", size=4, default="nnnn")
     subject_name_id=fields.Many2one("dara_mallas.subject_name")
+      
+    subject_class_ids = fields.One2many("dara_mallas.subject_class",inverse_name="subject_id")
 
     @api.onchange('subject_name_id','course_number')
     def onchange_subject_code(self):
@@ -32,7 +34,9 @@ class subject_rule(models.Model):
 
     period_id=fields.Many2one("dara_mallas.period")
     subject_id=fields.Many2one("dara_mallas.subject")
-    subject_homologation_ids = fields.One2many("dara_mallas.homologation",inverse_name="subject_rule_id")
+    subject_code=fields.Char(related="subject_id.code")
+    area_id=fields.Many2one("dara_mallas.area") 
+    subject_homologation_ids = fields.One2many("dara_mallas.homologation",inverse_name="subject_rule_id",string="Homologaciones")
 
     def name_get(self):
         result = []
@@ -80,7 +84,7 @@ class homologation(models.Model):
         for rec in self:
             if rec.homologation_subject_id:
                 result.append((rec.id,'%s - %s' % (str(rec.homologation_subject_id.code),str(rec.homologation_subject_id.name))))
-            if rec.test:
+            elif rec.test:
                 result.append((rec.id,'%s' % (str(rec.test))))
 
         return result

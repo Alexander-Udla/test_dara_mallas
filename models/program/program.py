@@ -28,7 +28,7 @@ class program_code(models.Model):
         journey=self.journey_id.code or ""
         mode=self.mode_id.code or ""
         saes_code=self.saes_code_id.name or ""
-        self.name=type+journey+mode+saes_code 
+        self.name=type+journey+mode+saes_code  
 
 class program(models.Model):
     _name="dara_mallas.program"
@@ -39,6 +39,7 @@ class program(models.Model):
     code_ids=fields.One2many("dara_mallas.program_code", inverse_name="program_id")
     description=fields.Char("Descripcion")
     program_min_pga=fields.Float("PGA minimo de programa")
+    program_min_cali=fields.Float("Calificación minima del curso")
     college_id=fields.Many2one("dara_mallas.college", string="Facultad / Escuela")
 
     specializations_ids=fields.One2many("dara_mallas.specialization",inverse_name="program_id") 

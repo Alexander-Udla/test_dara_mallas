@@ -52,8 +52,8 @@ class study_plan(models.Model):
     homologation_file=fields.Binary("Archivo")
     homologation_file_name=fields.Char("nombre de archivo")
     
-    #sniese_program_id=fields.Many2one("dara_mallas.sniese_program")
-    #redesign_code_id=fields.Many2one("dara_mallas.sniese_program" , string="Código de Rediseño")
+    sniese_program_id=fields.Many2one("dara_mallas.sniese_program")
+    redesign_code_id=fields.Many2one("dara_mallas.sniese_program" , string="Código de Rediseño")
 
     campus_id = fields.Many2one("dara_mallas.campus")
 
@@ -117,7 +117,7 @@ class study_plan_line(models.Model):
     line_order=fields.Integer("No.")
     area_homologation_id=fields.Many2one("dara_mallas.area_homologation", string="Areas")
     area_homologation_code=fields.Char("Codigo Area",related="area_homologation_id.area_id.code")
-    area_subject_inherit_area_ids=fields.One2many(related="area_homologation_id.subject_inherit_area_ids")
+    area_subject_inherit_area_ids=fields.One2many(related="area_homologation_id.subject_inherit_area_ids") 
     #level_id=fields.Many2one("dara_mallas.level")
     #study_field_id=fields.Many2one("dara_mallas.study_field")
     #study_field_order_number=fields.Integer("Orden para malla",related="study_field_id.number", store=True)
@@ -134,8 +134,9 @@ class study_plan_line_simple(models.Model):
     area_id=fields.Many2one("dara_mallas.area")
     period_subject_id=fields.Many2one("dara_mallas.period")
     subject_id=fields.Many2one("dara_mallas.subject")
-
-    study_plan_id=fields.Many2one("dara_mallas.study_plan")
+    subject_code=fields.Char(related="subject_id.code")
+ 
+    study_plan_id=fields.Many2one("dara_mallas.study_plan") 
 
 
    

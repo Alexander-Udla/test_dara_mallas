@@ -166,11 +166,7 @@ class subject_inherit(models.Model):
     core_corequisite_ids = fields.One2many(related="corequisite_line_id.corequisite_ids")
 
     #reglas de homologacion
-    subject_rule_id=fields.Many2one("dara_mallas.subject_rule")
-    homo_period_id=fields.Many2one(related="subject_rule_id.period_id")
-    homo_subject_id=fields.Many2one(related='subject_rule_id.subject_id')
-    homo_subject_code=fields.Char(related='subject_rule_id.subject_id.code')
-    homo_subject_homologation_ids = fields.One2many(related="subject_rule_id.subject_homologation_ids")
+    subject_inherit_homologation_ids = fields.One2many("dara_mallas.subject_inherit_homologation",inverse_name ="subject_inherit_id")
 
     #itinerarios
     itinerary_id=fields.Many2one("dara_mallas.itinerary_line")
@@ -201,7 +197,7 @@ class subject_inherit(models.Model):
     def name_get(self):
         result = []
         for rec in self:
-            result.append((rec.id,'%s - %s / %s' % (str(rec.scad_subject_id.code),str(rec.scad_subject_id.name),str(rec.scad_period_id.name))))
+            result.append((rec.id,'%s - %s ' % (str(rec.subject_id.code),str(rec.subject_id.name))))
         return result
 
     
@@ -222,6 +218,25 @@ class subject_inherit_area(models.Model):
     organization_unit_id=fields.Many2one("dara_mallas.organization_unit")
     #reverse name
     area_homologation_id = fields.Many2one("dara_mallas.area_homologation")
+
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s - %s' % (str(rec.subject_code),str(rec.subject_name))))
+        return result
+class subject_inherit_homologation(models.Model):
+    _name="dara_mallas.subject_inherit_homologation"
+
+
+    subject_rule_id=fields.Many2one("dara_mallas.subject_rule")
+    homo_period_id=fields.Many2one(related="subject_rule_id.period_id")
+    homo_subject_id=fields.Many2one(related='subject_rule_id.subject_id')
+    homo_subject_code=fields.Char(related='subject_rule_id.subject_id.code')
+    homo_area_id=fields.Many2one(related='subject_rule_id.area_id')
+    homo_subject_homologation_ids = fields.One2many(related="subject_rule_id.subject_homologation_ids")
+
+    #reverse name
+    subject_inherit_id = fields.Many2one("dara_mallas.subject_inherit")
 
 
 

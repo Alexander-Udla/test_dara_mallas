@@ -274,28 +274,22 @@
 
 
                             <page string="HOMOLOGACIONES">
-                                <group col="2" >
+                                <!-- <group col="2" >
                               
                                     <field name="subject_rule_id"/>
                                     <field name="homo_period_id"/>
                                     <field name="homo_subject_id"/>
                                     <field name="homo_subject_code"/>
-                                </group>
+                                </group> -->
                                 <notebook>
                                       <page string="Homologaciones">
-                                            <field name="homo_subject_homologation_ids">
+                                            <field name="subject_inherit_homologation_ids">
                                               <tree editable="bottom">
-                                                      <field name="homologation_subject_code"/>
-                                                      <field name="homologation_subject_id" string="Asignatura"/>
-                                                      <field name="subject_rule_rule_id" string="Regla"/>
-                                                      <field name="group_id"/>
-                                                      <field name="rule_min_score_id"/>
-                                                      <field name="condition"/>
-                                                      <field name="test"/>
-                                                      <field name="min_score"/>
-                                                      <field name="max_score"/>
-                                                      <field name="subject_rule_id" invisible="1"/>
-                                                      <field name="subject_attributes_id" />
+                                                      <field name="homo_area_id"/>
+                                                      <field name="homo_period_id"/>
+                                                      <field name="homo_subject_homologation_ids" widget="many2many_tags"/>
+                                                      
+                                                      <field name="subject_inherit_id" invisible="1"/>
                                               </tree>
                                             </field>
                                         </page>
@@ -369,15 +363,31 @@
                 <field name="arch" type="xml">
                 <tree>
 					
-                        <field name="subject_scacrse_id" />
-                        <field name="scad_college_id" required="1"/>
-                        <field name="scad_subject_id" required="1"/>
-                        <field name="scad_period_id" required="1"/>
+                        <field name="code" />
+                        <field name="subject_id" string="Asignatura"/>
+                        <!-- <field name="subject_scacrse_id" /> -->
+                        <field name="scad_college_id" />
+                        <field name="scad_subject_id" />
+                        <field name="scad_period_id" />
 				
                 </tree>     	            	  
                 </field>
         </record> 
         
+
+         <!-- search -->
+
+         <record id="udla_mallas_subject_inherit_search" model="ir.ui.view">
+                <field name="name">Asignatura</field>
+                <field name="model">dara_mallas.subject_inherit</field>
+                <field name="arch" type="xml">
+                	<search>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="scad_period_id" />
+					        </search>				            		    	
+           </field>
+        </record> 
    
 
 

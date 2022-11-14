@@ -8,9 +8,10 @@ from odoo import fields, models
 class subject_prerequisite_line(models.Model):
     _name="dara_mallas.prerequisite_line"
 
-    period_id=fields.Many2one("dara_mallas.period")
-    subject_id=fields.Many2one('dara_mallas.subject')
-    subject_prerequisite_ids = fields.One2many("dara_mallas.prerequisite",inverse_name="prerequisite_line_id")
+    period_id=fields.Many2one("dara_mallas.period",'Periodo')
+    subject_id=fields.Many2one('dara_mallas.subject','Asignatura')
+    subject_code=fields.Char(related="subject_id.code")
+    subject_prerequisite_ids = fields.One2many("dara_mallas.prerequisite",inverse_name="prerequisite_line_id",string="Prerrequisitos")
 
     def name_get(self):
         result = []

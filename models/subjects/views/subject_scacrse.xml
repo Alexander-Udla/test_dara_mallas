@@ -188,6 +188,7 @@
                 <field name="priority" eval="25" />
                 <field name="arch" type="xml">
                 <tree>
+						<field name="subject_code"/>
             		    <field name="subject_id"/>
             		    <field name="period_id" />
             		    
@@ -195,6 +196,21 @@
             		    
                 </tree>     	            	  
                 </field>
+        </record> 
+
+
+        <!-- search -->
+
+         <record id="udla_mallas_subject_scacrse_search" model="ir.ui.view">
+                <field name="name">Datos Suplementarios</field>
+                <field name="model">dara_mallas.subject_scacrse</field>
+                <field name="arch" type="xml">
+                	<search>
+                        <field name="subject_code"/>
+                        <field name="subject_id"/>
+                        <field name="period_id"/>
+					        </search>				            		    	
+           </field>
         </record> 
 
         <record id="action_open_subject_scacrse" model="ir.actions.act_window">

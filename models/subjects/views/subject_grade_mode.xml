@@ -44,6 +44,7 @@
                 <field name="arch" type="xml">
                 <tree>
 					
+                       <field name="subject_code"/>
                        <field name="subject_id"/>
                         <field name="period_id"/>
                         <field name="grade_mode_line_ids" widget="many2many_tags" />
@@ -51,7 +52,17 @@
                 </tree>     	            	  
                 </field>
         </record> 
-        
+         <record id="udla_mallas_subject_grade_mode_search" model="ir.ui.view">
+                <field name="name">Subject Calificación</field>
+                <field name="model">dara_mallas.grade_mode_line_subject</field>
+                <field name="arch" type="xml">
+                	<search>
+                        <field name="subject_code"/>
+                        <field name="subject_id"/>
+                        <field name="period_id"/>
+					        </search>				            		    	
+           </field>
+        </record> 
    
 
 

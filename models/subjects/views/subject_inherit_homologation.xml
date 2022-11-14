@@ -4,25 +4,25 @@
 	<data>
 		  <!-- Anual curricular planning FORM  -->
 		
-  	    <record id="dara_mallas_subject_rule_form" model="ir.ui.view">
-                <field name="name">view.dara_mallas.subject_rule.form</field>
-                <field name="model">dara_mallas.subject_rule</field>
+  	    <record id="dara_mallas_subject_inherit_homologation_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_inherit_homologation.form</field>
+                <field name="model">dara_mallas.subject_inherit_homologation</field>
                 <field name="priority" eval="25" />
                 <field name="arch" type="xml">
                 <form>
                 	<sheet>
-            		    <group col="2" >
+            		    <group col="2" > 
               		  		
-              		  		<field name="subject_id"/>
-                        <field name="period_id"/>
-              		  		<field name="area_id"/>
-
+              		  		<field name="subject_rule_id"/>
+                        <field name="homo_period_id"/>
+                        <field name="homo_subject_code"/>
+                        <field name="homo_area_id"/>
               		  		
               		  		
               		  </group>
               	<notebook>
                           <page string="Homologaciones">
-                                <field name="subject_homologation_ids">
+                                <field name="homo_subject_homologation_ids">
                                   <tree editable="bottom">
                                     <field name="homologation_subject_code"/>
                                     <field name="homologation_subject_id" string="Asignatura"/>
@@ -47,60 +47,46 @@
         </record> 
         
         <!-- Study Field    TREE  -->
-       <record id="dara_mallas_subject_rule_tree" model="ir.ui.view">
-                <field name="name">view.dara_mallas.subject_rule.tree</field>
-                <field name="model">dara_mallas.subject_rule</field>
+       <!-- <record id="dara_mallas_subject_inherit_homologation_tree" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_inherit_homologation.tree</field>
+                <field name="model">dara_mallas.subject_inherit_homologation</field>
                 <field name="priority" eval="25" />
                 <field name="arch" type="xml">
                 <tree>
 					
-                       <field name="subject_code"/>
                        <field name="subject_id"/>
                         <field name="period_id"/>
-                        <field name="area_id"/>
-                        <field name="subject_homologation_ids" widget="many2many_tags" />
+                        <field name="grade_line_ids" widget="many2many_tags" />
 				
                 </tree>     	            	  
                 </field>
-        </record> 
+        </record>  -->
         
-
-          <record id="udla_mallas_subject_rule_search" model="ir.ui.view">
-                <field name="name">Homologaciones Sigla</field>
-                <field name="model">dara_mallas.subject_rule</field>
-                <field name="arch" type="xml">
-                	<search>
-                        <field name="subject_code"/>
-                        <field name="subject_id"/>
-                        <field name="period_id"/>
-					        </search>				            		    	
-           </field>
-        </record> 
    
 
 
   		<!-- Study Field  ACTION OPEN -->
-        <record id="action_open_subject_rule" model="ir.actions.act_window">
-           <field name="name">Reglas de siglas</field>
+        <!-- <record id="action_open_subject_inherit_homologation" model="ir.actions.act_window">
+           <field name="name">Nivel de Sigla</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">dara_mallas.subject_rule</field>
+            <field name="res_model">dara_mallas.subject_inherit_homologation</field>
             <field name="view_mode">tree,form</field> 
             <field name="filter" eval="True"/>
  			      <field name="help" type="html">
               <p class="oe_view_nocontent_create">
-                Administre el registro de Reglas de sigla
+                Administre el registro de Nivel de sigla
               </p><p>
                 
                 Created by Intsoltecs
                 www.intsoltec.com	
               </p>
             </field>
-         </record>
+         </record> -->
 	
 
 
 </data>
 
-		<menuitem id="dara_subject_rule" name="Reglas" parent="dara_subjects_tree_menu" action="action_open_subject_rule" sequence="20"/>
+		<!-- <menuitem id="dara_subject_inherit_homologation" name="Nivel" parent="dara_subjects_tree_menu" action="action_open_subject_inherit_homologation" sequence="20"/> -->
 
 </openerp>	

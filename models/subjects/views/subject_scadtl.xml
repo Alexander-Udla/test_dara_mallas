@@ -37,6 +37,7 @@
                 <field name="arch" type="xml">
                 <tree>
 					
+                        <field name="subject_code"/>
                         <field name="subject_id"/>
                         <field name="weighing_id"/>
                         <field name="coordinador_id"/>
@@ -67,6 +68,24 @@
               </p>
             </field>
          </record>
+
+
+         <!-- search -->
+
+         <record id="udla_mallas_subject_scadtl_search" model="ir.ui.view">
+                <field name="name">Subject Scadtl</field>
+                <field name="model">dara_mallas.subject_scadtl</field>
+                <field name="arch" type="xml">
+                	<search>
+                        <field name="subject_code"/>
+                        <field name="subject_id"/>
+                        <field name="weighing_id"/>
+                        <field name="coordinador_id"/>
+                        <field name="program_code_id"/>
+                        <field name="period_id"/>
+					        </search>				            		    	
+           </field>
+        </record> 
 	
 
 

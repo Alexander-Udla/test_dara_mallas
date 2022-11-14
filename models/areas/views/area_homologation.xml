@@ -60,14 +60,14 @@
 
   		<!-- Study Field  ACTION OPEN -->
         <record id="action_open_area_homologation" model="ir.actions.act_window">
-           <field name="name">Area Homologacion</field>
+           <field name="name">Area Periodo</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">dara_mallas.area_homologation</field>
             <field name="view_mode">tree,form</field> 
             <field name="filter" eval="True"/>
  			      <field name="help" type="html">
               <p class="oe_view_nocontent_create">
-                Administre el registro de Area Homologacion
+                Administre el registro de Area Periodo
               </p><p>
                 
                 Created by Intsoltecs
@@ -80,6 +80,6 @@
 
 </data>
 
-		<menuitem id="dara_area_homologation" name="Areas Homologacion" parent="dara_areas_tree_menu" action="action_open_area_homologation" sequence="20"/>
+		<menuitem id="dara_area_homologation" name="Areas Periodo" parent="dara_areas_tree_menu" action="action_open_area_homologation" sequence="20"/>
 
 </openerp>	

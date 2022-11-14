@@ -12,13 +12,13 @@
                 <form>
                 	<sheet>
             		  <group col="2" >
-              		  		
+                        <field name="code"/>
               		  		<field name="name"/>
                         <field name="name_en"/>
                         <field name="short_name"/>
-                        <field name="code"/>
                         <field name="course_number"/>
                         <field name="subject_name_id"/>
+                        <field name="subject_class_ids"/>
               		  		
               		  		
               		  </group>
@@ -37,16 +37,29 @@
                 <field name="priority" eval="25" />
                 <field name="arch" type="xml">
                 <tree>
-					
+                        <field name="code"/>
                         <field name="name"/>
                         <field name="name_en"/>
                         <field name="short_name"/>
-                        <field name="code"/>
                         <field name="course_number"/>
                         <field name="subject_name_id"/>
+                        <field name="subject_class_ids" widget="many2many_tags"/>
 				
                 </tree>     	            	  
                 </field>
+        </record> 
+
+        <!-- search -->
+
+        <record id="udla_mallas_subject_sigla_search" model="ir.ui.view">
+                <field name="name">Subject Search</field>
+                <field name="model">dara_mallas.subject</field>
+                <field name="arch" type="xml">
+                	<search>
+                        <field name="code"/>
+              		  		<field name="name"/>
+					        </search>				            		    	
+           </field>
         </record> 
         
    

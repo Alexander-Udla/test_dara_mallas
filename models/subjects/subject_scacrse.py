@@ -11,6 +11,7 @@ class subject_scacrse(models.Model):
     
     period_id=fields.Many2one("dara_mallas.period")
     subject_id=fields.Many2one('dara_mallas.subject')
+    subject_code=fields.Char(related="subject_id.code")
     college_id=fields.Many2one("dara_mallas.college", string="Facultad / Escuela")
     area_id=fields.Many2one("dara_mallas.subject_department", string="Área de conocimiento")
     status_id=fields.Many2one("dara_mallas.subject_status","Estado")
