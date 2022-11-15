@@ -181,6 +181,40 @@
                                         
                                 </group>
               		  </page>
+              		  <page string="Modo de Calificación">
+                                <group col="2" >
+                                        <field name="grade_mode_line_subject_id"/>
+                                        <field name="grade_mode_line_ids">
+                                              <tree editable="bottom">
+                                                      <field name ="grade_mode_description"/>
+                                              </tree>
+                                            </field>
+                                        
+                                </group>
+              		  </page>
+              		  <page string="Nivel de sigla">
+                                <group col="2" >
+                                        <field name="grade_line_subject_id"/>
+                                        <field name="grade_line_ids">
+                                              <tree editable="bottom">
+                                                      <field name ="grade_description"/>
+                                              </tree>
+                                            </field>
+                                        
+                                </group>
+              		  </page>
+              		  <page string="Tipo de Horario">
+                                <group col="2" >
+                                        <field name="schedule_class_line_subject_id"/>
+                                        <field name="schedule_class_line_period_id"/>
+                                        <field name="schedule_class_line_ids">
+                                              <tree editable="bottom">
+                                                      <field name ="schedule_class_code"/>
+                                              </tree>
+                                            </field>
+                                        
+                                </group>
+              		  </page>
               		 
               		 
               		  </notebook>

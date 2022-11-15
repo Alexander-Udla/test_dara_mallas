@@ -22,7 +22,7 @@ class subject_inherit(models.Model):
     code=fields.Char(related="subject_id.code")
     course_number=fields.Char(related="subject_id.course_number")
     subject_name_id=fields.Many2one(related="subject_id.subject_name_id")
-    
+     
     #scadtl
     subject_scadtl_id = fields.Many2one("dara_mallas.subject_scadtl")
     scadt_subject_id=fields.Many2one(related='subject_scadtl_id.subject_id')
@@ -31,6 +31,19 @@ class subject_inherit(models.Model):
     scadt_program_code_id = fields.Many2one(related='subject_scadtl_id.program_code_id')
     scadt_period_id=fields.Many2one(related="subject_scadtl_id.period_id")
     
+    #modo calificacion 
+    grade_mode_line_subject_id = fields.Many2one("dara_mallas.grade_mode_line_subject")
+    grade_mode_line_ids = fields.One2many(related="grade_mode_line_subject_id.grade_mode_line_ids")
+    
+    #nivel de sigla
+    grade_line_subject_id = fields.Many2one("dara_mallas.grade_line_subject")
+    grade_line_ids = fields.One2many(related="grade_line_subject_id.grade_line_ids")
+ 
+    #tipo de horario
+    schedule_class_line_subject_id = fields.Many2one("dara_mallas.schedule_class_line_subject")
+    schedule_class_line_ids = fields.One2many(related="schedule_class_line_subject_id.schedule_class_line_ids")
+    schedule_class_line_period_id=fields.Many2one(related="schedule_class_line_subject_id.period_id")
+
     #scacrs
     subject_scacrse_id=fields.Many2one("dara_mallas.subject_scacrse")
     scad_period_id=fields.Many2one(related="subject_scacrse_id.period_id")
@@ -219,8 +232,8 @@ class subject_inherit_area(models.Model):
     #reverse name
     area_homologation_id = fields.Many2one("dara_mallas.area_homologation")
 
-    def name_get(self):
-        result = []
+    def name_get(self): 
+        result = [] 
         for rec in self:
             result.append((rec.id,'%s - %s' % (str(rec.subject_code),str(rec.subject_name))))
         return result

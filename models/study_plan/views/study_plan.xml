@@ -94,6 +94,16 @@
                                       </page>
                                      
                               </notebook>
+                              <notebook>
+							
+							<page string="Template para BANNER"> 
+								<field name="plan_template_file" readonly="1" filename="plan_template_file_name" />
+                                                <field name="plan_template_file_name" invisible="1"/>
+                                                <button name="generate_plan_template_v2" string="Generar template v2" class="oe_right oe_highlight" type="object"/>
+							</page>
+							
+						
+						</notebook>	
               		  		
 
 
