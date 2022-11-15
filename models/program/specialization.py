@@ -17,6 +17,7 @@ class specializations(models.Model):
     color=fields.Char("Color")
     major_ids=fields.One2many("dara_mallas.specialization_major", inverse_name="specialization_id")
     program_id=fields.Many2one("dara_mallas.program")
+    code_ids=fields.One2many(related="program_id.code_ids")
     sniese_title_ids=fields.One2many("dara_mallas.title", inverse_name="specialization_id")
     saes_speciality_plan_code=fields.Char("Codigo especializacion + plan SAES")
 class specialization_major(models.Model):

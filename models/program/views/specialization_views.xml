@@ -49,12 +49,27 @@
                 <field name="priority" eval="25" />
                 <field name="arch" type="xml">
                 <tree>
-					<field name="name"/>
-
+              		<field name="code_ids" widget="many2many_tags"/>
               		<field name="program_id"/>
+					        <field name="name"/>
+
               		
                 </tree>     	            	  
                 </field>
+        </record> 
+
+          <!-- search -->
+
+         <record id="udla_mallas_specialization_search" model="ir.ui.view">
+                <field name="name">specialization</field>
+                <field name="model">dara_mallas.specialization</field>
+                <field name="arch" type="xml">
+                	<search>
+                        <field name="code_ids" />
+                        <field name="program_id" />
+                        <field name="name"/>
+					        </search>				            		    	
+           </field>
         </record> 
         
    

@@ -54,6 +54,19 @@
                 </tree>     	            	  
                 </field>
         </record> 
+
+        <!-- search -->
+
+         <record id="udla_mallas_area_homologation" model="ir.ui.view">
+                <field name="name">area_homologation</field>
+                <field name="model">dara_mallas.area_homologation</field>
+                <field name="arch" type="xml">
+                	<search>
+                        <field name="area_id"/>
+                        <field name="period_id"/>
+					        </search>				            		    	
+           </field>
+        </record> 
         
    
 

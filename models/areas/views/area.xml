@@ -41,6 +41,18 @@
                 </tree>     	            	  
                 </field>
         </record> 
+<!-- search -->
+
+         <record id="udla_mallas_area_search" model="ir.ui.view">
+                <field name="name">area</field>
+                <field name="model">dara_mallas.area</field>
+                <field name="arch" type="xml">
+                	<search>
+                         <field name="name"/>
+                        <field name="code"/>
+					        </search>				            		    	
+           </field>
+        </record> 
         
    
 
