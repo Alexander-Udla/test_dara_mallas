@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		  <!-- Anual curricular planning FORM  -->
+		
+  	    <record id="dara_mallas_subject_class_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_class.form</field>
+                <field name="model">dara_mallas.subject_class</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <form>
+                	<sheet>
+            		    <group col="2" >
+              		  		
+              		  		<field name="subject_class_id"/>
+                       <!-- <field name="subject_id"/> -->
+              		  		
+              		  		
+              		  </group>
+              	
+						            		    
+            		    
+            		    </sheet>
+                </form>     	            	  
+                </field>
+        </record> 
+        
+        <!-- Study Field    TREE  -->
+       <record id="dara_mallas_subject_class_tree" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_class.tree</field>
+                <field name="model">dara_mallas.subject_class</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <tree>
+					
+                       <field name="subject_class_id"/>
+                       <!-- <field name="subject_id"/> -->
+                </tree>     	            	  
+                </field>
+        </record> 
+
+        <!-- search -->
+<!-- 
+         <record id="udla_mallas_subject_grade_search" model="ir.ui.view">
+                <field name="name">Subject Grade</field>
+                <field name="model">dara_mallas.subject_class</field>
+                <field name="arch" type="xml">
+                	<search>
+                        <field name="subject_code"/>
+                        <field name="subject_id"/>
+                        <field name="period_id"/>
+					        </search>				            		    	
+           </field>
+        </record>  -->
+        
+   
+
+
+  		<!-- Study Field  ACTION OPEN -->
+        <!-- <record id="action_open_subject_class" model="ir.actions.act_window">
+           <field name="name">Nivel de Sigla</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dara_mallas.subject_class</field>
+            <field name="view_mode">tree,form</field> 
+            <field name="filter" eval="True"/>
+ 			      <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Administre el registro de Nivel de sigla
+              </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record> -->
+	
+
+
+</data>
+
+		<!-- <menuitem id="dara_subject_class" name="Nivel" parent="dara_subjects_tree_menu" action="action_open_subject_class" sequence="20"/> -->
+
+</openerp>	

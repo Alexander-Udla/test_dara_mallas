@@ -13,7 +13,7 @@ class subject_class(models.Model):
 class subject_class_line(models.Model):
     _name="dara_mallas.subject_class"
     
-    subject_class_id=fields.Many2one("dara_mallas.subject_class_name") 
+    subject_class_id=fields.Many2one("dara_mallas.subject_class_name",string="Clase de Sigla") 
     subject_id=fields.Many2one("dara_mallas.subject") 
 
     def name_get(self):

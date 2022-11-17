@@ -666,35 +666,45 @@ class study_plan(models.Model):
             for area_subject in line.area_subject_inherit_area_ids:
 
                 for homologations in area_subject.subject_inherit_id.subject_inherit_homologation_ids:
-                    if homologations.homo_area_id.code == line.area_homologation_code:
+                    periodo = [ 
+                    int(item.subject_rule_id.period_id.name) 
+                    if item.homo_area_id.code == line.area_homologation_code and int(item.subject_rule_id.period_id.name) <= int(self.period_id.name)
+                    else 0 
+                    for item in area_subject.subject_inherit_id.subject_inherit_homologation_ids
+                    ]
+                    if homologations.homo_area_id.code == line.area_homologation_code :
+
                             homologations_item = homologations.subject_rule_id
                             
-                            for homologation_id in homologations_item.subject_homologation_ids:
-                                ws.cell(column=1,row=row_count,value=homologations_item.period_id.name)
-                                ws.cell(column=2,row=row_count,value=str(line.area_homologation_code))
-                                ws.cell(column=3,row=row_count,value=area_subject.subject_code)
-                                ws.cell(column=4,row=row_count,value=area_subject.subject_name)
-                                ws.cell(column=5,row=row_count,value=area_subject.subject_inherit_id.scadt_coordinador_id.idbanner)
-                                ws.cell(column=6,row=row_count,value=homologation_id.condition)
-                                if homologation_id.group_id.name:
-                                    ws.cell(column=7,row=row_count,value=homologation_id.group_id.name[0:homologation_id.group_id.name.find("-")])
-                                    ws.cell(column=8,row=row_count,value=homologation_id.group_id.name[homologation_id.group_id.name.find("-")+1:len(homologation_id.group_id.name)])
-                                else:
-                                    ws.cell(column=7,row=row_count,value="")
-                                    ws.cell(column=8,row=row_count,value="")
-                                
-                                if homologation_id.homologation_subject_id:
-                                    ws.cell(column=9,row=row_count,value=homologation_id.homologation_subject_id.subject_name_id.code)
-                                    ws.cell(column=10,row=row_count,value=homologation_id.homologation_subject_id.course_number)
-                                    if homologation_id.rule_min_score_id:
-                                        ws.cell(column=11,row=row_count,value=homologation_id.rule_min_score_id.name)
-
-                                else:
+                            if int(homologations_item.period_id.name) == max(periodo):
+                                for homologation_id in homologations_item.subject_homologation_ids:
+                                    ws.cell(column=1,row=row_count,value=homologations_item.period_id.name)
+                                    ws.cell(column=2,row=row_count,value=str(line.area_homologation_code))
+                                    ws.cell(column=3,row=row_count,value=area_subject.subject_code)
+                                    ws.cell(column=4,row=row_count,value=area_subject.subject_name)
+                                    ws.cell(column=5,row=row_count,value=area_subject.subject_inherit_id.scadt_coordinador_id.idbanner)
+                                    ws.cell(column=6,row=row_count,value=homologation_id.condition)
+                                    if homologation_id.group_id.name:
+                                        ws.cell(column=7,row=row_count,value=homologation_id.group_id.name[0:homologation_id.group_id.name.find("-")])
+                                        ws.cell(column=8,row=row_count,value=homologation_id.group_id.name[homologation_id.group_id.name.find("-")+1:len(homologation_id.group_id.name)])
+                                    else:
+                                        ws.cell(column=7,row=row_count,value="")
+                                        ws.cell(column=8,row=row_count,value="")
                                     
-                                    ws.cell(column=12,row=row_count,value=homologation_id.test)
-                                    ws.cell(column=13,row=row_count,value=self.score_value(homologation_id.min_score,homologation_id.max_score))
-                                    ws.cell(column=14,row=row_count,value=homologation_id.max_score)
-                                row_count+=1
+                                    if homologation_id.homologation_subject_id:
+                                        ws.cell(column=9,row=row_count,value=homologation_id.homologation_subject_id.subject_name_id.code)
+                                        ws.cell(column=10,row=row_count,value=homologation_id.homologation_subject_id.course_number)
+                                        if homologation_id.rule_min_score_id:
+                                            ws.cell(column=11,row=row_count,value=homologation_id.rule_min_score_id.name)
+
+                                    else:
+                                        
+                                        ws.cell(column=12,row=row_count,value=homologation_id.test)
+                                        ws.cell(column=13,row=row_count,value=self.score_value(homologation_id.min_score,homologation_id.max_score))
+                                        ws.cell(column=14,row=row_count,value=homologation_id.max_score)
+                                    row_count+=1
+
+                            
     def score_value(self,min=0,max=0):
         mini = str(min)
         maxi = str(max)

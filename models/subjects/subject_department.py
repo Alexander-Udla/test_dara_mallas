@@ -10,4 +10,4 @@ class subject_department(models.Model):
     
     code = fields.Char("Codigo")
     name=fields.Char("Nombre")
-    #college_id=fields.Many2one("dara_mallas.college")
+    college_id=fields.Many2one("dara_mallas.college")

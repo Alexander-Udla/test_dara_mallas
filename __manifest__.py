@@ -30,6 +30,7 @@
         'views/views.xml',
         'views/templates.xml',
         'models/subjects/views/subject.xml',
+        'models/subjects/views/subject_class.xml',
         'models/subjects/views/subject_inherit.xml',
         'models/subjects/views/subject_scacrse.xml',
         'models/subjects/views/subject_scadtl.xml',

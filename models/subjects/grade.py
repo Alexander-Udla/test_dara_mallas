@@ -75,6 +75,12 @@ class grade_mode_line_subject(models.Model):
     subject_code=fields.Char(related="subject_id.code")
     period_id=fields.Many2one("dara_mallas.period",'Periodo')
 
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s - %s' % (str(rec.subject_id.code),str(rec.subject_id.name))))
+        return result
+
 class subject_status(models.Model):
     _name="dara_mallas.subject_status"
     

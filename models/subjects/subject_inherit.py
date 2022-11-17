@@ -32,17 +32,17 @@ class subject_inherit(models.Model):
     scadt_period_id=fields.Many2one(related="subject_scadtl_id.period_id")
     
     #modo calificacion 
-    grade_mode_line_subject_id = fields.Many2one("dara_mallas.grade_mode_line_subject")
+    grade_mode_line_subject_id = fields.Many2one("dara_mallas.grade_mode_line_subject",string="Modo de Califición")
     grade_mode_line_ids = fields.One2many(related="grade_mode_line_subject_id.grade_mode_line_ids")
     
     #nivel de sigla
-    grade_line_subject_id = fields.Many2one("dara_mallas.grade_line_subject")
+    grade_line_subject_id = fields.Many2one("dara_mallas.grade_line_subject",string="Nivel de Sigla")
     grade_line_ids = fields.One2many(related="grade_line_subject_id.grade_line_ids")
  
     #tipo de horario
-    schedule_class_line_subject_id = fields.Many2one("dara_mallas.schedule_class_line_subject")
+    schedule_class_line_subject_id = fields.Many2one("dara_mallas.schedule_class_line_subject",string="Tipo de Horario")
     schedule_class_line_ids = fields.One2many(related="schedule_class_line_subject_id.schedule_class_line_ids")
-    schedule_class_line_period_id=fields.Many2one(related="schedule_class_line_subject_id.period_id")
+    schedule_class_line_period_id=fields.Many2one(related="schedule_class_line_subject_id.period_id",string="Periodo")
 
     #scacrs
     subject_scacrse_id=fields.Many2one("dara_mallas.subject_scacrse")
@@ -239,7 +239,7 @@ class subject_inherit_area(models.Model):
         return result
 class subject_inherit_homologation(models.Model):
     _name="dara_mallas.subject_inherit_homologation"
-
+ 
 
     subject_rule_id=fields.Many2one("dara_mallas.subject_rule")
     homo_period_id=fields.Many2one(related="subject_rule_id.period_id")
