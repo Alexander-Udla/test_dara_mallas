@@ -389,11 +389,11 @@ class study_plan(models.Model):
 
         #self.merge_with_color(ws,"W1:W1", "HORARIO_SIGLA", alCenter,"2B855C")
         txt = ""
-        for schedule_class_line_id in subject_id.schedule_class_line_ids:
+        for grade_id in subject_id.grade_line_ids:
             if txt != "":
-                txt = str(txt)+","+str(schedule_class_line_id.schedule_class_id.name)
+                txt = str(txt)+","+str(grade_id.grade_id.name)
             else:
-                txt = str(schedule_class_line_id.schedule_class_id.name)
+                txt = str(grade_id.grade_id.name)
         ws.cell(column=19,row=row,value=str(txt))
         #ws.cell(column=19,row=row,value=str(subject_id.grade_id.description))
     
