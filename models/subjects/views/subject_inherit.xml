@@ -210,6 +210,7 @@
                                         <field name="schedule_class_line_ids">
                                               <tree editable="bottom">
                                                       <field name ="schedule_class_code"/>
+                                                      <field name ="schedule_class_name"/>
                                               </tree>
                                             </field>
                                         

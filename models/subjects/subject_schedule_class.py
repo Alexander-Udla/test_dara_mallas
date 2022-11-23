@@ -11,6 +11,7 @@ class schedule_class_line(models.Model):
     
     schedule_class_id=fields.Many2one("dara_mallas.schedule_class")
     schedule_class_code=fields.Char("Codigo", related="schedule_class_id.code")
+    schedule_class_name=fields.Char("Descripcion", related="schedule_class_id.name")
     default=fields.Boolean("Default")
     
     schedule_class_line_subject_id=fields.Many2one("dara_mallas.schedule_class_line_subject")
