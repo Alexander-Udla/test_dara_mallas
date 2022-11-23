@@ -93,6 +93,20 @@ class banner_grade(models.Model):
     code=fields.Char("Code") 
     name=fields.Char("Descripcion")
 
+#=======MODALIDAD DE TITULACIÓN===============================
+
+class graduation_mode(models.Model):
+    _name="dara_mallas.graduation_mode"
+    
+    graduation_mode_id = fields.Many2one("dara_mallas.graduation_mode_data")
+    study_plan_id=fields.Many2one("dara_mallas.study_plan")
+    
+class graduation_mode_data(models.Model):
+    _name="dara_mallas.graduation_mode_data"
+    
+    name=fields.Char("Modalidad de titulacion")
+    codigo=fields.Char("Código")
+
 
 
 

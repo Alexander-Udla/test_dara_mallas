@@ -45,6 +45,7 @@
         'models/subjects/views/subject_department.xml',
         'models/subjects/views/subject_schedule_class.xml',
         'models/subjects/views/subject_inherit_homologation.xml',
+        'models/subjects/views/subject_no_course.xml',
         'models/program/views/program.xml',
         'models/program/views/specialization_views.xml',
         'models/areas/views/area.xml',

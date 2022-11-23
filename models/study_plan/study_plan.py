@@ -85,7 +85,7 @@ class study_plan(models.Model):
     #dean_id = fields.Char(string="Decano",related="college_id.dean_id.name")
 
     coordinator_id = fields.Many2one("dara_mallas.coordinator")
-    #graduation_mode_ids = fields.One2many("dara_mallas.graduation_mode",inverse_name="study_plan_id")
+    graduation_mode_ids = fields.One2many("dara_mallas.graduation_mode",inverse_name="study_plan_id")
 
     #study_plan_update_id=fields.Many2one("dara_mallas.study_plan_update")
     #study_plan_exist_id=fields.Many2one("dara_mallas.study_plan_exist")
@@ -93,7 +93,7 @@ class study_plan(models.Model):
     #==============================================
     #        REQUISITOS DE GRADUACION
     #==============================================
-    #no_course_ids = fields.One2many("dara_mallas.subject_no_course",inverse_name="study_plan_id")
+    no_course_ids = fields.One2many("dara_mallas.subject_no_course",inverse_name="study_plan_id")
 
     #==============================================
     #              PUBLICACIONES
