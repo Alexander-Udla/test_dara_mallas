@@ -124,6 +124,15 @@ class subject_scacrse(models.Model):
     externship_weeks=fields.Integer("Semanas Externado")
     lab_weeks=fields.Integer("Semanas Laboratorio")
 
+    # opciones adicionales
+    itinerary=fields.Boolean("Itinerario",track_visibility='always')
+    elective=fields.Boolean("Electiva",track_visibility='always')
+    #===================================================================
+    #   para identificar las asignaturas que son requisitos de graduación
+    #==================================================================
+    is_requisite_graduation = fields.Boolean("Requisito de graduación", default=False,track_visibility='always')
+    is_web = fields.Boolean("Mostrar en Malla", default=True,track_visibility='always')
+
     #MENSAJE DE ERROR
     hours_validation=fields.Char("Validacion")
 

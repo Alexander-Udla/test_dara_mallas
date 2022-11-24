@@ -163,6 +163,16 @@ class subject_inherit(models.Model):
     #MENSAJE DE ERROR
     scad_hours_validation=fields.Char(related="subject_scacrse_id.hours_validation")
 
+    # opciones adicionales
+    itinerary=fields.Boolean(related="subject_scacrse_id.itinerary",string="Itinerario",track_visibility='always')
+    elective=fields.Boolean(related="subject_scacrse_id.elective",string="Electiva",track_visibility='always')
+    #===================================================================
+    #   para identificar las asignaturas que son requisitos de graduación
+    #==================================================================
+    is_requisite_graduation = fields.Boolean(related="subject_scacrse_id.is_requisite_graduation",string="Requisito de graduación", default=False,track_visibility='always')
+    is_web = fields.Boolean(related="subject_scacrse_id.is_web",string="Mostrar en Malla", default=True,track_visibility='always')
+
+    
     #prerequisitos
     prerequisite_line_id=fields.Many2one("dara_mallas.prerequisite_line")
     preq_period_id=fields.Many2one(related="prerequisite_line_id.period_id")

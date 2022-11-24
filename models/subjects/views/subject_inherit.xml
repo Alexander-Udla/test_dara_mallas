@@ -225,6 +225,10 @@
             		
             		  <group col="4">
             		  		<field name="scad_total_hours" required="1"  />
+            		  		<field name="itinerary"  />
+            		  		<field name="elective"  />
+            		  		<field name="is_requisite_graduation"  />
+            		  		<field name="is_web"  />
 	            		
             		  		
             		  		
