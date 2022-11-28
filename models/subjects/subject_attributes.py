@@ -31,6 +31,19 @@ class subject_attributes_subject(models.Model):
     period_id=fields.Many2one("dara_mallas.period")
     subject_attributes_line_ids = fields.One2many("dara_mallas.subject_attributes_line",inverse_name="subject_attributes_subject_id")
 
+    def copy(self,default=None):
+        new_object=super(subject_attributes_subject,self).copy(default=default)
+        objects = []
+        for item in self.subject_attributes_line_ids:
+            pre = {
+                'subject_attributes_id':item.subject_attributes_id.id,
+                'subject_attributes_subject_id':new_object.id,
+            }
+            object_create = self.env['dara_mallas.subject_attributes_line'].create(pre)
+            objects.append(object_create.id)
+        new_object.subject_attributes_line_ids=[(6,0,objects)]
+        return new_object
+        
     def name_get(self):
         result = []
         for rec in self:

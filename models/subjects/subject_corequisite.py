@@ -14,6 +14,7 @@ class corequisite(models.Model):
 
     corequisite_line_id=fields.Many2one("dara_mallas.corequisite_line")
 
+
     def name_get(self):
         result = []
         for rec in self:
@@ -27,6 +28,18 @@ class corequisite_line(models.Model):
     subject_code=fields.Char(related="subject_id.code")
     corequisite_ids=fields.One2many("dara_mallas.corequisite",inverse_name="corequisite_line_id",string="Correquisitos")
 
+    def copy(self,default=None):
+        new_subject_corequisite_line=super(corequisite_line,self).copy(default=default)
+        corequisitos = []
+        for item in self.corequisite_ids:
+            pre = {
+                'corequisite_subject_id':item.corequisite_subject_id.id,
+                'corequisite_line_id':new_subject_corequisite_line.id,
+            }
+            new_corequisite = self.env['dara_mallas.corequisite'].create(pre)
+            corequisitos.append(new_corequisite.id)
+        new_subject_corequisite_line.corequisite_ids=[(6,0,corequisitos)]
+        return new_subject_corequisite_line
 
     def name_get(self):
         result = []

@@ -154,6 +154,7 @@
 									<field name="billed_id" required="1" string="Cobrado"/>
 									<field name="status_id" required="1" string="Estado"/>
 									<field name="repeat_limit" required="1" />
+									<field name="gpa" />
 								
 								</group>
               		  

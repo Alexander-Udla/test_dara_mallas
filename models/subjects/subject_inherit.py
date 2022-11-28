@@ -54,6 +54,7 @@ class subject_inherit(models.Model):
     scad_uec_credit_id=fields.Many2one(related="subject_scacrse_id.uec_credit_id")
     scad_billed_id=fields.Many2one(related="subject_scacrse_id.billed_id")
     scad_repeat_limit=fields.Integer(related="subject_scacrse_id.repeat_limit")
+    scad_gpa=fields.Boolean(related="subject_scacrse_id.gpa")
 
     #======================================================
     #                      Componentes PRESENCIAL

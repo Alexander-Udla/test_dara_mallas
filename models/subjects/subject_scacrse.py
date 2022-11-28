@@ -18,6 +18,7 @@ class subject_scacrse(models.Model):
     uec_credit_id=fields.Many2one("dara_mallas.uec_credit",'UEC o Credito')
     billed_id=fields.Many2one("dara_mallas.billed","Cobro")
     repeat_limit=fields.Integer("Limite repeticion")
+    gpa=fields.Boolean("Cuenta en PGA")
 
     #======================================================
     #                      Componentes PRESENCIAL

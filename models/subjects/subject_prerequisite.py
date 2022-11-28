@@ -13,6 +13,31 @@ class subject_prerequisite_line(models.Model):
     subject_code=fields.Char(related="subject_id.code")
     subject_prerequisite_ids = fields.One2many("dara_mallas.prerequisite",inverse_name="prerequisite_line_id",string="Prerrequisitos")
 
+    def copy(self,default=None):
+        new_subject_prerequisite_line=super(subject_prerequisite_line,self).copy(default=default)
+        prerequisites = []
+        for item in self.subject_prerequisite_ids:
+            pre = {
+                'prerequisite_subject_id':item.prerequisite_subject_id.id,
+                'condition':item.condition,
+                'conector':item.conector,
+                'or_conector':item.or_conector,
+                'lparen':item.lparen,
+                'test_code':item.test_code,
+                'test_score':item.test_score,
+                'grade_id':item.grade_id.id,
+                'score_id':item.score_id.id,
+                'rparen':item.rparen,
+                'seq':item.seq,
+                'prerequsite_type':item.prerequsite_type,
+                'prerequisite_line_id':new_subject_prerequisite_line.id,
+            }
+            new_prerequisite = self.env['dara_mallas.prerequisite'].create(pre)
+            prerequisites.append(new_prerequisite.id)
+        new_subject_prerequisite_line.subject_prerequisite_ids=[(6,0,prerequisites)]
+        return new_subject_prerequisite_line
+
+
     def name_get(self):
         result = []
         for rec in self:

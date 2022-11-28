@@ -167,6 +167,7 @@
                               <field name="scad_billed_id" required="1" string="Cobrado"/>
                               <field name="scad_status_id" required="1" string="Estado"/>
                               <field name="scad_repeat_limit" required="1" />
+                              <field name="scad_gpa"  />
                             
                             </group>
               		  </page>

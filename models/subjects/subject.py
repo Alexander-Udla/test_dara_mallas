@@ -38,6 +38,28 @@ class subject_rule(models.Model):
     area_id=fields.Many2one("dara_mallas.area") 
     subject_homologation_ids = fields.One2many("dara_mallas.homologation",inverse_name="subject_rule_id",string="Homologaciones")
 
+    def copy(self,default=None):
+        new_object=super(subject_rule,self).copy(default=default)
+        objects = []
+        for item in self.subject_homologation_ids:
+            pre = {
+                'homologation_subject_id':item.homologation_subject_id.id,
+                'subject_rule_rule_id':item.subject_rule_rule_id.id,
+                'subject_attributes_id':item.subject_attributes_id.id,
+                'group_id':item.group_id.id,
+                'condition':item.condition,
+                'test':item.test,
+                'min_score':item.min_score,
+                'max_score':item.max_score,
+                'rule_min_score_id':item.rule_min_score_id.id,
+                'subject_rule_id':new_object.id,
+            }
+            object_create = self.env['dara_mallas.homologation'].create(pre)
+            objects.append(object_create.id)
+        new_object.subject_homologation_ids=[(6,0,objects)]
+        return new_object
+    
+    
     def name_get(self):
         result = []
         for rec in self:
@@ -107,7 +129,19 @@ class elective_line(models.Model):
     subject_id=fields.Many2one("dara_mallas.subject")
 
     elective_ids=fields.One2many("dara_mallas.elective",inverse_name="elective_line_id")
-
+    
+    def copy(self,default=None):
+        new_object=super(elective_line,self).copy(default=default)
+        objects = []
+        for item in self.elective_ids:
+            pre = {
+                'elective_subject_id':item.elective_subject_id.id,
+                'elective_line_id':new_object.id,
+            }
+            object_create = self.env['dara_mallas.elective'].create(pre)
+            objects.append(object_create.id)
+        new_object.elective_ids=[(6,0,objects)]
+        return new_object
 class elective(models.Model):
     _name="dara_mallas.elective"
    
@@ -124,6 +158,20 @@ class itinerary_line(models.Model):
     subject_id=fields.Many2one("dara_mallas.subject")
 
     itinerary_ids=fields.One2many("dara_mallas.itinerary",inverse_name="itinerary_line_id")
+
+    def copy(self,default=None):
+        new_object=super(itinerary_line,self).copy(default=default)
+        objects = []
+        for item in self.itinerary_ids:
+            pre = {
+                'itinerary_subject_id':item.itinerary_subject_id.id,
+                'specialization_id':item.specialization_id.id,
+                'itinerary_line_id':new_object.id,
+            }
+            object_create = self.env['dara_mallas.itinerary'].create(pre)
+            objects.append(object_create.id)
+        new_object.elective_ids=[(6,0,objects)]
+        return new_object
 
 class itinerary(models.Model):
     _name="dara_mallas.itinerary"
