@@ -325,6 +325,7 @@
                                       <page string="Homologaciones">
                                             <field name="subject_inherit_homologation_ids">
                                               <tree editable="bottom">
+                                                      <field name="subject_rule_id"/>
                                                       <field name="homo_area_id"/>
                                                       <field name="homo_period_id"/>
                                                       <field name="homo_subject_homologation_ids" widget="many2many_tags"/>
