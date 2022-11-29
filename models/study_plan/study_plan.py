@@ -66,7 +66,7 @@ class study_plan(models.Model):
     prerequisite_file=fields.Binary("Archivo")
     prerequisite_file_name=fields.Char("nombre de archivo")
     corequisite_file=fields.Binary("Archivo")
-    corequisite_file_name=fields.Char("nombre de archivo")
+    corequisite_file_name=fields.Char("nombre de archivo") 
     homologation_file=fields.Binary("Archivo")
     homologation_file_name=fields.Char("nombre de archivo")
     
@@ -100,6 +100,46 @@ class study_plan(models.Model):
     # =============================================
 
     mallas_web = fields.Boolean("Publicar Mallas Web ?")
+
+    def copy(self,default=None):
+        new_object=super(study_plan,self).copy(default=default)
+        objects = []
+        for item in self.study_plan_lines_ids:
+            pre = {
+                'area_homologation_id':item.area_homologation_id.id,
+                'line_order':item.line_order,
+                'study_plan_id':new_object.id,
+            }
+            object_create = self.env['dara_mallas.study_plan_line'].create(pre)
+            objects.append(object_create.id)
+        new_object.study_plan_lines_ids=[(6,0,objects)]
+
+        objects = []
+        for item in self.study_plan_lines_simple_ids:
+            pre = {
+                'period_id':item.period_id.id,
+                'area_id':item.area_id.id,
+                'period_subject_id':item.period_subject_id.id,
+                'subject_id':item.subject_id.id,
+                'study_plan_id':new_object.id,
+            }
+            object_create = self.env['dara_mallas.study_plan_line_simple'].create(pre)
+            objects.append(object_create.id)
+        new_object.sstudy_plan_lines_simple_ids=[(6,0,objects)]
+
+        objects = []
+        for item in self.no_course_ids:
+            pre = {
+                'subject_attributes_no_course_id':item.subject_attributes_no_course_id.id,
+                'subject_id':item.subject_id.id,
+                'study_plan_id':new_object.id,
+            }
+            object_create = self.env['dara_mallas.subject_no_course'].create(pre)
+            objects.append(object_create.id)
+        new_object.no_course_ids=[(6,0,objects)]
+
+
+        return new_object
 
     def name_get(self):
         result = []
