@@ -24,7 +24,7 @@
                                 <field name="subject_prerequisite_ids">
                                   <tree editable="bottom">
                                     <field name ="seq"/>
-                                    <field name="conector" widget="radio"  options="{'horizontal': true}"/>
+                                    <field name="conector" widget="radio_tree"/>
                                     <field name="lparen"/>
                                     <field name="test_code"/>
                                     <field name="test_score"/>
