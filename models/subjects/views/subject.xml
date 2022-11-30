@@ -16,6 +16,7 @@
               		  		<field name="name"/>
                         <field name="name_en"/>
                         <field name="short_name"/>
+                        <field name="new_subject"/>
                         <field name="course_number"/>
                         <field name="subject_name_id"/>
                         <field name="subject_class_ids"/>

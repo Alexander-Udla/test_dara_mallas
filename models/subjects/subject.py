@@ -7,12 +7,14 @@ class subject(models.Model):
     name=fields.Char("Asignatura, curso o equivalente")
     name_en=fields.Char("Subject, course or equivalent ") 
 
-    short_name=fields.Char("Nombre Corto", size=28)
+    short_name=fields.Char("Nombre Corto", size=30)
     code=fields.Char("Sigla", default='ccc-nnnn')
     course_number=fields.Char("Course", size=4, default="nnnn")
     subject_name_id=fields.Many2one("dara_mallas.subject_name")
       
     subject_class_ids = fields.One2many("dara_mallas.subject_class",inverse_name="subject_id")
+
+    new_subject = fields.Boolean("Nueva", default=False,track_visibility='always')
 
     @api.onchange('subject_name_id','course_number')
     def onchange_subject_code(self):
