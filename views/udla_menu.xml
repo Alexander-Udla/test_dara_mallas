@@ -16,6 +16,11 @@
 	<!-- configuracion -->
 	<menuitem id="dara_config_menu" name="Configuración" groups="dara_admin" sequence="5"/>
 
+	<!-- reportes -->
+	<menuitem id="dara_reports_menu" name="Reportes"/>
+	<menuitem id="dara_subjects_reports" name="Asignaturas" parent="dara_reports_menu" sequence="3" />
+
+
 
 
 </data>

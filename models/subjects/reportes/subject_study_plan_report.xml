@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_collect_pivot" model="ir.ui.view">
+         <field name="name">subject_study_plan</field>
+         <field name="model">dara_mallas.subject_study_plan_report</field>
+         <field name="arch" type="xml">
+             <pivot string="Asignaturas y mallas" disable_linking="True">
+                 <field name="subject"  type="row"/>
+
+                 <field name="study_plan_id" type="row"/>
+<!--                  <field name="study_plan_class_id"/> -->
+                 
+             </pivot>
+         </field>
+         
+         
+    </record>
+    
+	
+   
+
+<!--     Custom reports (aka filters)       -->
+<!--     <record id="filter_sale_report_sales_funnel" model="ir.filters"> -->
+<!--         <field name="name">Sales Funnel</field> -->
+<!--         <field name="model_id">sale.report</field> -->
+<!--         <field name="domain">['&amp;', ('date','&lt;=', time.strftime('%%Y-12-31')), '&amp;', ('date','&gt;=',time.strftime('%%Y-01-01')), ('state','not in',('cancel',))]</field> -->
+<!--         <field name="user_id" eval="False"/> -->
+<!--         <field name="context">{'group_by': ['state'], 'measures': ['price_subtotal']}</field> -->
+<!--     </record> -->
+<!--     <record id="filter_sale_report_salespersons" model="ir.filters"> -->
+<!--         <field name="name">By Salespersons</field> -->
+<!--         <field name="model_id">sale.report</field> -->
+<!--         <field name="user_id" eval="False"/> -->
+<!--         <field name="context">{'group_by': ['date:month', 'user_id']}</field> -->
+<!--     </record> -->
+<!--     <record id="filter_sale_report_salesteam" model="ir.filters"> -->
+<!--         <field name="name">By Salesteam</field> -->
+<!--         <field name="model_id">sale.report</field> -->
+<!--         <field name="user_id" eval="False"/> -->
+<!--         <field name="context">{'group_by': ['date:month', 'team_id']}</field> -->
+<!--     </record> -->
+<!--     <record id="filter_isale_report_product" model="ir.filters"> -->
+<!--         <field name="name">By Product</field> -->
+<!--         <field name="model_id">sale.report</field> -->
+<!--         <field name="user_id" eval="False"/> -->
+<!--         <field name="context">{'group_by': ['date:month', 'product_id']}</field> -->
+<!--     </record> -->
+
+    <record id="subject_study_plan_report_search" model="ir.ui.view">
+        <field name="name">subject.study.plan.search</field>
+        <field name="model">dara_mallas.subject_study_plan_report</field>
+        <field name="arch" type="xml">
+            <search string="Subject">
+                <field name="subject"/>
+                
+
+            </search>
+        </field>
+    </record>
+
+    <record id="action_subject_study_plan_report_all" model="ir.actions.act_window">
+        <field name="name">Mallas de la sigla</field>
+        <field name="res_model">dara_mallas.subject_study_plan_report</field>
+       
+        <field name="view_mode">pivot</field>
+        <field name="view_id"></field> 
+      <!-- force empty -->
+<!--         <field name="search_view_id" ref="view_order_product_search"/> -->
+<!--         <field name="context">{'search_default_Sales':1, 'group_by_no_leaf':1,'group_by':[]}</field> -->
+<!--         <field name="help">This report performs analysis on your quotations and sales orders. Analysis check your sales revenues and sort it by different group criteria (salesman, partner, product, etc.) Use this report to perform analysis on sales not having invoiced yet. If you want to analyse your turnover, you should use the Invoice Analysis report in the Accounting application.</field> -->
+    </record>
+
+
+    <!-- form subject mallas de sigla  -->
+    <record id="subject_malla_sigla_view" model="ir.ui.view">
+		<field name="name">Malla de sigla</field>
+		<field name="model">dara_mallas.subject_mallas_sigla</field>
+		<field name="arch" type="xml">
+			<form>
+				
+				<group>
+                    <field name="subject_id" can_create="true"/>
+				</group>
+				<footer>
+					<button name="generate_malla_sigla" string="Generar" class="oe_right oe_highlight" type="object"/>
+
+
+					<button string="Cancelar" special="cancel" class="oe_right"/>
+				
+				</footer> 
+			
+			</form>
+		
+		</field>
+	
+	
+	</record>
+    <!-- wizart subject mallas de sigla  -->
+
+
+    <record id="action_subject_study_plan_report_m2m" model="ir.actions.act_window">
+        <field name="name">Mallas de la sigla</field>
+        <field name="res_model">dara_mallas.subject_mallas_sigla</field>
+        <field name="type">ir.actions.act_window</field>
+       
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+     
+    </record>
+
+    <!-- tree para tabla se subject pivot -->
+
+     <record id="dara_mallas_subject_view_pivot_tree" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_pivot.tree</field>
+                <field name="model">dara_mallas.subject_pivot</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                
+                <tree>
+            		    <field name="code"/>
+            		    <field name="name"/>
+                </tree>     	            	  
+                </field>
+    </record> 
+    <!-- form para tabla se subject pivot -->
+ 
+     <record id="dara_mallas_subject_view_pivot_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_pivot.form</field>
+                <field name="model">dara_mallas.subject_pivot</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                    <form>
+                            <field name="code" readonly="1"/>
+                            <field name="name" readonly="1"/>
+                    </form>  
+                </field>
+    </record> 
+    <!-- SEARCH  para tabla se subject pivot -->
+
+     <record id="dara_mallas_subject_view_pivot_search" model="ir.ui.view">
+                <field name="name">view.dara_mallas.subject_pivot.search</field>
+                <field name="model">dara_mallas.subject_pivot</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <search>
+                         <field name="code"/>
+                </search>
+                </field>
+    </record> 
+	
+    
+	<menuitem id="subject_study_plan_men" 
+    groups="dara_mallas_malla_de_sigla"
+    parent="dara_subjects_reports"  
+    name="Mallas de sigla." 
+    action="action_subject_study_plan_report_m2m" 
+    /> 
+
+
+</odoo>

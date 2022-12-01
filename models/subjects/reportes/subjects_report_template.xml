@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<record id="graphic_subject_view" model="ir.ui.view">
+		<field name="name">Template Subject</field>
+		<field name="model">dara_mallas.subject_template</field>
+		<field name="arch" type="xml">
+			<form>
+				
+				<group>
+                    <field name="subject_id" />
+                    <field name="file" readonly="1" filename="file_name" />
+                    <field name="file_name" invisible="1"/>
+				</group>
+				<footer>
+					<button name="generate_graphic_subject" string="Generar Template Subject" class="oe_right oe_highlight" type="object"/>
+
+					<!-- <button name="generate_script_prerequisite" string="Generar Script Prerequisitos" class="oe_right oe_highlight" type="object" groups="base.group_no_one"/> -->
+					<!-- <button name="generate_script_prerequisite_v2_errors" string="Validar Prerrequisitos" class="oe_right oe_highlight" type="object" /> -->
+
+					<button string="Cancelar" special="cancel" class="oe_right"/>
+				
+				</footer> 
+			
+			</form>
+		
+		</field>
+	
+	
+	</record>
+
+
+
+    <record id="action_graphic_subject_view_report" model="ir.actions.act_window">
+        <field name="name">Template Subject</field>
+		
+        <field name="res_model">dara_mallas.subject_template</field>
+        <field name="type">ir.actions.act_window</field>
+        
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+         
+    </record>
+    
+
+	<menuitem id="graphic_plan_graphic_study_plan_v2_men" parent="dara_subjects_reports" name="template subjects" 
+			action="action_graphic_subject_view_report"  
+			groups="dara_mallas_template_subjects"
+			sequence="50"/> 
+
+
+</odoo>

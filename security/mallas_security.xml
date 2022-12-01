@@ -5,6 +5,21 @@
         <record model="res.groups" id="dara_admin">
             <field name="name">Administrar mallas</field>
         </record>
+
+         <!-- reportes -->
+        <record model="ir.module.category" id="dara_mallas_report_group">
+            <field name="name">Reportes</field>
+            <field name="sequence">105</field>
+        </record>
+
+        <record model="res.groups" id="dara_mallas_template_subjects">
+            <field name="name">Template Subject</field>
+            <field name="category_id" ref="dara_mallas_report_group"/>
+        </record>
+         <record model="res.groups" id="dara_mallas_malla_de_sigla">
+            <field name="name">Mallas de sigla</field>
+            <field name="category_id" ref="dara_mallas_report_group"/>
+        </record>
     
     </data>
 </odoo>

@@ -652,10 +652,10 @@ class study_plan(models.Model):
 
 
         #self.merge_with_color(ws,"BG1:BG1", "CUENTA_EN_GPA", alCenter,"2B855C")
-        #ws.cell(column=56,row=row,value=str(subject_id.gpa))
+        ws.cell(column=56,row=row,value=str(subject_id.cad_gpa))
         #self.merge_with_color(ws,"BH1:BH1", "SIGLA_NUEVA", alCenter,"2B855C")
 
-        #ws.cell(column=57,row=row,value=str(subject_id.new_subject))
+        ws.cell(column=57,row=row,value=str(subject_id.new_subject))
 
        
 

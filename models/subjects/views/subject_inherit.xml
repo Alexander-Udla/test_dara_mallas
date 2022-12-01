@@ -20,6 +20,7 @@
                         <field name="code"/>
                         <field name="course_number"/>
                         <field name="subject_name_id"/>
+                        <field name="new_subject"/>
               		  		
               		  		
               		  </group>
