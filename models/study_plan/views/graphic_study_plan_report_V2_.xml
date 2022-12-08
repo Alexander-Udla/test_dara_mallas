@@ -17,7 +17,7 @@
 				</group>
 				<footer>
 					<button name="graphic_plan_only_credits" string="Generar MALLA" class="oe_right oe_highlight" type="object"/>
-					<button name="graphic_plan_grade_program" string="Malla de POSGRADOS" class="oe_right oe_highlight" type="object"/>
+					<!-- <button name="graphic_plan_grade_program" string="Malla de POSGRADOS" class="oe_right oe_highlight" type="object"/> -->
 					<!-- <button name="graphic_plan_catalogo" string="Generar Catálogo" class="oe_right oe_highlight" type="object"/> -->
 					<button string="Cancelar" special="cancel" class="oe_right"/>
 				

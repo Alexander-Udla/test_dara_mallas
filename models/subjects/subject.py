@@ -14,7 +14,7 @@ class subject(models.Model):
       
     subject_class_ids = fields.One2many("dara_mallas.subject_class",inverse_name="subject_id")
 
-    new_subject = fields.Boolean("Nueva", default=False,track_visibility='always')
+    new_subject = fields.Boolean("Nueva", default=True,track_visibility='always')
 
     @api.onchange('subject_name_id','course_number')
     def onchange_subject_code(self):
