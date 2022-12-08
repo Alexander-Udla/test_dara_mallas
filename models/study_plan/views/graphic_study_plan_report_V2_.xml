@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<record id="graphic_plan_only_creditsv2_wizard_view" model="ir.ui.view">
+		<field name="name">Malla con creditos</field>
+		<field name="model">dara_mallas.graphic_study_plan_v2</field>
+		<field name="arch" type="xml">
+			<form>
+				
+				<group>
+				<field name="program_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+				<field name="period_id" context="{'program_id':program_id,'check_domain':True}" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+				<field name="include_prerequisite"/>
+				<field name="include_detail"/>
+				<field name="file" readonly="1" filename="file_name" />
+            	<field name="file_name" invisible="1"/>
+				</group>
+				<footer>
+					<button name="graphic_plan_only_credits" string="Generar MALLA" class="oe_right oe_highlight" type="object"/>
+					<button name="graphic_plan_grade_program" string="Malla de POSGRADOS" class="oe_right oe_highlight" type="object"/>
+					<!-- <button name="graphic_plan_catalogo" string="Generar Catálogo" class="oe_right oe_highlight" type="object"/> -->
+					<button string="Cancelar" special="cancel" class="oe_right"/>
+				
+				</footer>
+			
+			</form>
+		
+		</field>
+	
+	
+	</record>
+
+
+
+    <record id="action_graphic_graphic_study_plan_v2_report" model="ir.actions.act_window">
+        <field name="name">Mallas graficas nuevo formato</field>
+		
+        <field name="res_model">dara_mallas.graphic_study_plan_v2</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+         
+    </record>
+    
+
+<!-- 	<menuitem id="men_mallas_graficas" name="MALLAS GRAFICAS" parent="men_reports" sequence="1" groups="udla_admin,udla_analista,read_plan_group" /> -->
+	
+	<!-- <menuitem id="graphic_plan_graphic_study_plan_v2_men" parent="men_reports" name="M. grafica formato 2019" 
+			action="action_graphic_graphic_study_plan_v2_report" 
+			groups="udla_admin,udla_analista,read_plan_group"
+			sequence="1"/> -->
+
+
+</odoo>

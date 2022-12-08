@@ -22,7 +22,7 @@
                           <page string="Itinerarios">
                                 <field name="itinerary_ids">
                                   <tree editable="bottom">
-                                    <field name ="itinerary_subject_id"/>
+                                    <field name ="itinerary_subject_inherit_id"/>
                                     <field name="itinerary_subject_code"/>
                                     <field name="specialization_id"/>
                                     <field name="itinerary_line_id" invisible="1"/>

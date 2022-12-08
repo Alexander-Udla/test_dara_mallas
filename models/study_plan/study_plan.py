@@ -101,6 +101,25 @@ class study_plan(models.Model):
 
     mallas_web = fields.Boolean("Publicar Mallas Web ?")
 
+    #==================================================
+    #               MALLA GRAFICA 
+    #==================================================
+
+    def graphic_plan(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'dara_mallas.graphic_study_plan_v2',
+            'view_mode': 'form',
+            'view_type': 'form',
+            #'res_id': self.id, #extra
+            #'views': [(False, 'form')], #extra
+            'target': 'new',
+            'name': 'Mallas con creditos',
+            'domain': [],
+            'context': {'program_id':self.program_id.id,
+                        'period_id':self.period_id.id}, 
+        }
+
     def copy(self,default=None):
         new_object=super(study_plan,self).copy(default=default)
         objects = []
@@ -909,6 +928,21 @@ class study_plan(models.Model):
                    fill_type='solid')
         ws[cell].fill = redFill
 
+
+    #=============================================================================
+    #                               Elimina "( )" en blanco 
+    #=============================================================================
+
+    def cadenaLimpia(self,cadena):
+        for count,char in enumerate(cadena,start=0):
+            if count < len(cadena)-1:
+                txt = char+' '+cadena[count+1]
+                if txt == '( )':
+                    cadena.pop(count)
+                    cadena.pop(count)
+                    self.cadenaLimpia(cadena)
+            
+        return cadena
 
 class study_plan_line(models.Model):
     _name="dara_mallas.study_plan_line"

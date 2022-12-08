@@ -352,7 +352,7 @@
                                       <page string="Itinerarios">
                                             <field name="itin_itinerary_ids">
                                               <tree editable="bottom">
-                                                      <field name ="itinerary_subject_id"/>
+                                                      <field name ="itinerary_subject_inherit_id"/>
                                                       <field name="itinerary_subject_code"/>
                                                       <field name="specialization_id"/>
                                                       <field name="itinerary_line_id" invisible="1"/>
@@ -376,7 +376,7 @@
                                       <page string="Electivas">
                                             <field name="elec_elective_ids">
                                               <tree editable="bottom">
-                                                      <field name ="elective_subject_id"/>
+                                                      <field name ="elective_subject_inherit_id"/>
                                                       <field name="elective_subject_code"/>
                                                       <field name="elective_line_id" invisible="1"/>
                                               </tree>

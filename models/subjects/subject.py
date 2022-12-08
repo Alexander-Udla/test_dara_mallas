@@ -147,10 +147,10 @@ class elective_line(models.Model):
 class elective(models.Model):
     _name="dara_mallas.elective"
    
-    elective_subject_id=fields.Many2one("dara_mallas.subject")
-    elective_subject_code=fields.Char("Sigla",related="elective_subject_id.code")
+    elective_subject_inherit_id=fields.Many2one("dara_mallas.subject_inherit")
+    elective_subject_code=fields.Char("Sigla",related="elective_subject_inherit_id.code")
 
-    elective_line_id=fields.Many2one("dara_mallas.elective_line")
+    elective_line_id=fields.Many2one("dara_mallas.elective_line") 
 
 
 class itinerary_line(models.Model):
@@ -167,6 +167,7 @@ class itinerary_line(models.Model):
         for item in self.itinerary_ids:
             pre = {
                 'itinerary_subject_id':item.itinerary_subject_id.id,
+                'itinerary_subject_inherit_id':item.itinerary_subject_inherit_id.id,
                 'specialization_id':item.specialization_id.id,
                 'itinerary_line_id':new_object.id,
             }
@@ -179,8 +180,8 @@ class itinerary(models.Model):
     _name="dara_mallas.itinerary"
 
    
-    itinerary_subject_id=fields.Many2one("dara_mallas.subject")
-    itinerary_subject_code=fields.Char("Sigla",related="itinerary_subject_id.code")
+    itinerary_subject_inherit_id=fields.Many2one("dara_mallas.subject_inherit")
+    itinerary_subject_code=fields.Char("Sigla",related="itinerary_subject_inherit_id.code")
     specialization_id=fields.Many2one("dara_mallas.specialization")
 
     itinerary_line_id=fields.Many2one("dara_mallas.itinerary_line")

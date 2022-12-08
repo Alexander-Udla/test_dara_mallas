@@ -10,7 +10,11 @@
                 <field name="priority" eval="25" />
                 <field name="arch" type="xml">
                 <form>
-
+                  <header>
+                		<field name="state" widget="statusbar" clickable="False"/>
+                		<button name="graphic_plan" string="Malla grafica con creditos" type="object" class="oe_right oe_highlight"/>
+                		
+                </header>
                 
                 	<sheet>
             		  <group>

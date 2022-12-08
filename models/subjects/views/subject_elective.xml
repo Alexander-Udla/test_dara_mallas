@@ -22,7 +22,7 @@
                           <page string="Electivas">
                                 <field name="elective_ids">
                                   <tree editable="bottom">
-                                    <field name ="elective_subject_id"/>
+                                    <field name ="elective_subject_inherit_id"/>
                                     <field name="elective_subject_code"/>
                                     <field name="elective_line_id" invisible="1"/>
                                   </tree>

@@ -56,6 +56,7 @@
         'models/college/views/college.xml',
         'models/study_plan/views/study_plan.xml',
         'models/study_plan/views/study_plan_line.xml',
+        'models/study_plan/views/graphic_study_plan_report_V2_.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
