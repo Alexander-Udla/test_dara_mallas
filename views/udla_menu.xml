@@ -11,7 +11,7 @@
 	<menuitem id="dara_areas_menu" name="Areas" groups="dara_admin" sequence="3"/>
 
 	<!-- siglas -->
-	<menuitem id="dara_subjects_menu" name="Asignaturas" groups="dara_admin" sequence="4"/>
+	<menuitem id="dara_subjects_menu" name="Asignaturas" groups="dara_admin,dara_mallas_menu_subjects" sequence="4"/>
 
 	<!-- configuracion -->
 	<menuitem id="dara_config_menu" name="Configuración" groups="dara_admin" sequence="5"/>

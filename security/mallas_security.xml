@@ -6,6 +6,31 @@
             <field name="name">Administrar mallas</field>
         </record>
 
+        <!-- menus -->
+        <record model="ir.module.category" id="dara_mallas_menus_group">
+            <field name="name">Menús Disponibles</field>
+            <field name="sequence">104</field>
+        </record>
+
+        <record model="res.groups" id="dara_mallas_menu_subjects">
+            <field name="name">Asignaturas</field>
+            <field name="category_id" ref="dara_mallas_menus_group"/>
+        </record>
+
+
+         <!-- asignaturas -->
+
+        <record model="ir.module.category" id="dara_mallas_group">
+            <field name="name">Permisos Creación, Lectura, Escritura, Eliminación</field>
+            <field name="sequence">103</field>
+        </record>
+
+        <record model="res.groups" id="dara_mallas_read">
+            <field name="name">Lectura</field>
+            <field name="category_id" ref="dara_mallas_group"/>
+        </record>
+
+        
          <!-- reportes -->
         <record model="ir.module.category" id="dara_mallas_report_group">
             <field name="name">Reportes</field>
