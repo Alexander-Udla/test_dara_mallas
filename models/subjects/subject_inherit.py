@@ -232,7 +232,7 @@ class subject_inherit(models.Model):
 class subject_inherit_area(models.Model):
     _name="dara_mallas.subject_inherit_area"
 
-
+    _order="line_order asc"
     subject_inherit_id=fields.Many2one("dara_mallas.subject_inherit")
     subject_id=fields.Many2one(related="subject_inherit_id.subject_id")
     subject_code=fields.Char(related="subject_inherit_id.subject_id.code")
