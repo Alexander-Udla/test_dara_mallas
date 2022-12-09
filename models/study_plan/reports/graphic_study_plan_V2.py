@@ -110,130 +110,133 @@ class credit_study_plan_report(models.TransientModel):
         if not study_plan_id:
             raise UserError("NO se ha encontrado la malla seleccionada")
         
+        subject_exists = []
         for plan_line_id in study_plan_id.study_plan_lines_ids:
             for area_subject in plan_line_id.area_subject_inherit_area_ids:
                 plan_line = area_subject
-                level_number=int(plan_line.area_homologation_id.area_id.code[-2:])
-            
-    
+                if plan_line.subject_inherit_id.code not in subject_exists:
+                    level_number=int(plan_line.area_homologation_id.area_id.code[-2:])
                 
-                            
-                #===================================================================
-                # Tenemos un la lista unit_list que contiene los id de las unidades de organizacion que existen en el plan            
-                # revisamos si el id actual no se encuentra en el listado entonces es la primera vez que tenmos este id 
-                # anadimos el id en unit_list y creamos una entrada en el diccionario unit_dict
-                # 
-                # unit_dic es el diccionario que tiene como clave el id de la unida de organizario y como dato 
-                # un listado de los niveles que estan registrados en esta unidad ej. 
-                # unit_dic={1:[1,2,3,4]}  la unida de organizacion con id 1 tiene los semestres 1,2,3,4 
-                #===================================================================
-                
-                if not plan_line.organization_unit_id: 
-                    raise UserError("No se ha cargado la unidad de organizacion de: \n\n"+\
-                                    plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name)
-                                    
-                
-                if plan_line.organization_unit_id.id not in unit_list_ids:  # si es la primera vez que aparece la unidad de organizacoin 
-                    unit_list_ids.append(plan_line.organization_unit_id.id)
-                    unit_dic[plan_line.organization_unit_id.id]=[level_number]   
-                else:
-                    if level_number not in unit_dic[plan_line.organization_unit_id.id]:    
-                        unit_dic[plan_line.organization_unit_id.id].append(level_number)   # si no existe en el listado se incluye en la lista de niveles para cada id.
+        
                     
-                
-                
-                #===================================================================
-                # ROW_COUNT_LIST es un array que me permite identificar el maximo numero de la fila o la fila actual 
-                # apra cada nivel. Los niveles vienen dados por el indice del array asi: 
-                # row_count_list[5]=30  sifnifica que el nivel 5 o semestre 5 esta escribiendo en la fila 30
-                #===================================================================
-                    
-                if row_count_list[level_number]:  
-                    row_number=row_count_list[level_number]+5 # sumamos cuatro para tener la fila en la que vamos a escribir
-                    if row_number>max_row_count:
-                        max_row_count=row_number
-                else:   # es la primera asignatura arrancamos de la fila 11
-                    row_number=11
-                    
-                    #===============================================================
-                    # Si es la primera asignatura vamos a escribir la cabecera del semestre         
-                    #===============================================================
-                    cell_range=self._get_init_column(level_number)+"6:"+\
-                                self._get_end_column(level_number)+"6"
-                    self.merge_no_border(ws,cell_range, "Período ", alCenter,"FFFFFF",Font(size=26))
-                    rd=ws.row_dimensions[6]
-                    rd.height=42
-                    cell_range=self._get_init_column(level_number)+"7:"+\
-                                self._get_end_column(level_number)+"7"
-                    self.merge_no_border(ws,cell_range, str(level_number), alCenter,"FFFFFF",Font(size=35,color="851B1B",b=True))
-                    
-                    rd=ws.row_dimensions[7]
-                    rd.height=42
-                #===================================================================
-                # CARGANDO LA SIGLA
-                #===================================================================
-                cell_range=self._get_init_column(level_number)+str(row_number)+":"+\
-                                self._get_end_column(level_number)+str(row_number)
-                range_font=Font(size=16,color="000000")
-                code_font=range_font
-                color="FFFFFF"
-                
-                if plan_line.study_field_id:
-                    color=plan_line.study_field_id.color[-6:]
-                    if color=="FFFFFF":
-                        code_font=Font(size=16, color="FFFFFF")
-                    
-                        
-                
-                
-                self.merge_with_border(ws, cell_range, plan_line.subject_inherit_id.code, alCenter, color,code_font)
-
-                rd=ws.row_dimensions[row_number]
-                rd.height=32
-                #===================================================================
-                # CARGANDO EL NOMBRE DE LA ASIGNATURA
-                #===================================================================
-                cell_range=self._get_init_column(level_number)+str(row_number+1)+":"+\
-                                self._get_end_column2(level_number)+str(row_number+2)
-                self.merge_with_border(ws, cell_range, plan_line.subject_inherit_id.name, alCenter, "ffffff", range_font)
-                
-                rd=ws.row_dimensions[row_number+1]
-                rd.height=32
-                rd=ws.row_dimensions[row_number+2]
-                rd.height=32
-                
-                
-                
-                #===================================================================
-                # CARGANDO CREDITOS
-                #===================================================================
-                
-                cell_range=self._get_end_column(level_number)+str(row_number+1)+":"+\
-                                self._get_end_column(level_number)+str(row_number+1)
                                 
-                self.merge_with_border(ws, cell_range, "CR ", alCenter, "ffffff", range_font)
+                    #===================================================================
+                    # Tenemos un la lista unit_list que contiene los id de las unidades de organizacion que existen en el plan            
+                    # revisamos si el id actual no se encuentra en el listado entonces es la primera vez que tenmos este id 
+                    # anadimos el id en unit_list y creamos una entrada en el diccionario unit_dict
+                    # 
+                    # unit_dic es el diccionario que tiene como clave el id de la unida de organizario y como dato 
+                    # un listado de los niveles que estan registrados en esta unidad ej. 
+                    # unit_dic={1:[1,2,3,4]}  la unida de organizacion con id 1 tiene los semestres 1,2,3,4 
+                    #===================================================================
+                    
+                    if not plan_line.organization_unit_id: 
+                        raise UserError("No se ha cargado la unidad de organizacion de: \n\n"+\
+                                        plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name)
+                                        
+                    
+                    if plan_line.organization_unit_id.id not in unit_list_ids:  # si es la primera vez que aparece la unidad de organizacoin 
+                        unit_list_ids.append(plan_line.organization_unit_id.id)
+                        unit_dic[plan_line.organization_unit_id.id]=[level_number]   
+                    else:
+                        if level_number not in unit_dic[plan_line.organization_unit_id.id]:    
+                            unit_dic[plan_line.organization_unit_id.id].append(level_number)   # si no existe en el listado se incluye en la lista de niveles para cada id.
+                        
+                    
+                    
+                    #===================================================================
+                    # ROW_COUNT_LIST es un array que me permite identificar el maximo numero de la fila o la fila actual 
+                    # apra cada nivel. Los niveles vienen dados por el indice del array asi: 
+                    # row_count_list[5]=30  sifnifica que el nivel 5 o semestre 5 esta escribiendo en la fila 30
+                    #===================================================================
+                        
+                    if row_count_list[level_number]:  
+                        row_number=row_count_list[level_number]+5 # sumamos cuatro para tener la fila en la que vamos a escribir
+                        if row_number>max_row_count:
+                            max_row_count=row_number
+                    else:   # es la primera asignatura arrancamos de la fila 11
+                        row_number=11
+                        
+                        #===============================================================
+                        # Si es la primera asignatura vamos a escribir la cabecera del semestre         
+                        #===============================================================
+                        cell_range=self._get_init_column(level_number)+"6:"+\
+                                    self._get_end_column(level_number)+"6"
+                        self.merge_no_border(ws,cell_range, "Período ", alCenter,"FFFFFF",Font(size=26))
+                        rd=ws.row_dimensions[6]
+                        rd.height=42
+                        cell_range=self._get_init_column(level_number)+"7:"+\
+                                    self._get_end_column(level_number)+"7"
+                        self.merge_no_border(ws,cell_range, str(level_number), alCenter,"FFFFFF",Font(size=35,color="851B1B",b=True))
+                        
+                        rd=ws.row_dimensions[7]
+                        rd.height=42
+                    #===================================================================
+                    # CARGANDO LA SIGLA
+                    #===================================================================
+                    cell_range=self._get_init_column(level_number)+str(row_number)+":"+\
+                                    self._get_end_column(level_number)+str(row_number)
+                    range_font=Font(size=16,color="000000")
+                    code_font=range_font
+                    color="FFFFFF"
+                    
+                    if plan_line.study_field_id:
+                        color=plan_line.study_field_id.color[-6:]
+                        if color=="FFFFFF":
+                            code_font=Font(size=16, color="FFFFFF")
+                        
+                            
+                    
+                    
+                    self.merge_with_border(ws, cell_range, plan_line.subject_inherit_id.code, alCenter, color,code_font)
 
-                cell_range=self._get_end_column(level_number)+str(row_number+2)+":"+\
-                                self._get_end_column(level_number)+str(row_number+2)
-                color="ffffff"
-                if plan_line.subject_inherit_id.scad_tit_hours>0:
-                    color="755AA6"
-                self.merge_with_border(ws, cell_range, str("%.2f"  % plan_line.subject_inherit_id.scad_credits), alCenter, color, range_font)
+                    rd=ws.row_dimensions[row_number]
+                    rd.height=32
+                    #===================================================================
+                    # CARGANDO EL NOMBRE DE LA ASIGNATURA
+                    #===================================================================
+                    cell_range=self._get_init_column(level_number)+str(row_number+1)+":"+\
+                                    self._get_end_column2(level_number)+str(row_number+2)
+                    self.merge_with_border(ws, cell_range, plan_line.subject_inherit_id.name, alCenter, "ffffff", range_font)
+                    
+                    rd=ws.row_dimensions[row_number+1]
+                    rd.height=32
+                    rd=ws.row_dimensions[row_number+2]
+                    rd.height=32
+                    
+                    
+                    
+                    #===================================================================
+                    # CARGANDO CREDITOS
+                    #===================================================================
+                    
+                    cell_range=self._get_end_column(level_number)+str(row_number+1)+":"+\
+                                    self._get_end_column(level_number)+str(row_number+1)
+                                    
+                    self.merge_with_border(ws, cell_range, "CR ", alCenter, "ffffff", range_font)
 
-                
-                total_credits+=plan_line.subject_inherit_id.scad_credits if not plan_line.subject_inherit_id.is_requisite_graduation else 0
-                total_hours += plan_line.subject_inherit_id.scad_total_hours if not plan_line.subject_inherit_id.is_requisite_graduation else 0
-                level_credits[level_number]+=plan_line.subject_inherit_id.scad_credits
-                
-                ws.column_dimensions[self._get_init_column(level_number)].width=19
-                ws.column_dimensions[self._get_end_column2(level_number)].width=19
-                ws.column_dimensions[self._get_end_column(level_number)].width=7
-                ws.column_dimensions[self._get_init_column(level_number+1)].width=6
-                
-                cell=ws["A2"]
-                cell.font  = Font(color="851B1B",b=True, size=40)
-                
-                row_count_list[level_number]=row_number #inicializamos el el contador de lineas para el semestre 
+                    cell_range=self._get_end_column(level_number)+str(row_number+2)+":"+\
+                                    self._get_end_column(level_number)+str(row_number+2)
+                    color="ffffff"
+                    if plan_line.subject_inherit_id.scad_tit_hours>0:
+                        color="755AA6"
+                    self.merge_with_border(ws, cell_range, str("%.2f"  % plan_line.subject_inherit_id.scad_credits), alCenter, color, range_font)
+
+                    
+                    total_credits+=plan_line.subject_inherit_id.scad_credits if not plan_line.subject_inherit_id.is_requisite_graduation else 0
+                    total_hours += plan_line.subject_inherit_id.scad_total_hours if not plan_line.subject_inherit_id.is_requisite_graduation else 0
+                    level_credits[level_number]+=plan_line.subject_inherit_id.scad_credits
+                    
+                    ws.column_dimensions[self._get_init_column(level_number)].width=19
+                    ws.column_dimensions[self._get_end_column2(level_number)].width=19
+                    ws.column_dimensions[self._get_end_column(level_number)].width=7
+                    ws.column_dimensions[self._get_init_column(level_number+1)].width=6
+                    
+                    cell=ws["A2"]
+                    cell.font  = Font(color="851B1B",b=True, size=40)
+                    
+                    row_count_list[level_number]=row_number #inicializamos el el contador de lineas para el semestre 
+                    subject_exists.append(plan_line.subject_inherit_id.code) #agregamos el codigo de la asignatura para evitar duplicados
                 
 
 
