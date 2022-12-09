@@ -811,81 +811,84 @@ class credit_study_plan_report(models.TransientModel):
         leftCenter=Alignment(horizontal="left",vertical="center", wrapText=True,shrinkToFit=True) 
         select_start=row_count+9
         write_legend=False
+        subject_exists = []
         for plan_line_id in study_plan_id.study_plan_lines_ids:
             for area_subject in plan_line_id.area_subject_inherit_area_ids:
                 plan_line = area_subject
-                if plan_line.subject_inherit_id.elective:
-                    
-                    
-                    write_legend=True
-                    select_count=0    
-                    
-                    
-                    for elective_id in plan_line.subject_inherit_id.elec_elective_ids:
-                        #===================================================================
-                        # CARGANDO LA SIGLA
-                        #===================================================================
-                        cell_range=self._get_init_column(7+select_count)+str(row_count)+":"+\
-                                        self._get_end_column(7+select_count)+str(row_count)
-                        color="ffffff"
-                        if plan_line.study_field_id:
-                            color=plan_line.study_field_id.color[-6:]
+                if plan_line.subject_inherit_id.code not in subject_exists:
+                    if plan_line.subject_inherit_id.elective:
                         
-                        range_font=Font(size=16, color=plan_line.study_field_id.font_color[-6:])
-                        _logger.warning(plan_line.study_field_id.name+" color: "+plan_line.study_field_id.font_color[-6:])    
-                        self.merge_with_border(ws, cell_range, elective_id.elective_subject_inherit_id.code, alCenter, color, range_font)
-            
-                        rd=ws.row_dimensions[row_count]
-                        rd.height=32
                         
-                        #===================================================================
-                        # CARGANDO EL NOMBRE DE LA ASIGNATURA
-                        #===================================================================
-                        cell_range=self._get_init_column(7+select_count)+str(row_count+1)+":"+\
-                                        self._get_end_column2(7+select_count)+str(row_count+2)
-                        self.merge_with_border(ws, cell_range, elective_id.elective_subject_inherit_id.name, alCenter, "ffffff", range_font)
+                        write_legend=True
+                        select_count=0    
                         
+                        
+                        for elective_id in plan_line.subject_inherit_id.elec_elective_ids:
+                            #===================================================================
+                            # CARGANDO LA SIGLA
+                            #===================================================================
+                            cell_range=self._get_init_column(7+select_count)+str(row_count)+":"+\
+                                            self._get_end_column(7+select_count)+str(row_count)
+                            color="ffffff"
+                            if plan_line.study_field_id:
+                                color=plan_line.study_field_id.color[-6:]
+                            
+                            range_font=Font(size=16, color=plan_line.study_field_id.font_color[-6:])
+                            _logger.warning(plan_line.study_field_id.name+" color: "+plan_line.study_field_id.font_color[-6:])    
+                            self.merge_with_border(ws, cell_range, elective_id.elective_subject_inherit_id.code, alCenter, color, range_font)
+                
+                            rd=ws.row_dimensions[row_count]
+                            rd.height=32
+                            
+                            #===================================================================
+                            # CARGANDO EL NOMBRE DE LA ASIGNATURA
+                            #===================================================================
+                            cell_range=self._get_init_column(7+select_count)+str(row_count+1)+":"+\
+                                            self._get_end_column2(7+select_count)+str(row_count+2)
+                            self.merge_with_border(ws, cell_range, elective_id.elective_subject_inherit_id.name, alCenter, "ffffff", range_font)
+                            
+                            rd=ws.row_dimensions[row_count+1]
+                            rd.height=32
+                            rd=ws.row_dimensions[row_count+2]
+                            rd.height=32
+                            rd=ws.row_dimensions[row_count+3]
+                            rd.height=32
+                            #===================================================================
+                            # CARGANDO CREDITOS
+                            #===================================================================
+                        
+                            cell_range=self._get_end_column(7+select_count)+str(row_count+1)+":"+\
+                                            self._get_end_column(7+select_count)+str(row_count+1)
+                                            
+                            self.merge_with_border(ws, cell_range, "CR ", alCenter, "ffffff", range_font)
+                
+                            cell_range=self._get_end_column(7+select_count)+str(row_count+2)+":"+\
+                                            self._get_end_column(7+select_count)+str(row_count+2)
+
+                            self.merge_with_border(ws, cell_range, str(elective_id.elective_subject_inherit_id.scad_credits), alCenter, "ffffff", range_font)
+
+                            _logger.warning("ITINERARIO.."+elective_id.elective_subject_inherit_id.code+" "+elective_id.elective_subject_inherit_id.name)
+                            
+                            select_count+=1    
+                        
+                    
+                    #===============================================================
+                    # 
+                    # 
+                    # CREANDO CABECERA DE LAS ELECTIVAS
+                    # 
+                    # 
+                    #===============================================================
+                    
+                        cell_range=self._get_init_column(7)+str(row_count-1)+":"+\
+                                            self._get_end_column(7+select_count-1)+str(row_count-1)
+                        
+                        self.merge_no_color(ws, cell_range,plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name, alCenter,Font(size=16))
                         rd=ws.row_dimensions[row_count+1]
                         rd.height=32
-                        rd=ws.row_dimensions[row_count+2]
-                        rd.height=32
-                        rd=ws.row_dimensions[row_count+3]
-                        rd.height=32
-                        #===================================================================
-                        # CARGANDO CREDITOS
-                        #===================================================================
-                    
-                        cell_range=self._get_end_column(7+select_count)+str(row_count+1)+":"+\
-                                        self._get_end_column(7+select_count)+str(row_count+1)
-                                        
-                        self.merge_with_border(ws, cell_range, "CR ", alCenter, "ffffff", range_font)
-            
-                        cell_range=self._get_end_column(7+select_count)+str(row_count+2)+":"+\
-                                        self._get_end_column(7+select_count)+str(row_count+2)
-
-                        self.merge_with_border(ws, cell_range, str(elective_id.elective_subject_inherit_id.scad_credits), alCenter, "ffffff", range_font)
-
-                        _logger.warning("ITINERARIO.."+elective_id.elective_subject_inherit_id.code+" "+elective_id.elective_subject_inherit_id.name)
                         
-                        select_count+=1    
-                    
-                
-                #===============================================================
-                # 
-                # 
-                # CREANDO CABECERA DE LAS ELECTIVAS
-                # 
-                # 
-                #===============================================================
-                
-                    cell_range=self._get_init_column(7)+str(row_count-1)+":"+\
-                                        self._get_end_column(7+select_count-1)+str(row_count-1)
-                    
-                    self.merge_no_color(ws, cell_range,plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name, alCenter,Font(size=16))
-                    rd=ws.row_dimensions[row_count+1]
-                    rd.height=32
-                    
-                    row_count+=5    
+                        row_count+=5   
+                        subject_exists.append(plan_line.subject_inherit_id.code)
                     
                 
         #=======================================================================
@@ -912,95 +915,97 @@ class credit_study_plan_report(models.TransientModel):
         leftCenter=Alignment(horizontal="left",vertical="center", wrapText=True,shrinkToFit=True) 
         itinerary_start=row_count+8
         write_legend=False
+        subject_exists = []
         for plan_line_id in study_plan_id.study_plan_lines_ids:
             for area_subject in plan_line_id.area_subject_inherit_area_ids:
                 plan_line = area_subject
-                if plan_line.subject_inherit_id.itinerary:
-                    level_number=int(plan_line.area_homologation_id.area_id.code[-2:])
+                if plan_line.subject_inherit_id.code not in subject_exists:
+                    if plan_line.subject_inherit_id.itinerary:
+                        level_number=int(plan_line.area_homologation_id.area_id.code[-2:])
+                        
+                        is_equals = False 
+                        write_legend=True
+                        itinerary_count=0    
+                        
+                        
+                        for itinerary_id in plan_line.subject_inherit_id.itin_itinerary_ids:
+                            #===================================================================
+                            # COMPRUEBA SI LA ASIGNATURA ES LA MISMA QUE EL ITINERARIO
+                            #===================================================================
+                            if itinerary_id.itinerary_subject_inherit_id.code == plan_line.subject_inherit_id.code:
+                                is_equals = True
+                            
+                            #===================================================================
+                            # CARGANDO LA SIGLA
+                            #===================================================================
+                            cell_range=self._get_init_column(3+itinerary_count)+str(row_count)+":"+\
+                                            self._get_end_column(3+itinerary_count)+str(row_count)
+                            color="ffffff"
+                            if plan_line.study_field_id:
+                                color=itinerary_id.specialization_id.color[-6:]
+                            
+                            range_font=Font(size=16, color=plan_line.study_field_id.font_color[-6:])
+                            _logger.warning(plan_line.study_field_id.name+" color: "+plan_line.study_field_id.font_color[-6:])    
+                            self.merge_with_border(ws, cell_range, itinerary_id.itinerary_subject_inherit_id.code, alCenter, color, range_font)
+                
+                            rd=ws.row_dimensions[row_count]
+                            rd.height=32
+                            
+                            #===================================================================
+                            # CARGANDO EL NOMBRE DE LA ASIGNATURA
+                            #===================================================================
+                            cell_range=self._get_init_column(3+itinerary_count)+str(row_count+1)+":"+\
+                                            self._get_end_column2(3+itinerary_count)+str(row_count+2)
+                            self.merge_with_border(ws, cell_range, itinerary_id.itinerary_subject_inherit_id.name, alCenter, "ffffff", range_font)
+                            
+                            rd=ws.row_dimensions[row_count+1]
+                            rd.height=32
+                            rd=ws.row_dimensions[row_count+2]
+                            rd.height=32
+                            rd=ws.row_dimensions[row_count+3]
+                            rd.height=32
+                            #===================================================================
+                            # CARGANDO CREDITOS
+                            #===================================================================
+                        
+                            cell_range=self._get_end_column(3+itinerary_count)+str(row_count+1)+":"+\
+                                            self._get_end_column(3+itinerary_count)+str(row_count+1)
+                                            
+                            self.merge_with_border(ws, cell_range, "CR ", alCenter, "ffffff", range_font)
+                
+                            cell_range=self._get_end_column(3+itinerary_count)+str(row_count+2)+":"+\
+                                            self._get_end_column(3+itinerary_count)+str(row_count+2)
+
+                            self.merge_with_border(ws, cell_range, str(itinerary_id.itinerary_subject_inherit_id.scad_credits), alCenter, "ffffff", range_font)
+
+                            _logger.warning("ITINERARIO.."+itinerary_id.itinerary_subject_inherit_id.code+" "+itinerary_id.itinerary_subject_inherit_id.name)
+                            
+                            itinerary_count+=1    
+                            
                     
-                    is_equals = False 
-                    write_legend=True
-                    itinerary_count=0    
+                    #===============================================================
+                    # 
+                    # 
+                    # CREANDO CABECERA DEL ITINEARIO
+                    # 
+                    # 
+                    #===============================================================
                     
-                    
-                    for itinerary_id in plan_line.subject_inherit_id.itin_itinerary_ids:
-                        #===================================================================
-                        # COMPRUEBA SI LA ASIGNATURA ES LA MISMA QUE EL ITINERARIO
-                        #===================================================================
-                        if itinerary_id.itinerary_subject_inherit_id.code == plan_line.subject_inherit_id.code:
-                            is_equals = True
+                        cell_range=self._get_init_column(3)+str(row_count-1)+":"+\
+                                            self._get_end_column(3+itinerary_count-1)+str(row_count-1)
+
+                        print(cell_range)                   
+                        txt = "ITINERARIO "+str(self.ordinals_number(level_number)) if is_equals else plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name
                         
-                        #===================================================================
-                        # CARGANDO LA SIGLA
-                        #===================================================================
-                        cell_range=self._get_init_column(3+itinerary_count)+str(row_count)+":"+\
-                                        self._get_end_column(3+itinerary_count)+str(row_count)
-                        color="ffffff"
-                        if plan_line.study_field_id:
-                            color=itinerary_id.specialization_id.color[-6:]
-                        
-                        range_font=Font(size=16, color=plan_line.study_field_id.font_color[-6:])
-                        _logger.warning(plan_line.study_field_id.name+" color: "+plan_line.study_field_id.font_color[-6:])    
-                        self.merge_with_border(ws, cell_range, itinerary_id.itinerary_subject_inherit_id.code, alCenter, color, range_font)
-            
-                        rd=ws.row_dimensions[row_count]
-                        rd.height=32
-                        
-                        #===================================================================
-                        # CARGANDO EL NOMBRE DE LA ASIGNATURA
-                        #===================================================================
-                        cell_range=self._get_init_column(3+itinerary_count)+str(row_count+1)+":"+\
-                                        self._get_end_column2(3+itinerary_count)+str(row_count+2)
-                        self.merge_with_border(ws, cell_range, itinerary_id.itinerary_subject_inherit_id.name, alCenter, "ffffff", range_font)
-                        
+                        self.merge_no_color(ws, cell_range,txt, alCenter,Font(size=16))
                         rd=ws.row_dimensions[row_count+1]
                         rd.height=32
-                        rd=ws.row_dimensions[row_count+2]
-                        rd.height=32
-                        rd=ws.row_dimensions[row_count+3]
-                        rd.height=32
-                        #===================================================================
-                        # CARGANDO CREDITOS
-                        #===================================================================
-                    
-                        cell_range=self._get_end_column(3+itinerary_count)+str(row_count+1)+":"+\
-                                        self._get_end_column(3+itinerary_count)+str(row_count+1)
-                                        
-                        self.merge_with_border(ws, cell_range, "CR ", alCenter, "ffffff", range_font)
-            
-                        cell_range=self._get_end_column(3+itinerary_count)+str(row_count+2)+":"+\
-                                        self._get_end_column(3+itinerary_count)+str(row_count+2)
-
-                        self.merge_with_border(ws, cell_range, str(itinerary_id.itinerary_subject_inherit_id.scad_credits), alCenter, "ffffff", range_font)
-
-                        _logger.warning("ITINERARIO.."+itinerary_id.itinerary_subject_inherit_id.code+" "+itinerary_id.itinerary_subject_inherit_id.name)
                         
-                        itinerary_count+=1    
+                        row_count+=5
                         
-                
-                #===============================================================
-                # 
-                # 
-                # CREANDO CABECERA DEL ITINEARIO
-                # 
-                # 
-                #===============================================================
-                
-                    cell_range=self._get_init_column(3)+str(row_count-1)+":"+\
-                                        self._get_end_column(3+itinerary_count-1)+str(row_count-1)
-
-                    print(cell_range)                   
-                    txt = "ITINERARIO "+str(self.ordinals_number(level_number)) if is_equals else plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name
+                        is_equals = False
                     
-                    self.merge_no_color(ws, cell_range,txt, alCenter,Font(size=16))
-                    rd=ws.row_dimensions[row_count+1]
-                    rd.height=32
-                    
-                    row_count+=5
-                    
-                    is_equals = False
-                    
-                
+                    subject_exists.append(plan_line.subject_inherit_id.code)
         if write_legend:
             cell_range="C"+str(itinerary_start-1)+":G"+str(itinerary_start-1)
             self.merge_no_border(ws, cell_range, "ASIGNATURAS DE ITINERARIO",leftCenter,"ffffff",Font(size=28,color="851b1b"))
