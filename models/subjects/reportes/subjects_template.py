@@ -272,9 +272,9 @@ class Subject_template(models.TransientModel):
             txt = ""
             for grade_id in subject_id.grade_line_ids:
                 if txt != "":
-                    txt = str(txt)+","+str(grade_id.grade_id.name)
+                    txt = str(txt)+","+str(grade_id.grade_id.description)
                 else:
-                    txt = str(grade_id.grade_id.name)
+                    txt = str(grade_id.grade_id.description)
             ws.cell(column=17,row=row,value=str(txt))
             #ws.cell(column=17,row=row,value=str(subject_id.grade_id.description))
 
@@ -293,9 +293,9 @@ class Subject_template(models.TransientModel):
             txt = ""
             for grade_id in subject_id.grade_line_ids:
                 if txt != "":
-                    txt = str(txt)+","+str(grade_id.grade_id.name)
+                    txt = str(txt)+","+str(grade_id.grade_id.description)
                 else:
-                    txt = str(grade_id.grade_id.name)
+                    txt = str(grade_id.grade_id.description)
             ws.cell(column=19,row=row,value=str(txt))
             #ws.cell(column=19,row=row,value=str(subject_id.grade_id.description))
         
