@@ -1101,7 +1101,7 @@ class credit_study_plan_report(models.TransientModel):
         ws.cell(column=2,row=row,value=str(subject_id.course_number))
 
         #self.merge_with_color(ws,"D1:D1", "SIGLA", alCenter,"2B855C")
-        ws.cell(column=3,row=row,value=str(subject_id.name))
+        ws.cell(column=3,row=row,value=str(subject_id.short_name)) 
 
         #self.merge_with_color(ws,"E1:E1", "PERIODO DE LA SIGLA SCACRSE", alCenter,"2B855C")
         ws.cell(column=4,row=row,value=str(subject_id.scad_period_id.name))
