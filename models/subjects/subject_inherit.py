@@ -23,6 +23,7 @@ class subject_inherit(models.Model):
     course_number=fields.Char(related="subject_id.course_number")
     subject_name_id=fields.Many2one(related="subject_id.subject_name_id")
     new_subject=fields.Boolean(related="subject_id.new_subject")
+    subject_class_ids=fields.One2many(related="subject_id.subject_class_ids")
      
     #scadtl
     subject_scadtl_id = fields.Many2one("dara_mallas.subject_scadtl")

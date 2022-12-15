@@ -24,6 +24,13 @@
               		  		
               		  		
               		  </group>
+                    <group col="4" >
+                              <field name="subject_class_ids">
+                                                        <tree editable="bottom">
+                                                                <field name="subject_class_id"/>
+                                                        </tree>
+                              </field>
+                    </group>
                   <group>
                   
                 	
@@ -334,6 +341,7 @@
                                                       <field name="subject_inherit_id" invisible="1"/>
                                               </tree>
                                             </field>
+                                            
                                         </page>
                                 </notebook>
                             
@@ -419,7 +427,7 @@
 
          <!-- search -->
 
-         <record id="udla_mallas_subject_inherit_search" model="ir.ui.view">
+         <record id="dara_mallas_subject_inherit_search" model="ir.ui.view">
                 <field name="name">Asignatura</field>
                 <field name="model">dara_mallas.subject_inherit</field>
                 <field name="arch" type="xml">
@@ -450,12 +458,184 @@
               </p>
             </field>
          </record>
-	
+
+          <!-- ======================================================================================
+               ============================ MANU POR TIPO DE modalidad===============================
+               ======================================================================================  -->
+
+        <record id="action_open_subject_inherit_face_to_face" model="ir.actions.act_window">
+              <field name="name">Asignaturas Presencial</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">dara_mallas.subject_inherit</field>
+                
+                <field name="view_mode">tree,form</field> 
+                <field name="filter" eval="True"/>
+                <field name="domain" eval="[('scad_face_to_face','=','True')]"/>
+                
+                <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Administre el registro de la planificacion curricular anual
+                 </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record>
+
+        <record id="action_open_subject_inherit_hybrid" model="ir.actions.act_window">
+                <field name="name">Asignaturas Hibridas</field>
+                  <field name="type">ir.actions.act_window</field>
+                  <field name="res_model">dara_mallas.subject_inherit</field>
+                  
+                  <field name="view_mode">tree,form</field> 
+                  <field name="filter" eval="True"/>
+                  <field name="domain" eval="[('scad_hybrid','=','True')]"/>
+                  
+                  <field name="help" type="html">
+                    <p class="oe_view_nocontent_create">
+                      Administre el registro de la planificacion curricular anual
+                    </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record>
+
+        <record id="action_open_subject_inherit_online" model="ir.actions.act_window">
+                      <field name="name">Asignaturas En linea</field>
+                        <field name="type">ir.actions.act_window</field>
+                        <field name="res_model">dara_mallas.subject_inherit</field>
+                        
+                        <field name="view_mode">tree,form</field> 
+                        <field name="filter" eval="True"/>
+                          <field name="domain" eval="[('scad_online','=','True')]"/>
+                          
+                          <field name="help" type="html">
+                          <p class="oe_view_nocontent_create">
+                            Administre el registro de la planificacion curricular anual
+                          </p><p>
+                            
+                            Created by Intsoltecs
+                            www.intsoltec.com	
+                          </p>
+                        </field>
+         </record>
+
+          <!-- ======================================================================================
+               ============================ MENU POR TIPO DE CLASE DE SIGLA===============================
+               ======================================================================================  -->
+          <record id="action_open_subject_inherit_general_education" model="ir.actions.act_window">
+                  <field name="name">Asignaturas de Formación General</field>
+                    <field name="type">ir.actions.act_window</field>
+                    <field name="res_model">dara_mallas.subject_inherit</field>
+                    
+                    <field name="view_mode">tree,form</field> 
+                    <field name="filter" eval="True"/>
+                    <field name="domain" eval="[('subject_class_ids.subject_class_id.name','=','Formación General')]"/>
+                    <field name="help" type="html">
+                      <p class="oe_view_nocontent_create">
+                        Administre el registro de la planificacion curricular anual
+                      </p><p>
+                        
+                        Created by Intsoltecs
+                        www.intsoltec.com	
+                      </p>
+                    </field>
+         </record>
+          <record id="action_open_subject_inherit_commnon_trunk" model="ir.actions.act_window">
+                  <field name="name">Asignaturas de Tronco común</field>
+                    <field name="type">ir.actions.act_window</field>
+                    <field name="res_model">dara_mallas.subject_inherit</field>
+                    
+                    <field name="view_mode">tree,form</field> 
+                    <field name="filter" eval="True"/>
+                    <field name="domain" eval="[('subject_class_ids.subject_class_id.name','=','Tronco común')]"/>
+                    <field name="help" type="html">
+                      <p class="oe_view_nocontent_create">
+                        Administre el registro de la planificacion curricular anual
+                      </p><p>
+                        
+                        Created by Intsoltecs
+                        www.intsoltec.com	
+                      </p>
+                    </field>
+         </record>
+          <record id="action_open_subject_inherit_program" model="ir.actions.act_window">
+                  <field name="name">Asignaturas de Carrera</field>
+                    <field name="type">ir.actions.act_window</field>
+                    <field name="res_model">dara_mallas.subject_inherit</field>
+                    
+                    <field name="view_mode">tree,form</field> 
+                    <field name="filter" eval="True"/>
+                    <field name="domain" eval="[('subject_class_ids.subject_class_id.name','=','Carrera')]"/>
+                    <field name="help" type="html">
+                      <p class="oe_view_nocontent_create">
+                        Administre el registro de la planificacion curricular anual
+                      </p><p>
+                        
+                        Created by Intsoltecs
+                        www.intsoltec.com	
+                      </p>
+                    </field>
+         </record>
+          <record id="action_open_subject_inherit_languaje" model="ir.actions.act_window">
+                  <field name="name">Asignaturas de Idiomas</field>
+                    <field name="type">ir.actions.act_window</field>
+                    <field name="res_model">dara_mallas.subject_inherit</field>
+                    
+                    <field name="view_mode">tree,form</field> 
+                    <field name="filter" eval="True"/>
+                    <field name="domain" eval="[('subject_class_ids.subject_class_id.name','=','Idiomas')]"/>
+                    <field name="help" type="html">
+                      <p class="oe_view_nocontent_create">
+                        Administre el registro de la planificacion curricular anual
+                      </p><p>
+                        
+                        Created by Intsoltecs
+                        www.intsoltec.com	
+                      </p>
+                    </field>
+         </record>
+          <record id="action_open_subject_inherit_service" model="ir.actions.act_window">
+                  <field name="name">Asignaturas de Servicio</field>
+                    <field name="type">ir.actions.act_window</field>
+                    <field name="res_model">dara_mallas.subject_inherit</field>
+                    
+                    <field name="view_mode">tree,form</field> 
+                    <field name="filter" eval="True"/>
+                    <field name="domain" eval="[('subject_class_ids.subject_class_id.name','=','Servicio')]"/>
+                    <field name="help" type="html">
+                      <p class="oe_view_nocontent_create">
+                        Administre el registro de la planificacion curricular anual
+                      </p><p>
+                        
+                        Created by Intsoltecs
+                        www.intsoltec.com	
+                      </p>
+                    </field>
+         </record>
 
 
 </data>
 
     <menuitem id="dara_subject_inherits_tree_menu" name="Asignaturas Complete" parent="dara_subjects_menu" sequence="2" />
 		<menuitem id="dara_subject_inherits" name="Sigla" parent="dara_subject_inherits_tree_menu" action="action_open_subject_inherit" sequence="20"/>
+
+
+    <!-- por modalidad -->
+    <menuitem id="dara_subjects_modalidad" name="Por Modalidad" parent="dara_subjects_menu" sequence="2" />
+    <menuitem id="dara_Siglas_face_to_face" name="Presencial" parent="dara_subjects_modalidad" action="action_open_subject_inherit_face_to_face" sequence="2"/>
+    <menuitem id="dara_Siglas_hybrid" name="Hibridas" parent="dara_subjects_modalidad" action="action_open_subject_inherit_hybrid" sequence="3"/>
+    <menuitem id="dara_Siglas_online" name="En linea" parent="dara_subjects_modalidad" action="action_open_subject_inherit_online" sequence="4"/>
+
+    <!-- por clase -->
+    <menuitem id="dara_subjects_class" name="Por Clase" parent="dara_subjects_menu" sequence="3" />
+    <menuitem id="dara_general_education" name="Formacion General" parent="dara_subjects_class" action="action_open_subject_inherit_general_education" sequence="1"/>
+    <menuitem id="dara_Siglas_commnon_trunk" name="Tronco Comun" parent="dara_subjects_class" action="action_open_subject_inherit_commnon_trunk" sequence="2"/>
+    <menuitem id="dara_Siglas_program" name="De Carrera" parent="dara_subjects_class" action="action_open_subject_inherit_program" sequence="3"/>
+    <menuitem id="dara_Siglas_languaje" name="Idiomas" parent="dara_subjects_class" action="action_open_subject_inherit_languaje" sequence="4"/>
+    <menuitem id="dara_Siglas_service" name="Servicios" parent="dara_subjects_class" action="action_open_subject_inherit_service" sequence="5"/>
 
 </openerp>	
