@@ -53,7 +53,7 @@ class prerrequisites_report(models.Model):
                 group by s.id ,sp.id ,pr.name
                 order by 3 desc
         """ 
-        return select_str
+        return select_str 
     
 
 

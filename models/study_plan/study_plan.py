@@ -161,10 +161,17 @@ class study_plan(models.Model):
         return new_object
 
     def name_get(self):
-        result = []
-        for rec in self:
-            result.append((rec.id,'%s - %s' % (str(rec.program_id.name),str(rec.period_id.name))))
-        return result
+        res = []
+        for element in self:
+            name = ""
+            for item in element.program_id.code_ids:
+                name += item.name+' '
+            name +='/ '
+            name +=element.program_id.name or ' '
+            name += ' - '
+            name += element.period_id.name or ''
+            res.append((element.id, name))
+        return res
       
     
 
