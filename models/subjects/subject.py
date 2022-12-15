@@ -129,6 +129,7 @@ class elective_line(models.Model):
      
     period_id=fields.Many2one("dara_mallas.period")
     subject_id=fields.Many2one("dara_mallas.subject")
+    subject_code=fields.Char("Code",related="subject_id.code")
 
     elective_ids=fields.One2many("dara_mallas.elective",inverse_name="elective_line_id")
     
@@ -144,13 +145,25 @@ class elective_line(models.Model):
             objects.append(object_create.id)
         new_object.elective_ids=[(6,0,objects)]
         return new_object
+    
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s - %s' % (str(rec.subject_code),str(rec.subject_id.name))))
+        return result
 class elective(models.Model):
     _name="dara_mallas.elective"
    
     elective_subject_inherit_id=fields.Many2one("dara_mallas.subject_inherit")
     elective_subject_code=fields.Char("Sigla",related="elective_subject_inherit_id.code")
 
-    elective_line_id=fields.Many2one("dara_mallas.elective_line") 
+    elective_line_id=fields.Many2one("dara_mallas.elective_line")
+
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s' % (str(rec.elective_subject_code))))
+        return result
 
 
 class itinerary_line(models.Model):
@@ -158,7 +171,7 @@ class itinerary_line(models.Model):
      
     period_id=fields.Many2one("dara_mallas.period")
     subject_id=fields.Many2one("dara_mallas.subject")
-
+    subject_code=fields.Char("Code",related="subject_id.code")
     itinerary_ids=fields.One2many("dara_mallas.itinerary",inverse_name="itinerary_line_id")
 
     def copy(self,default=None):
@@ -175,6 +188,12 @@ class itinerary_line(models.Model):
             objects.append(object_create.id)
         new_object.elective_ids=[(6,0,objects)]
         return new_object
+    
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s - %s' % (str(rec.subject_code),str(rec.subject_id.name))))
+        return result
 
 class itinerary(models.Model):
     _name="dara_mallas.itinerary"
@@ -185,3 +204,9 @@ class itinerary(models.Model):
     specialization_id=fields.Many2one("dara_mallas.specialization")
 
     itinerary_line_id=fields.Many2one("dara_mallas.itinerary_line")
+
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s' % (str(rec.itinerary_subject_code))))
+        return result

@@ -44,12 +44,25 @@
                 <field name="arch" type="xml">
                 <tree>
 					
+                       <field name="subject_code"/>
                        <field name="subject_id"/>
                         <field name="period_id"/>
                         <field name="elective_ids" widget="many2many_tags" />
 				
                 </tree>     	            	  
                 </field>
+        </record> 
+
+         <!-- search -->
+        <record id="dara_mallas_elective_line_search" model="ir.ui.view">
+                <field name="name">Electivas Search</field>
+                <field name="model">dara_mallas.elective_line</field>
+                <field name="arch" type="xml">
+                	<search>
+                         <field name="subject_code"/>
+                       <field name="subject_id"/>
+					        </search>				            		    	
+           </field>
         </record> 
         
    

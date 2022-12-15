@@ -199,7 +199,7 @@ class subject_inherit(models.Model):
     itin_period_id=fields.Many2one(related="itinerary_id.period_id")
     itin_subject_id=fields.Many2one(related='itinerary_id.subject_id')
     itin_subject_code=fields.Char(related='itinerary_id.subject_id.code')
-    itin_itinerary_ids = fields.One2many(related="itinerary_id.itinerary_ids")
+    itin_itinerary_ids = fields.One2many(related="itinerary_id.itinerary_ids") 
 
     #electivas
     elective_id=fields.Many2one("dara_mallas.elective_line")

@@ -24,7 +24,7 @@
               		  		
               		  		
               		  </group>
-                    <group col="4" >
+                    <group col="2" >
                               <field name="subject_class_ids">
                                                         <tree editable="bottom">
                                                                 <field name="subject_class_id"/>
@@ -620,8 +620,8 @@
 
 </data>
 
-    <menuitem id="dara_subject_inherits_tree_menu" name="Asignaturas Complete" parent="dara_subjects_menu" sequence="2" />
-		<menuitem id="dara_subject_inherits" name="Sigla" parent="dara_subject_inherits_tree_menu" action="action_open_subject_inherit" sequence="20"/>
+    <menuitem id="dara_subject_inherits_tree_menu" name="Asignaturas" parent="dara_subjects_menu" sequence="2" />
+		<menuitem id="dara_subject_inherits" name="Asignaturas" parent="dara_subject_inherits_tree_menu" action="action_open_subject_inherit" sequence="20"/>
 
 
     <!-- por modalidad -->

@@ -88,7 +88,7 @@
 
 </data>
 
-    <menuitem id="dara_subjects_tree_menu" name="Asignaturas" parent="dara_subjects_menu" sequence="2" />
+    <menuitem id="dara_subjects_tree_menu" name="Organizaión" parent="dara_subjects_menu" groups="dara_admin" sequence="2" />
 		<menuitem id="dara_subjects" name="Sigla" parent="dara_subjects_tree_menu" action="action_open_subject" sequence="20"/>
 
 </openerp>	

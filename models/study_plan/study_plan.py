@@ -348,6 +348,24 @@ class study_plan(models.Model):
                     self.escribir_una_materia(ws,area_subject.subject_inherit_id,row)
                     subject.append(area_subject.subject_inherit_id.subject_id.code)
                     row = row + 1
+        
+        for line in self.study_plan_lines_ids:
+            for area_subject in line.area_subject_inherit_area_ids:
+                if area_subject.subject_inherit_id.elective:
+                    for item in area_subject.subject_inherit_id.elec_elective_ids:
+                        if item.elective_subject_inherit_id.subject_id.code not in subject:
+                            self.escribir_una_materia(ws,item.elective_subject_inherit_id,row)
+                            subject.append(item.elective_subject_inherit_id.subject_id.code)
+                            row = row + 1
+
+        for line in self.study_plan_lines_ids:
+            for area_subject in line.area_subject_inherit_area_ids:
+                if area_subject.subject_inherit_id.itinerary:
+                    for item in area_subject.subject_inherit_id.itin_itinerary_ids:
+                        if item.itinerary_subject_inherit_id.subject_id.code not in subject:
+                            self.escribir_una_materia(ws,item.itinerary_subject_inherit_id,row)
+                            subject.append(item.itinerary_subject_inherit_id.subject_id.code)
+                            row = row + 1
 
                                     
     def escribir_una_materia(self,ws,subject_id,row):
