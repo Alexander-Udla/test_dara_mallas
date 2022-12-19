@@ -969,6 +969,92 @@ class study_plan(models.Model):
             
         return cadena
 
+
+    #=============================================================================
+    #                               Temaplte de homologaciones 
+    #=============================================================================
+    def generate_homologation_template(self):
+        alCenter = Alignment(horizontal="center", vertical="center", wrapText=True)
+        
+        wb = Workbook()
+        ws = wb.create_sheet("Homologaciones", 0)
+        
+        
+        self.merge_with_color(ws, "A1:I1", "", alCenter, "A92121")
+        self.merge_no_color(ws, "A2:I2", "HOMOLOGACIONES "+self.program_id.name, alCenter)
+        
+        cell=ws["A2"]
+        cell.font  = Font(color="A92121",b=True, size=30)
+        ws.row_dimensions[2].height=50
+
+        row_count=3
+        #ws.cell(column=1,row=row_count,value="CODIGO PROGRAMA")
+        ws.cell(column=2,row=row_count,value="NOMBRE PROGRAMA")
+        ws.cell(column=3,row=row_count,value="PERIODO")
+        ws.cell(column=4,row=row_count,value="AREA")
+        ws.cell(column=5,row=row_count,value="SIGLA")
+        ws.cell(column=6,row=row_count,value="DESCRIPCION SIGLA")
+        ws.cell(column=7,row=row_count,value="COORDINADOR")
+        ws.cell(column=8,row=row_count,value="CONDICION")
+        ws.cell(column=9,row=row_count,value="CONECTOR")
+        ws.cell(column=10,row=row_count,value="SIGLA")
+        ws.cell(column=11,row=row_count,value="PRUEBA")
+        ws.cell(column=12,row=row_count,value="PUNTAJE MAXIMO")
+        ws.cell(column=13,row=row_count,value="PUNTAJE MINIMO")
+        ws.cell(column=14,row=row_count,value="ATRIBUTOS DE GRADO")
+        row_count=4            
+        
+        for line in self.study_plan_lines_ids:
+
+            for area_subject in line.area_subject_inherit_area_ids:
+
+                for homologations in area_subject.subject_inherit_id.subject_inherit_homologation_ids:
+                    periodo = [ 
+                            int(item.subject_rule_id.period_id.name) 
+                            if item.homo_area_id.code == line.area_homologation_code and int(item.subject_rule_id.period_id.name) <= int(self.period_id.name)
+                                else 0 
+                            for item in area_subject.subject_inherit_id.subject_inherit_homologation_ids
+                    ]
+                    if homologations.homo_area_id.code == line.area_homologation_code :
+
+                            homologations_item = homologations.subject_rule_id
+                            
+                            if int(homologations_item.period_id.name) == max(periodo):
+                                for homologation_id in homologations_item.subject_homologation_ids:
+                                    
+                                        #ws.cell(column=1,row=row_count,value=program_code.name)
+                                        ws.cell(column=2,row=row_count,value=self.program_id.name)
+                                        ws.cell(column=3,row=row_count,value=self.period_id.name)
+                                        ws.cell(column=4,row=row_count,value=str(line.area_homologation_code))
+                                        ws.cell(column=5,row=row_count,value=area_subject.subject_code)
+                                        ws.cell(column=6,row=row_count,value=area_subject.subject_name)
+                                        ws.cell(column=7,row=row_count,value=area_subject.subject_inherit_id.scadt_coordinador_id.idbanner)
+                                        ws.cell(column=8,row=row_count,value=homologation_id.condition)
+                                        ws.cell(column=9,row=row_count,value=homologation_id.group_id.name)
+                                        if homologation_id.homologation_subject_id:
+                                            ws.cell(column=10,row=row_count,value=homologation_id.homologation_subject_id.code)
+                                        else:
+                                            ws.cell(column=10,row=row_count,value='-')
+                                            ws.cell(column=11,row=row_count,value=homologation_id.test if homologation_id.test else '')
+                                            ws.cell(column=12,row=row_count,value=self.score_value(homologation_id.min_score,homologation_id.max_score))
+                                            ws.cell(column=13,row=row_count,value=homologation_id.max_score if homologation_id.max_score else '')
+                                            ws.cell(column=14,row=row_count,value=homologation_id.subject_attributes_id.name if homologation_id.subject_attributes_id else '')
+                                        row_count+=1
+        
+        output=BytesIO()
+        wb.save(output)
+        
+        #=======================================================================
+        # grabando el archivo
+        #=======================================================================
+        _logger.warning("listos para escribir")
+        self.write({
+            
+            'homologation_file':base64.b64encode(output.getvalue()),
+            'homologation_file_name':'Template_homologacion_'+self.program_id.name+'_'+self.period_id.name+".xlsx"
+            })
+        wb.close()
+        output.close()  
 class study_plan_line(models.Model):
     _name="dara_mallas.study_plan_line"
     #_rec_name="subject_id"
