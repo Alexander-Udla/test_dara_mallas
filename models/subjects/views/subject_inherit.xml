@@ -242,11 +242,11 @@
             		  		
             		  		
             		  </group>
-                    <notebook>
+                    <notebook >
                             <page string="PREREQUISITOS">
                                 <group col="2" >
                               
-                                    <field name="prerequisite_line_id"/>
+                                    <field name="prerequisite_line_id" />
                                     <field name="preq_period_id"/>
                                     <field name="preq_subject_id"/>
                                     <field name="preq_subject_code"/>
@@ -636,6 +636,6 @@
     <menuitem id="dara_Siglas_commnon_trunk" name="Tronco Comun" parent="dara_subjects_class" action="action_open_subject_inherit_commnon_trunk" sequence="2"/>
     <menuitem id="dara_Siglas_program" name="De Carrera" parent="dara_subjects_class" action="action_open_subject_inherit_program" sequence="3"/>
     <menuitem id="dara_Siglas_languaje" name="Idiomas" parent="dara_subjects_class" action="action_open_subject_inherit_languaje" sequence="4"/>
-    <menuitem id="dara_Siglas_service" name="Servicios" parent="dara_subjects_class" action="action_open_subject_inherit_service" sequence="5"/>
+    <!-- <menuitem id="dara_Siglas_service" name="Servicios" parent="dara_subjects_class" action="action_open_subject_inherit_service" sequence="5"/> -->
 
 </openerp>	
