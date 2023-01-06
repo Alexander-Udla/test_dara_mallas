@@ -242,8 +242,8 @@
             		  		
             		  		
             		  </group>
-                    <notebook >
-                            <page string="PREREQUISITOS">
+                    <notebook groups="dara_mallas.dara_admin">
+                            <page string="PREREQUISITOS" >
                                 <group col="2" >
                               
                                     <field name="prerequisite_line_id" />
