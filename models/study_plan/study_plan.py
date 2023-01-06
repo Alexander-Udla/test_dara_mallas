@@ -988,7 +988,7 @@ class study_plan(models.Model):
         ws.row_dimensions[2].height=50
 
         row_count=3
-        #ws.cell(column=1,row=row_count,value="CODIGO PROGRAMA")
+        ws.cell(column=1,row=row_count,value="CODIGO PROGRAMA")
         ws.cell(column=2,row=row_count,value="NOMBRE PROGRAMA")
         ws.cell(column=3,row=row_count,value="PERIODO")
         ws.cell(column=4,row=row_count,value="AREA")
@@ -1002,13 +1002,17 @@ class study_plan(models.Model):
         ws.cell(column=12,row=row_count,value="PUNTAJE MAXIMO")
         ws.cell(column=13,row=row_count,value="PUNTAJE MINIMO")
         ws.cell(column=14,row=row_count,value="ATRIBUTOS DE GRADO")
-        row_count=4            
+        row_count=4    
+         
+        #ordenar por area        
+        ordenados = sorted(self.study_plan_lines_ids, key=lambda coche : coche.area_homologation_code)
         
-        for line in self.study_plan_lines_ids:
-
+        for line in ordenados:
+            
             for area_subject in line.area_subject_inherit_area_ids:
 
                 for homologations in area_subject.subject_inherit_id.subject_inherit_homologation_ids:
+                    #periodo maximo
                     periodo = [ 
                             int(item.subject_rule_id.period_id.name) 
                             if item.homo_area_id.code == line.area_homologation_code and int(item.subject_rule_id.period_id.name) <= int(self.period_id.name)
@@ -1021,8 +1025,10 @@ class study_plan(models.Model):
                             
                             if int(homologations_item.period_id.name) == max(periodo):
                                 for homologation_id in homologations_item.subject_homologation_ids:
-                                    
-                                        #ws.cell(column=1,row=row_count,value=program_code.name)
+
+                                        for code_id in self.program_id.code_ids:
+                                            if code_id.name[-3:] == str(line.area_homologation_code)[:3]:
+                                                ws.cell(column=1,row=row_count,value=code_id.name)
                                         ws.cell(column=2,row=row_count,value=self.program_id.name)
                                         ws.cell(column=3,row=row_count,value=self.period_id.name)
                                         ws.cell(column=4,row=row_count,value=str(line.area_homologation_code))
