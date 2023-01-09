@@ -1640,7 +1640,7 @@ class credit_study_plan_report(models.TransientModel):
                     
                     for corequisite_id in plan_line.subject_inherit_id.core_corequisite_ids:
                         
-                        ws2.cell(column=22,row=corequisite_count,value=corequisite_id.code+" "+corequisite_id.name)
+                        ws2.cell(column=22,row=corequisite_count,value=corequisite_id.corequisite_subject_id.code+" "+corequisite_id.corequisite_subject_id.name)
                         corequisite_count+=1
                     
                 
