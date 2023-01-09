@@ -1025,6 +1025,10 @@ class credit_study_plan_report(models.TransientModel):
     
 
     def ordinals_number(self,number):
+        if number in [2]:
+            return str(number)+"do"
+        if number in [1,3]:
+            return str(number)+"ro"
         if number in [4,5,6]:
             return str(number)+"to"
         if number in [7,10]:
