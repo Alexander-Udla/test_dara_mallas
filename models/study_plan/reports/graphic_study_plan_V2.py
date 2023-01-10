@@ -1605,8 +1605,7 @@ class credit_study_plan_report(models.TransientModel):
                             self.merge_no_color(ws2, "b"+str(row_count)+":b"+str(end_row), \
                                                 level_number, alCenter)
                             self.merge_no_color(ws2, "d"+str(row_count)+":d"+str(end_row), \
-                                                #itinerary_id.specialization_id.name\
-                                                    "\n" +elective_id.elective_subject_inherit_id.code+" "+elective_id.elective_subject_inherit_id.name, leftCenter)
+                                                elective_id.elective_subject_inherit_id.code+" "+elective_id.elective_subject_inherit_id.name, leftCenter)
                         
                             
                             row_count=end_row+1    
