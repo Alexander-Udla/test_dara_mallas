@@ -741,11 +741,12 @@ class study_plan(models.Model):
         
         row_count=3            
         
-
+        #ordenar por area          
+        ordenados = sorted(self.study_plan_lines_ids, key=lambda coche : coche.area_homologation_code)
         #=======================================================
         # VAMOS A GRABAR LOS DATOS DE LA MALLA
         #=======================================================
-        for line in self.study_plan_lines_ids:
+        for line in ordenados:
 
             for area_subject in line.area_subject_inherit_area_ids:
 
@@ -1004,7 +1005,7 @@ class study_plan(models.Model):
         ws.cell(column=14,row=row_count,value="ATRIBUTOS DE GRADO")
         row_count=4    
          
-        #ordenar por area        
+        #ordenar por area          
         ordenados = sorted(self.study_plan_lines_ids, key=lambda coche : coche.area_homologation_code)
         
         for line in ordenados:
