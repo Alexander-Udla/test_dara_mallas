@@ -58,7 +58,7 @@ class study_plan(models.Model):
     study_plan_lines_ids=fields.One2many("dara_mallas.study_plan_line",inverse_name="study_plan_id")
     study_plan_lines_simple_ids=fields.One2many("dara_mallas.study_plan_line_simple",inverse_name="study_plan_id")
     
-    state=fields.Selection((('borrador','Borrador'),('vigente','Vigente'),('registro','NO vigente')), string="Estado")
+    state=fields.Selection([('borrador','Borrador'),('vigente','Vigente'),('registro','NO vigente')], string="Estado")
     file=fields.Binary("Archivo")
     file_name=fields.Char("nombre de archivo")
     plan_template_file=fields.Binary("Archivo")
