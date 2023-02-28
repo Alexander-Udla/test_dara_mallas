@@ -11,29 +11,16 @@
                 <field name="arch" type="xml">
                 <form>
                 	<sheet>
-            		    <group col="2" >
-              		  		
-              		  		<field name="subject_id"/>
-                        <field name="subject_code"/>
-              		  		
-              		  		
-              		  </group>
-              	<notebook>
-                          <page string="Sílabos">
-                                <field name="subject_description_ids">
-                                  <tree editable="bottom">
-                                    <field name ="period_id"/>
-                                    <field name="content_description"/>
-                                    <field name="content_description_en"/>
-                                    <field name="state"/>
-                                    <field name="subject_description_id" invisible="1"/>
-                                  </tree>
-                                </field>
-                            </page>
-                      </notebook>
-						            		    
-            		    
-            		    </sheet>
+                        <group col="2" >
+                            
+                            <field name="subject_id"/>
+                            <field name="subject_code"/>
+                            <field name ="period_id"/>
+                            <field name ="tipo"/>
+                            <field name="content_description"/>
+                            <field name="content_description_en"/>
+                        </group>
+            		  </sheet>
                 </form>     	            	  
                 </field>
         </record> 
@@ -48,18 +35,19 @@
 					
                        <field name="subject_code"/>
                        <field name="subject_id"/>
-                        <field name="subject_description_ids" widget="many2many_tags" />
+                       <field name ="period_id"/>
+                        <field name ="tipo"/>
 				
                 </tree>     	            	  
                 </field>
         </record> 
         <!-- search -->
         <record id="dara_mallas_subject_description_line_search" model="ir.ui.view">
-                <field name="name">Itinerario Search</field>
+                <field name="name">Silabo Search</field>
                 <field name="model">dara_mallas.subject_description_line</field>
                 <field name="arch" type="xml">
                 	<search>
-                         <field name="subject_code"/>
+                        <field name="subject_code"/>
                        <field name="subject_id"/>
 					        </search>				            		    	
            </field>
@@ -80,8 +68,7 @@
                 Administre el registro de los sílabos de sigla
               </p><p>
                 
-                Created by Intsoltecs
-                www.intsoltec.com	
+                DARA - UDLA
               </p>
             </field>
          </record>
