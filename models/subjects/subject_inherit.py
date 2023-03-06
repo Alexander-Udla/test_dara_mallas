@@ -192,7 +192,7 @@ class subject_inherit(models.Model):
     core_corequisite_ids = fields.One2many(related="corequisite_line_id.corequisite_ids")
 
     #reglas de homologacion
-    subject_inherit_homologation_ids = fields.One2many("dara_mallas.subject_inherit_homologation",inverse_name ="subject_inherit_id")
+    subject_inherit_homologation_ids = fields.One2many("dara_mallas.subject_inherit_homologation",inverse_name ="subject_inherit_id") 
 
     #itinerarios
     itinerary_id=fields.Many2one("dara_mallas.itinerary_line")

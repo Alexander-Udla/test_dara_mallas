@@ -4,3 +4,4 @@ from . import program
 from . import specialization
 from . import journey
 from . import mode
+from . import carga

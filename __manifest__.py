@@ -50,6 +50,7 @@
         'models/subjects/reportes/subject_study_plan_report.xml',
         'models/program/views/program.xml',
         'models/program/views/specialization_views.xml',
+        'models/program/carga/program_create_template.xml',
         'models/areas/views/area.xml',
         'models/areas/views/area_homologation.xml',
         'models/period/views/period.xml',
