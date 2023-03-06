@@ -10,10 +10,15 @@
                 <field name="priority" eval="25" />
                 <field name="arch" type="xml">
                 <form>
+                        <header>
+                		<field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                		
+                        </header>
                 	<sheet>
                         <group col="2" >
                             
                             <field name="subject_id"/>
+                            <field name="subject_name_en"/>
                             <field name="subject_code"/>
                             <field name ="period_id"/>
                             <field name ="tipo"/>
@@ -37,6 +42,7 @@
                        <field name="subject_id"/>
                        <field name ="period_id"/>
                         <field name ="tipo"/>
+                        <field name ="state"/>
 				
                 </tree>     	            	  
                 </field>

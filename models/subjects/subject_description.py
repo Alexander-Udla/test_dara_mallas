@@ -4,10 +4,12 @@ class subject_description(models.Model):
 
     subject_id=fields.Many2one("dara_mallas.subject")
     subject_code=fields.Char(related="subject_id.code")
+    subject_name_en=fields.Char(related="subject_id.name_en")
     content_description=fields.Text("Descripcion mínima",track_visibility='always')
     content_description_en=fields.Text("Minimum description",track_visibility='always')
     period_id=fields.Many2one("dara_mallas.period","Periodo")
     tipo = fields.Char("Tipo")
+    state=fields.Selection([('revisado','Revisado'),('por revisar','Por Revisar')], string="Estado")
     
     def name_get(self):
         result = []
