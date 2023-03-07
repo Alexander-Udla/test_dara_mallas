@@ -16,7 +16,7 @@ class program_create(models.Model):
     _name="dara_mallas.program_create"
 
     name=fields.Char("nombre del Programa")
-    state=fields.Selection((('pendiente','Pendiente'),('error','Error'),('aprobado','Aprobado')))
+    state=fields.Selection([('pendiente','Pendiente'),('error','Error'),('aprobado','Aprobado')])
     csv_file=fields.Binary("Archivo de Carrera")
     name_file=fields.Char("nombre de archivo")
     result = fields.Text("Resultados")
@@ -33,7 +33,7 @@ class program_create(models.Model):
         
 
         #collage
-        college = self.env['dara_mallas.college'].search([('name','=','EDUCACION CONTINUA')]) 
+        college = self.env['dara_mallas.college'].search([('name','=','EDUCACIÓN CONTINUA')]) 
         #grade 
         grade = self.env['dara_mallas.grade'].search([('name','=','Educación Continua')])
         
@@ -68,7 +68,7 @@ class program_create(models.Model):
                 #create subject
                 for error in self.create_subject(sheet_obj,max_col,college,grade,max_row,program_code,nam_career,grade_,campus_,area_):
                     errors += error +"\n"
-                self.create_subject(sheet_obj,max_col,college,grade,max_row,program_code,nam_career,grade_,campus_)
+                self.create_subject(sheet_obj,max_col,college,grade,max_row,program_code,nam_career,grade_,campus_,area_)
                 
                 self.write({
                                     'state':'aprobado',
@@ -369,7 +369,6 @@ class program_create(models.Model):
 
     def create_subject(self,sheet_obj,max_col,college,grade,max_row,program_code_,nam_career_,grade_,campus_,area_):
         #clase
-        print("hola")
         try:
             subject_class_name = self.env['dara_mallas.subject_class_name'].search([('name','=','Carrera')])  
             
@@ -445,7 +444,7 @@ class program_create(models.Model):
                     #sub.append(str(res.code+str(mat[5])))
                     
                     #modo calificacion
-                    grade_mode = self.env['dara_mallas.grade_mode'].search([('description','=','S')])
+                    grade_mode = self.env['dara_mallas.grade_mode'].search([('name','=','S')])
                     
                     
                     subject = self.env['dara_mallas.subject'].search([('code', '=', res.code+str(mat[5]))])
@@ -462,6 +461,8 @@ class program_create(models.Model):
                                 
                                 })
                         subject_scacrse_new = self.env['dara_mallas.subject_scacrse'].create({
+                                'period_id':period.id,
+                                'college_id':college.id,
                                 'subject_id':subject_create_new.id,
                                 'teaching_sesions':mat[11],
                                 'academic_hours':mat[12],
@@ -482,9 +483,10 @@ class program_create(models.Model):
                                 'gpa':True,
                                 'face_to_face' : True
                         })
-                        subject_scadtl_new = self.env['dara_mallas.scadtl'].create({
+                        subject_scadtl_new = self.env['dara_mallas.subject_scadtl'].create({
 
                                 'subject_id':subject_create_new.id,
+                                'period_id':period.id,
                                 'coordinador_id':subject_owner.id,
                                 'program_code_id': programa_code.id,
                                 'weighing_id':weighing.id,
@@ -492,6 +494,7 @@ class program_create(models.Model):
                         })
                         subject_schule_class_new = self.env['dara_mallas.schedule_class_line_subject'].create({
                             'subject_id':subject_create_new.id,
+                            'period_id':period.id,
                             'schedule_class_line_ids':[ 
                                     (0,0,{'schedule_class_id':d[0],'schedule_class_code':code[0]}),
                                     (0,0,{'schedule_class_id':d[1],'schedule_class_code':code[1]}),
@@ -511,29 +514,44 @@ class program_create(models.Model):
                             'subject_id':subject_create_new.id,
                             'subject_class_id':subject_class_name.id
                         })
+                        #tipo de calificacion
                         subject_grade_new = self.env['dara_mallas.grade_mode_line_subject'].create({
                             'subject_id':subject_create_new.id,
-                            'grade_mode_line_ids' : [(0,0,{
-                                    'grade_mode_id':grade_mode.id,
-                                    #'grade_mode_code': grade_mode.description,
-                                    #'default': True,
-                                    #'subject_id':subject_update.id
-                                    })]
+                            'period_id':period.id,
+                           
                         })
+                        subject_grade_mode_line = self.env['dara_mallas.grade_mode_line'].create({
+                            'grade_mode_id':grade_mode.id,
+                            'grade_mode_line_subject_id':subject_grade_new.id
+                        })
+
+
                         subject_rule_new = self.env['dara_mallas.subject_rule'].create({
                         'subject_id':subject_create_new.id,
+                        'period_id':period.id,
                         'area_id':area_.id,
-                        'subject_homologation_ids':[(0,0,{
-                                                'subject_id':subject_create_new.id,
-                                                'homologation_subject_id':subject_create_new.id,
-                                                'homologation_subject_code':subject_create_new.code,
+                        })
+                        subject_homologation_new = self.env['dara_mallas.homologation'].create({
+                            'homologation_subject_id':subject_create_new.id,
+                                                #'subject_rule_rule_id':subject_create_new.id,
+                                                #'homologation_subject_code':subject_create_new.code,
                                                 'group_id':group.id,
                                                 'condition':1,
-                                                'rule_min_score_id':rule.id
-                                                })]
-
+                                                'rule_min_score_id':rule.id,
+                                                'subject_rule_id':subject_rule_new.id 
                         })
                         
+                        #nivel de sigla
+                        grade_line_subject_new = self.env['dara_mallas.grade_line_subject'].create({
+                            'period_id':period.id,
+                            'subject_id':subject_create_new.id,
+
+                        })
+                        grade_line_new = self.env['dara_mallas.grade_line'].create({
+                            'grade_id':grade.id,
+                            'grade_line_subject_id':grade_line_subject_new.id,
+
+                        })
                         #crear sigla con todos los componentes
                         subject_inherit_new = self.env['dara_mallas.subject_inherit'].create(
                             {
@@ -541,9 +559,11 @@ class program_create(models.Model):
                             'subject_scadtl_id':subject_scadtl_new.id,
                             'grade_mode_line_subject_id':subject_grade_new.id,
                             'schedule_class_line_subject_id':subject_schule_class_new.id,
-                            'subject_scacrse_id':subject_scacrse_new.id
+                            'subject_scacrse_id':subject_scacrse_new.id,
+                            'grade_line_subject_id':grade_line_subject_new.id
                             }
                         )
+
                         #crear homologaciones para sigla inherit
                         subject_homologation_inherit = self.env['dara_mallas.subject_inherit_homologation'].create({
                             'subject_rule_id':subject_rule_new.id,
@@ -606,6 +626,7 @@ class program_create(models.Model):
         #agrega las areas a la malla
         study_plan_line_new = self.env['dara_mallas.study_plan_line'].create({
             'study_plan_id':study_plan_.id,
+            'line_order':int(area_.code[-1:] if area_.code[-1:]!= 0 else area_.code[-2:]),
             'area_homologation_id':are_homologation_new.id
         })
 
