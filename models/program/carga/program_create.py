@@ -99,7 +99,7 @@ class program_create(models.Model):
             saes_ = []
             for data in program:
                 for codes in data.code_ids:
-                    if codes.name[0:4] == 'EDCO':
+                    if codes.name[0:4] == 'EDCO' and int(codes.name[6:len(codes.name)]) != 907:
                         saes_.append(int(codes.name[6:len(codes.name)]))
             if saes_:
                 saes_max = max(saes_)+1
@@ -117,7 +117,6 @@ class program_create(models.Model):
         except Exception as e:
             self.result = "Se producio un error al realizar el codigo del programa"+str(saes_max)
        
-
     def read_xlsx_cabecera_validator(self,sheet_obj,max_col,validator=False):
         try:
             
@@ -366,7 +365,6 @@ class program_create(models.Model):
             self.result = "EL programa EDCO : "+name_career.value+" ya existe en el sistema"
             #raise UserError("EL programa EDCO : "+name_career.value+" ya existe en el sistema")
         
-
     def create_subject(self,sheet_obj,max_col,college,grade,max_row,program_code_,nam_career_,grade_,campus_,area_):
         #clase
         try:
@@ -576,6 +574,7 @@ class program_create(models.Model):
             self.create_study_plan(sheet_obj,max_col,college,grade,max_row,sub,program_code_,nam_career_,uec_,period,grade_,campus_,area_)            
         except Exception as e:
             print(e)
+    
     def create_study_plan(self,sheet_object,max_col,collage,grade,max_row,sub,program_code_,nam_career_,uec_,period,grade_,campus_,area_):
 
         try:
@@ -606,7 +605,6 @@ class program_create(models.Model):
             self.result = "La malla: "+program.name+" ya existe en el sistema"
             _logger.error("La malla: "+program.name+" ya existe en el sistema")
           
-
     def add_subject(self,subjects,period,nam_career_,area_,study_plan_):
         #program
         program = self.env['dara_mallas.program'].search([('name','=',nam_career_)])
@@ -641,8 +639,7 @@ class program_create(models.Model):
                 except Exception as e:
                     self.result = "La materia: "+item.name+" fue NO agregado correctacmente a "+program.name
                     _logger.error("La materia: "+item.name+" fue NO agregado correctacmente a "+program.name)
-                
-    
+                  
     def open_study_plan_create(self):
       
         return {
