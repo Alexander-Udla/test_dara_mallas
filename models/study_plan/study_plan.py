@@ -719,8 +719,8 @@ class study_plan(models.Model):
             for area_subject in line.area_homologation_id:
                 ws.cell(column=1,row=r,value=str(area_subject.area_id.code))
                 ws.cell(column=2,row=r,value=str(area_subject.area_id.name))
-                #ws.cell(column=3,row=r,value=str(line.subject_id.grade_id.description))
-                #ws.cell(column=4,row=r,value=str(line.subject_id.grade_id.description))
+                ws.cell(column=3,row=r,value=str(self.grade_id.description))
+                ws.cell(column=4,row=r,value=str(self.grade_id.description))
                 ws.cell(column=5,row=r,value="X")
                 #aux_level_data = level_data
                 r = r+1
