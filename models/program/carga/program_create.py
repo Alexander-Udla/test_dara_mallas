@@ -248,7 +248,7 @@ class program_create(models.Model):
             
             #verifica si hay una formula
             max_row = sheet_obj.max_row
-            for i in range(15, max_row +1):
+            for i in range(14, max_row +1):
                 subj = []
                 for j in range(1, max_col + 1):
                     cell_obj = sheet_obj.cell(row = i, column = j)
@@ -397,7 +397,7 @@ class program_create(models.Model):
                 d.append(schedule.id)
                 code.append(schedule.code)
         
-            for i in range(15, max_row +1):
+            for i in range(14, max_row +1):
                 mat = []
                 
                 for j in range(1, max_col + 1):
