@@ -12,6 +12,10 @@
             <field name="sequence">104</field>
         </record>
 
+        <record model="res.groups" id="dara_mallas_menu_study_plan">
+            <field name="name">Mallas</field>
+            <field name="category_id" ref="dara_mallas_menus_group"/>
+        </record>
         <record model="res.groups" id="dara_mallas_menu_subjects">
             <field name="name">Asignaturas</field>
             <field name="category_id" ref="dara_mallas_menus_group"/>

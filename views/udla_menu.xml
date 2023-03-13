@@ -5,7 +5,7 @@
 	<menuitem id="dara_programs_menu" name="Programas" groups="dara_admin" sequence="1"/>
 
 	<!-- mallas -->
-	<menuitem id="dara_study_plan_menu" name="Mallas" groups="dara_admin" sequence="2"/>
+	<menuitem id="dara_study_plans_menu" name="Mallas" groups="dara_admin,dara_mallas_menu_study_plan" sequence="2"/>
 
 	<!-- areas -->
 	<menuitem id="dara_areas_menu" name="Areas" groups="dara_admin" sequence="3"/>

@@ -186,7 +186,7 @@
          </record>
  		
 		</data>
-	  <menuitem id="dara_study_plan_tree_menu" name="Mallas" parent="dara_study_plan_menu" sequence="2" />
+	  <menuitem id="dara_study_plan_tree_menu" name="Mallas" parent="dara_study_plans_menu" sequence="2" />
 		<menuitem id="dara_study_plans" name="Todas" parent="dara_study_plan_tree_menu" action="action_open_all_study_plan" sequence="20"/>
 
 	

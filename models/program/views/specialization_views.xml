@@ -96,6 +96,6 @@
 
 
 </data>
-		<menuitem id="dara_specializations" name="Especializaciones" parent="dara_programs_tree_menu" action="action_open_specialization" sequence="2"/>
+		<menuitem id="dara_specializations" name="Especializaciones" parent="dara_programs_tree_menu" action="action_open_specialization" sequence="25"/>
 
 </openerp>	
