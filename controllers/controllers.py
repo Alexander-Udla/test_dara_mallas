@@ -15,7 +15,7 @@ class CreateObjects(http.Controller):
         cheack_subject_scadtl = http.request.env['dara_mallas.subject_scadtl'].search([('subject_id','=',subject.id),('period_id','=',period.id)])
         try:
             if not cheack_subject_scadtl:
-                subject_scadtl = http.request.env['dara_mallas.subject_scadtl'].create({
+                subject_scadtl_new = http.request.env['dara_mallas.subject_scadtl'].create({
                     'subject_id':subject.id,
                     'period_id':period.id,
                     'weighing_id':weighing.id,
@@ -23,7 +23,23 @@ class CreateObjects(http.Controller):
                     'program_code_id':subject_scadtl_max.program_code_id.id,
 
                 })
+
+                subject_inherit = http.request.env['dara_mallas.subject_inherit'].search([('subject_id','=',subject.id)])
+                for item in subject_inherit:
+                    item.write(
+                        {
+                        'subject_scadtl_id':subject_scadtl_new.id
+                        }
+                    )
+
             else:
+                subject_inherit = http.request.env['dara_mallas.subject_inherit'].search([('subject_id','=',subject.id)])
+                for item in subject_inherit:
+                    item.write(
+                        {
+                        'subject_scadtl_id':subject_scadtl_max.id
+                        }
+                    )
                 print("sigla ya existe")
             data = {
             'res':'ok %s'%(program_code),
