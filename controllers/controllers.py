@@ -1,21 +1,49 @@
 # -*- coding: utf-8 -*-
-# from odoo import http
+from odoo import http
+import json
 
+class CreateObjects(http.Controller):
+    @http.route('/create/objectos/<string:program_code>/',type='json', auth='public')
+    def index(self,program_code,**kw):
+        #data = json.loads(http.request.httprequest.data)
+        subject = http.request.env['dara_mallas.subject'].search([('code','=',program_code)])
+        period = http.request.env['dara_mallas.period'].search([('name','=','202300')])
+        weighing = http.request.env['dara_mallas.weighing'].search([('code','=','P70')])
+        subject_scadtl = http.request.env['dara_mallas.subject_scadtl'].search([('subject_id','=',subject.id)])
+        subject_scadtl_max = subject_scadtl.sorted(key=lambda r: r.period_id.name , reverse=True)[0]
 
-# class DaraMallas(http.Controller):
-#     @http.route('/dara_mallas/dara_mallas/', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
+        cheack_subject_scadtl = http.request.env['dara_mallas.subject_scadtl'].search([('subject_id','=',subject.id),('period_id','=',period.id)])
+        try:
+            if not cheack_subject_scadtl:
+                subject_scadtl = http.request.env['dara_mallas.subject_scadtl'].create({
+                    'subject_id':subject.id,
+                    'period_id':period.id,
+                    'weighing_id':weighing.id,
+                    'coordinador_id':subject_scadtl_max.coordinador_id.id,
+                    'program_code_id':subject_scadtl_max.program_code_id.id,
 
-#     @http.route('/dara_mallas/dara_mallas/objects/', auth='public')
+                })
+            else:
+                print("sigla ya existe")
+            data = {
+            'res':'ok %s'%(program_code),
+            }
+            return json.dumps(data)
+        except Exception as e:
+            data = {
+                'res':'fail %s'%(program_code),
+                }
+            return json.dumps(data)
+
+#     @http.route('/custom/addons/dara_rdas/custom/addons/dara_rdas/objects/', auth='public')
 #     def list(self, **kw):
-#         return http.request.render('dara_mallas.listing', {
-#             'root': '/dara_mallas/dara_mallas',
-#             'objects': http.request.env['dara_mallas.dara_mallas'].search([]),
+#         return http.request.render('custom/addons/dara_rdas.listing', {
+#             'root': '/custom/addons/dara_rdas/custom/addons/dara_rdas',
+#             'objects': http.request.env['custom/addons/dara_rdas.custom/addons/dara_rdas'].search([]),
 #         })
 
-#     @http.route('/dara_mallas/dara_mallas/objects/<model("dara_mallas.dara_mallas"):obj>/', auth='public')
+#     @http.route('/custom/addons/dara_rdas/custom/addons/dara_rdas/objects/<model("custom/addons/dara_rdas.custom/addons/dara_rdas"):obj>/', auth='public')
 #     def object(self, obj, **kw):
-#         return http.request.render('dara_mallas.object', {
+#         return http.request.render('custom/addons/dara_rdas.object', {
 #             'object': obj
 #         })
