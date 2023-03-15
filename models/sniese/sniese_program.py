@@ -31,7 +31,7 @@ class sniese_program(models.Model):
     #===========================================
     banner_complete_name = fields.Char("Nombre completo BANNER")
     sniese_name = fields.Char("Nombre SNIESE")
-    transitional_provision = fields.Selection((('SEGUNDA','SEGUNDA'),('TERCERA','TERCERA'),('APROBACION NORMAL','APROBACION NORMAL')), string="Transitoria")
+    transitional_provision = fields.Selection([('SEGUNDA','SEGUNDA'),('TERCERA','TERCERA'),('APROBACION NORMAL','APROBACION NORMAL')], string="Transitoria")
     field_wide_id = fields.Many2one('dara_mallas.field_wide','Campo amplio')
     field_specific_id = fields.Many2one('dara_mallas.field_specific','Campo especifico')
     field_detailed_id = fields.Many2one('dara_mallas.field_detailed','Campo detallado')
