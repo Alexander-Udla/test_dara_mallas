@@ -14,6 +14,12 @@ class title(models.Model):
     genre=fields.Selection([('femenino','Femenino'),('masculino','Masculino')],"Genero")
     grade_id=fields.Many2one("dara_mallas.grade")
     
-    specialization_id=fields.Many2one("dara_mallas.specialization")
+    specialization_id=fields.Many2one("dara_mallas.specialization") 
+
+    def name_get(self):
+        result = []
+        for rec in self:
+            result.append((rec.id,'%s / %s' % (str(rec.name),str(rec.genre))))
+        return result
     
     
