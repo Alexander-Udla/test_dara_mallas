@@ -83,6 +83,17 @@
 
 </data>
 
-		<menuitem id="dara_subject_description_line" name="Sílabos" parent="dara_subject_inherits_tree_menu" action="action_open_subject_description_line" sequence="20"/>
+		<menuitem id="dara_subject_description_line_normal" 
+                name="Sílabos" 
+                parent="dara_subject_inherits_tree_menu" 
+                action="action_open_subject_description_line" 
+                sequence="20"/>
+                
+                <!-- perfil para traduccion -->
+		<menuitem id="dara_subject_description_traduction" 
+                name="Sílabos" 
+                action="action_open_subject_description_line" 
+                groups="dara_mallas_silabos"
+                sequence="20"/>
 
 </openerp>	

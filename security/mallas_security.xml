@@ -49,6 +49,19 @@
             <field name="name">Mallas de sigla</field>
             <field name="category_id" ref="dara_mallas_report_group"/>
         </record>
+
+        <!-- Traduccion -->
+    
+        <record model="ir.module.category" id="dara_mallas_traslate_group">
+            <field name="name">Traducción</field>
+            <field name="sequence">106</field>
+        </record>
+
+        <record model="res.groups" id="dara_mallas_silabos">
+            <field name="name">Silabos</field>
+            <field name="category_id" ref="dara_mallas_traslate_group"/>
+        </record>
+         
     
     </data>
 </odoo>
