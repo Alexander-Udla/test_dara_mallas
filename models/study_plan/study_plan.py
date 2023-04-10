@@ -828,13 +828,13 @@ class study_plan(models.Model):
         for program_code in self.program_id.code_ids:
             for line in self.study_plan_lines_ids:
                 for area_subject in line.area_homologation_id:
-                    check = False
-                    if self.grade_id.description == 'EC':
-                        if program_code.name[-3:]== area_subject.area_id.code[1:4]:
-                            check = True
-                        elif program_code.name[-3:]== area_subject.area_id.code[0:3]:
-                            check = True
-                    if check:
+                    #check = False
+                   # if self.grade_id.description == 'EC':
+                        #if program_code.name[-3:]== area_subject.area_id.code[1:4]:
+                         #   check = True
+                        #elif program_code.name[-3:]== area_subject.area_id.code[0:3]:
+                           # check = True
+                    #if check:
                     
                         ws.cell(column=1,row=r,value=str(self.period_id.name))
                         ws.cell(column=2,row=r,value=program_code.name)
