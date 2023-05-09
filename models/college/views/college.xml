@@ -14,6 +14,7 @@
             		    <group col="2" >
                         <field name="code"/>
               		  		<field name="name"/>
+              		  		<field name="name_en"/>
               		  		<field name="name_short"/>
               		  		
               		  		
@@ -35,6 +36,7 @@
                 <tree>
                         <field name="code"/>
                       <field name="name"/>
+                      <field name="name_en"/>
                       <field name="name_short"/>
 				
                 </tree>     	            	  
@@ -56,8 +58,7 @@
                 Administre el registro de Facultad / Escuela
               </p><p>
                 
-                Created by Intsoltecs
-                www.intsoltec.com	 
+                DARA/CIA
               </p>
             </field>
          </record>
