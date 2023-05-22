@@ -261,7 +261,33 @@ def get_homologations():
         'PRUEBA':['L','3D57C5',15],
         'PUNTAJE MAXIMO':['M','3D57C5',15],
         'PUNTAJE MINIMO':['N','3D57C5',15],
-        'ESTADO_BOT':['O','3D57C5',15],
+        'ATRIBUTO GRADO':['O','3D57C5',15],
+        'ESTADO_BOT':['P','3D57C5',15],
+        
+        }
+    return  labels
+
+def get_homologations_rule_rule():
+    labels={
+        #'CODIGO PROGRAMA':['A','3D57C5',20],
+        #'NOMBRE PROGRAMA':['B','3D57C5',25],
+        'PERIODO':['A','3D57C5',25],
+        'AREA':['B','3D57C5',22],
+        'SIGLA':['C','3D57C5',22],
+        'REGLA':['D','3D57C5',22],
+        'DESCRIPCION SIGLA':['E','3D57C5',32],
+        'COORDINADOR':['F','3D57C5',32],
+        'CONDICION':['G','3D57C5',15],
+        'CONJUNTO':['H','3D57C5',15],
+        'SUBCONJUNTO':['I','3D57C5',15],
+        'SUBJECT':['J','3D57C5',15],
+        'COURSE':['K','3D57C5',15],
+        'PUNTAJE':['L','3D57C5',15],
+        'PRUEBA':['M','3D57C5',15],
+        'PUNTAJE MAXIMO':['N','3D57C5',15],
+        'PUNTAJE MINIMO':['O','3D57C5',15],
+        'ATRIBUTO GRADO':['P','3D57C5',15],
+        'ESTADO_BOT':['Q','3D57C5',15],
         
         }
     return  labels

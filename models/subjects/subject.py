@@ -92,7 +92,8 @@ class homologation(models.Model):
 
     homologation_subject_id=fields.Many2one("dara_mallas.subject",track_visibility='always')
     homologation_subject_code=fields.Char("Sigla",related="homologation_subject_id.code",track_visibility='always')
-    subject_rule_rule_id = fields.Many2one("dara_mallas.subject_rule",track_visibility='always')
+    #subject_rule_rule_id = fields.Many2one("dara_mallas.subject_rule",track_visibility='always')
+    subject_rule_subject_id = fields.Many2one("dara_mallas.subject_inherit",track_visibility='always')
     subject_attributes_id = fields.Many2one("dara_mallas.subject_attributes")
     group_id=fields.Many2one("dara_mallas.group_rule",track_visibility='always') 
     condition=fields.Char("Condiciones",track_visibility='always')

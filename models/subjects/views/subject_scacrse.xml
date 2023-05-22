@@ -52,7 +52,9 @@
 		            		  	<field name="practicing_hours"/>
 		            		  	<field name="community_service_hours"/>
 		            		  	<field name="lab_application_hours"/>
+		            		  	<field name="externship_application_hours"/>
 	            		    	<field name="asisted_hours" readonly="1" force_save="1"/>
+
 	
 	            		   </group>
 	            		   

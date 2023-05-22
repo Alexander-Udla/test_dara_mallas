@@ -26,7 +26,8 @@
                                   <tree editable="bottom">
                                     <field name="homologation_subject_code"/>
                                     <field name="homologation_subject_id" string="Asignatura"/>
-                                    <field name="subject_rule_rule_id" string="Regla"/>
+                                    <!-- <field name="subject_rule_rule_id" string="Regla"/> -->
+                                    <field name="subject_rule_subject_id" string="Regla"/>
                                     <field name="group_id"/>
                                     <field name="rule_min_score_id"/>
                                     <field name="condition"/>

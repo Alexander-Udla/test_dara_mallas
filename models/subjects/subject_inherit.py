@@ -58,7 +58,7 @@ class subject_inherit(models.Model):
     scad_repeat_limit=fields.Integer(related="subject_scacrse_id.repeat_limit")
     scad_gpa=fields.Boolean(related="subject_scacrse_id.gpa")
 
-    #======================================================
+    #====================================================== 
     #                      Componentes PRESENCIAL
     #======================================================
     scad_face_to_face=fields.Boolean(related="subject_scacrse_id.face_to_face")
@@ -79,6 +79,7 @@ class subject_inherit(models.Model):
     scad_community_service_hours=fields.Integer(related="subject_scacrse_id.community_service_hours",track_visibility='always')
     scad_lab_application_hours=fields.Integer(related="subject_scacrse_id.lab_application_hours",track_visibility='always')
     scad_asisted_hours=fields.Integer(related="subject_scacrse_id.asisted_hours",track_visibility='always')
+    scad_externship_application_hours=fields.Integer(related="subject_scacrse_id.externship_application_hours",track_visibility='always')
 
     #horas autonomas
     scad_autonomus_hours=fields.Integer(related="subject_scacrse_id.autonomus_hours",track_visibility='always')

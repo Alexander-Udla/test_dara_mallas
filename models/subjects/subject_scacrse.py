@@ -41,6 +41,7 @@ class subject_scacrse(models.Model):
     community_service_hours=fields.Integer("H. Ser. Com.",track_visibility='always')
     lab_application_hours=fields.Integer("H. Lab. Aplicacion",track_visibility='always')
     asisted_hours=fields.Integer("Total Asistido",track_visibility='always')
+    externship_application_hours=fields.Integer("H. Aplicación Externado")
 
     #horas autonomas
     autonomus_hours=fields.Integer("Total Autonomo Pre.",track_visibility='always')

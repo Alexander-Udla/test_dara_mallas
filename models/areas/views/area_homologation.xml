@@ -15,6 +15,7 @@
               		  		
               		  		<field name="area_id"/>
                         <field name="period_id"/>
+                        <field name="dinamic"/>
               		  		
               		  		
               		  </group>

@@ -73,7 +73,9 @@
 		            		  	<field name="scad_practicing_hours"/>
 		            		  	<field name="scad_community_service_hours"/>
 		            		  	<field name="scad_lab_application_hours"/>
+		            		  	<field name="scad_externship_application_hours"/>
 	            		    	<field name="scad_asisted_hours" readonly="1" force_save="1"/>
+
 	
 	            		   </group>
 	            		   
