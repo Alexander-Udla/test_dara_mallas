@@ -88,7 +88,7 @@ class subject_rule_line(models.Model):
 
 class homologation(models.Model):
     _name="dara_mallas.homologation"
-    _order="group_id,homologation_subject_id"
+    #_order="group_id,homologation_subject_id"
 
     homologation_subject_id=fields.Many2one("dara_mallas.subject",track_visibility='always')
     homologation_subject_code=fields.Char("Sigla",related="homologation_subject_id.code",track_visibility='always')
