@@ -46,7 +46,7 @@ class subject_rule(models.Model):
         for item in self.subject_homologation_ids:
             pre = {
                 'homologation_subject_id':item.homologation_subject_id.id,
-                'subject_rule_rule_id':item.subject_rule_rule_id.id,
+                'subject_rule_subject_id':item.subject_rule_subject_id.id,
                 'subject_attributes_id':item.subject_attributes_id.id,
                 'group_id':item.group_id.id,
                 'condition':item.condition,
