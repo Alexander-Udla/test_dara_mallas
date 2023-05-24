@@ -1158,9 +1158,9 @@ class study_plan(models.Model):
                                 else 0 
                             for item in area_subject.subject_inherit_id.subject_inherit_homologation_ids
                     ]
-                    if homologations.homo_area_id.code == line.area_homologation_code or line.area_homologation_id.dinamic :
+                    if homologations.homo_area_id.code == line.area_homologation_code or (line.area_homologation_id.dinamic and homologations.homo_area_id.code == line.area_homologation_code):
 
-                            homologations_item = homologations.subject_rule_id
+                            homologations_item = homologations.subject_rule_id 
                             
                             if int(homologations_item.period_id.name) == max(periodo) or line.area_homologation_id.dinamic:
                                 for homologation_id in homologations_item.subject_homologation_ids:
@@ -1173,7 +1173,8 @@ class study_plan(models.Model):
                                         ws.cell(column=4,row=row_count,value=str(line.area_homologation_code))
                                         ws.cell(column=5,row=row_count,value=area_subject.subject_code)
                                         ws.cell(column=6,row=row_count,value=area_subject.subject_name)
-                                        
+                                        if area_subject.subject_code == 'FGHZ0960':
+                                            print("hola")
                                         if homologation_id.subject_rule_subject_id:
                                             ws.cell(column=7,row=row_count,value=homologation_id.homologation_subject_id.code)
                                             ws.cell(column=8,row=row_count,value=homologation_id.homologation_subject_id.name)
