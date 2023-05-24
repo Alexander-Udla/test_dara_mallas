@@ -1179,24 +1179,40 @@ class study_plan(models.Model):
                                             ws.cell(column=8,row=row_count,value=homologation_id.homologation_subject_id.name)
 
 
-                                        ws.cell(column=9,row=row_count,value=area_subject.subject_inherit_id.scadt_coordinador_id.idbanner)
                                         ws.cell(column=10,row=row_count,value=homologation_id.condition)
                                         ws.cell(column=11,row=row_count,value=homologation_id.group_id.name)
-                                        if homologation_id.homologation_subject_id: 
-                                            if homologation_id.homologation_subject_id and not homologation_id.subject_rule_subject_id:
-                                                ws.cell(column=12,row=row_count,value=homologation_id.homologation_subject_id.code)
-                                            elif homologation_id.subject_rule_subject_id:
+                                        if homologation_id.homologation_subject_id:
+                                            #cuando es normal
+                                            if homologation_id.homologation_subject_id and not homologation_id.subject_rule_subject_id and (not homologation_id.test or homologation_id.test == '0'):
+                                                ws.cell(column=9,row=row_count,value=area_subject.subject_inherit_id.scadt_coordinador_id.idbanner)
+                                                ws.cell(column=12,row=row_count,value=homologation_id.homologation_subject_id.code) 
+                                            
+                                            if homologation_id.subject_rule_subject_id and not homologation_id.test:
+                                                ws.cell(column=9,row=row_count,value=self.get_coordinador(homologation_id.subject_rule_subject_id.subject_id.code))
                                                 ws.cell(column=12,row=row_count,value=homologation_id.subject_rule_subject_id.subject_id.code)
+                                            
+                                            if homologation_id.test and homologation_id.test != '0' :
+                                                ws.cell(column=7,row=row_count,value=homologation_id.homologation_subject_id.code)
+                                                ws.cell(column=8,row=row_count,value=homologation_id.homologation_subject_id.name)
+                                                ws.cell(column=9,row=row_count,value=self.get_coordinador(homologation_id.homologation_subject_id.code))
+                                                ws.cell(column=12,row=row_count,value='-')
+                                                ws.cell(column=14,row=row_count,value=homologation_id.test if homologation_id.test else '')
+                                                ws.cell(column=15,row=row_count,value=self.score_value(homologation_id.min_score,homologation_id.max_score))
+                                                ws.cell(column=16,row=row_count,value=homologation_id.max_score if homologation_id.max_score else '')
+                                                ws.cell(column=17,row=row_count,value=homologation_id.subject_attributes_id.name if homologation_id.subject_attributes_id else '')
+                                            
                                             if homologation_id.rule_min_score_id:
                                                 ws.cell(column=13,row=row_count,value=homologation_id.rule_min_score_id.name)
                                         else:
                                             if homologation_id.subject_attributes_id:
+                                                ws.cell(column=9,row=row_count,value=area_subject.subject_inherit_id.scadt_coordinador_id.idbanner)
                                                 ws.cell(column=12,row=row_count,value='-')
                                                 ws.cell(column=14,row=row_count,value='')
                                                 ws.cell(column=15,row=row_count,value='')
                                                 ws.cell(column=16,row=row_count,value='')
                                                 ws.cell(column=17,row=row_count,value=homologation_id.subject_attributes_id.name if homologation_id.subject_attributes_id else '')
                                             else:
+                                                ws.cell(column=9,row=row_count,value=area_subject.subject_inherit_id.scadt_coordinador_id.idbanner)
                                                 ws.cell(column=12,row=row_count,value='-')
                                                 ws.cell(column=14,row=row_count,value=homologation_id.test if homologation_id.test else '')
                                                 ws.cell(column=15,row=row_count,value=self.score_value(homologation_id.min_score,homologation_id.max_score))
@@ -1217,7 +1233,14 @@ class study_plan(models.Model):
             'homologation_file_name':'Template_homologacion_'+self.program_id.name+'_'+self.period_id.name+".xlsx"
             })
         wb.close()
-        output.close()  
+        output.close()
+
+    def get_coordinador(self,code):
+        subject = self.env['dara_mallas.subject'].search([('code','=',code)])
+        scadtls = self.env['dara_mallas.subject_scadtl'].search([('subject_id','=',subject.id)])
+        periodo_max = max([item.period_id.name for item in scadtls])
+        coordinador = list(filter(lambda x:x.period_id.name == periodo_max,scadtls))
+        return coordinador[0].coordinador_id.idbanner if coordinador else ""
 
 class study_plan_line(models.Model):
     _name="dara_mallas.study_plan_line"
