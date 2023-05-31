@@ -413,6 +413,7 @@ class credit_study_plan_report(models.TransientModel):
         
         if self.include_prerequisite:
             self.create_prerequisite_sheet(wb, study_plan_id)
+            self.create_prerequisite_sheet_all(wb, study_plan_id)
             self.create_prerequisite_oneline_sheet(wb, study_plan_id)
         
         if self.include_detail:
@@ -1723,11 +1724,277 @@ class credit_study_plan_report(models.TransientModel):
                     
                         
                         row_count=end_row+1
+    
+    def create_prerequisite_sheet_all(self,wb,study_plan_id):       
+        #======================================================================
+        # CREANDO LA SEGUNDA HORA PARA LA MALLA CON PREREQUISITOS
+        #======================================================================
+        alCenter = Alignment(horizontal="center", vertical="center", wrapText=True)        
+        leftCenter=Alignment(horizontal="left",vertical="center", wrapText=True,shrinkToFit=True)
+        leftTop=Alignment(horizontal="left",vertical="top", wrapText=True,shrinkToFit=True)
+        rightCenter=Alignment(horizontal="right",vertical="center", wrapText=True,shrinkToFit=True)
+        ws2 = wb.create_sheet("Prerequisitos Banner All", 2)
+        
+        self.merge_with_border(ws2, "A1:P1", "", alCenter, "851B1B")
+        self.merge_no_color(ws2, "A2:P2", "PREREQUISITOS "+self.program_id.name, alCenter)
+        
+        cell=ws2["A2"]
+        cell.font  = Font(color="851B1B",b=True, size=30)
+        ws2.row_dimensions[2].height=50
+        
+        self.merge_with_border(ws2, "A3:P3", "", alCenter, "989797")
+        
+        ws2.column_dimensions[get_column_letter(1)].width=2
+        
+        self.merge_with_border(ws2, "B6:B6", "Semestre", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(3)].width=1
+        
+        self.merge_with_border(ws2, "D6:D6", "Materia", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(4)].width=40
+        
+        ws2.column_dimensions[get_column_letter(5)].width=1
+        
+        self.merge_with_border(ws2, "F6:F6", "seq", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(6)].width=5
+        ws2.column_dimensions[get_column_letter(7)].width=1
+        
+        self.merge_with_border(ws2, "H6:H6", "conector", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(8)].width=8
+        ws2.column_dimensions[get_column_letter(9)].width=1
+        
+        self.merge_with_border(ws2, "J6:J6", "lparen", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(10)].width=8
+        ws2.column_dimensions[get_column_letter(11)].width=1
+        
+        self.merge_with_border(ws2, "L6:L6", "test code", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(12)].width=8
+        ws2.column_dimensions[get_column_letter(13)].width=1
+        
+        
+        self.merge_with_border(ws2, "N6:N6", "tes score", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(14)].width=8
+        ws2.column_dimensions[get_column_letter(15)].width=1
+        
+        self.merge_with_border(ws2, "P6:P6", "Prerequisito", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(16)].width=40
+        ws2.column_dimensions[get_column_letter(17)].width=1
+        
+        
+        self.merge_with_border(ws2, "R6:R6", "score", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(18)].width=8
+        ws2.column_dimensions[get_column_letter(19)].width=1
+        
+        self.merge_with_border(ws2, "T6:T6", "rparent", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(20)].width=8
+        ws2.column_dimensions[get_column_letter(21)].width=1
+
+        self.merge_with_border(ws2, "V6:V6", "Type", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(22)].width=8
+        ws2.column_dimensions[get_column_letter(23)].width=1
+        
+        
+        self.merge_with_border(ws2, "X6:X6", "correquisito", alCenter, "989797")
+        ws2.column_dimensions[get_column_letter(24)].width=50
+        ws2.column_dimensions[get_column_letter(25)].width=1
+        
+        
+        
+        row_count= 7
+        
+       
+        
+        subjects_exist = []
+        for plan_line_id in study_plan_id.study_plan_lines_ids:
+            for area_subject in plan_line_id.area_subject_inherit_area_ids:
+                plan_line = area_subject 
+                level_number=int(plan_line.area_homologation_id.area_id.code[-2:])
+                prerequisite_count=row_count
+                corequisite_count=row_count
+                #===================================================================
+                #                    ESCRIBE SI ES DE ELECTIVA
+                #=================================================================
+                if plan_line.subject_inherit_id.code not in subjects_exist:
+                    subjects_exist.append(plan_line.subject_inherit_id.code)
+                    if plan_line.subject_inherit_id.elective:
+                        
+                        elective_start=row_count
+                        
+                        prerequisite_count=row_count
+                        corequisite_count=row_count
+                        _logger.warning("row count"+str(row_count))
+                        _logger.warning("Asignatura: "+plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name)
+                        for elective_id in plan_line.subject_inherit_id.elec_elective_ids:
+                        
+                            prerequisite_count=row_count
+                            corequisite_count=row_count
+                            _logger.warning("ITINERARIO.."+elective_id.elective_subject_inherit_id.code+" "+elective_id.elective_subject_inherit_id.name)
+                            
+                            lineas = prerequisite_count
+                            for x in range(5,22):
+                                ws2.cell(column=x,row=lineas).border = Border(top = Side(border_style='thin')) 
+
+                            for prerequisite_id in elective_id.elective_subject_inherit_id.preq_subject_prerequisite_ids:
+                                _logger.warning("Prerequisito :"+str(prerequisite_id.prerequisite_subject_code)+" "+ str(prerequisite_id.prerequisite_subject_id.name))
+                                
+                                ws2.cell(column=6,row=prerequisite_count,value=prerequisite_id.seq if prerequisite_id.seq else '')
+                                ws2.cell(column=8,row=prerequisite_count,value=prerequisite_id.conector if prerequisite_id.conector else '')
+                                ws2.cell(column=10,row=prerequisite_count,value=prerequisite_id.lparen if prerequisite_id.lparen else '')
+                                ws2.cell(column=20,row=prerequisite_count,value=prerequisite_id.rparen if prerequisite_id.rparen else '')
+                                
+
+                                if prerequisite_id.prerequisite_subject_code:
+                                    ws2.cell(column=16,row=prerequisite_count,value=str(prerequisite_id.prerequisite_subject_code)+" "+str(prerequisite_id.prerequisite_subject_id.name))
+                                    ws2.cell(column=18,row=prerequisite_count,value=prerequisite_id.score_id.name if prerequisite_id.score_id.name else '')
+                                    prerequisite_count+=1
+
+                                if prerequisite_id.test_code:
+                                    ws2.cell(column=12,row=prerequisite_count,value=prerequisite_id.test_code if prerequisite_id.test_code else '')
+                                    ws2.cell(column=14,row=prerequisite_count,value=prerequisite_id.test_score if prerequisite_id.test_score else '')
+                                    prerequisite_count+=1
+                                
+                                
+                            for corequisite_id in elective_id.elective_subject_inherit_id.core_corequisite_ids:
+                                
+                                ws2.cell(column=22,row=corequisite_count,value=corequisite_id.corequisite_subject_id.code+" "+corequisite_id.corequisite_subject_id.name)
+                                corequisite_count+=1
+                            
+                            
+                            if max(prerequisite_count,corequisite_count) <= row_count:
+                                end_row=row_count
+                            else:
+                                end_row=max(prerequisite_count,corequisite_count)-1
+                            _logger.warning("row count"+str(row_count))
+                            _logger.warning("Prerequisite count: "+str(prerequisite_count))
+                            _logger.warning("corequisite count: "+str(corequisite_count))
+                            _logger.warning("MAX: "+str(end_row))
+                            _logger.warning(str())
+                            self.merge_no_color(ws2, "b"+str(row_count)+":b"+str(end_row), \
+                                                level_number, alCenter)
+                            self.merge_no_color(ws2, "d"+str(row_count)+":d"+str(end_row), \
+                                                elective_id.elective_subject_inherit_id.code+" "+elective_id.elective_subject_inherit_id.name, leftCenter)
+                        
+                            
+                            row_count=end_row+1    
+                        
+                        
+                        self.merge_with_border(ws2, "c"+str(elective_start)+":c"+str(end_row), plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name, alCenter, "FFF001")
+                        ws2.column_dimensions["C"].width=10
+                    
+                    elif plan_line.subject_inherit_id.itinerary:
+                        
+                        itinerary_start=row_count
+                        
+                        prerequisite_count=row_count
+                        corequisite_count=row_count
+                        _logger.warning("row count"+str(row_count))
+                        _logger.warning("Asignatura: "+plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name)
+                        for itinerary_id in plan_line.subject_inherit_id.itin_itinerary_ids:
+                        
+                            prerequisite_count=row_count
+                            corequisite_count=row_count
+                            _logger.warning("ITINERARIO.."+itinerary_id.itinerary_subject_inherit_id.code+" "+itinerary_id.itinerary_subject_inherit_id.name)
+                            
+                            lineas = prerequisite_count
+                            for x in range(5,22):
+                                ws2.cell(column=x,row=lineas).border = Border(top = Side(border_style='thin')) 
+
+                            for prerequisite_id in itinerary_id.itinerary_subject_inherit_id.preq_subject_prerequisite_ids:
+                                _logger.warning("Prerequisito :"+str(prerequisite_id.prerequisite_subject_code)+" "+ str(prerequisite_id.prerequisite_subject_id.name))
+                                
+                                ws2.cell(column=6,row=prerequisite_count,value=prerequisite_id.seq if prerequisite_id.seq else '')
+                                ws2.cell(column=8,row=prerequisite_count,value=prerequisite_id.conector if prerequisite_id.conector else '')
+                                ws2.cell(column=10,row=prerequisite_count,value=prerequisite_id.lparen if prerequisite_id.lparen else '')
+                                ws2.cell(column=20,row=prerequisite_count,value=prerequisite_id.rparen if prerequisite_id.rparen else '')
+                                
+
+                                if prerequisite_id.prerequisite_subject_code:
+                                    ws2.cell(column=16,row=prerequisite_count,value=str(prerequisite_id.prerequisite_subject_code)+" "+str(prerequisite_id.prerequisite_subject_id.name))
+                                    ws2.cell(column=18,row=prerequisite_count,value=prerequisite_id.score_id.name if prerequisite_id.score_id.name else '')
+                                    prerequisite_count+=1
+
+                                if prerequisite_id.test_code:
+                                    ws2.cell(column=12,row=prerequisite_count,value=prerequisite_id.test_code if prerequisite_id.test_code else '')
+                                    ws2.cell(column=14,row=prerequisite_count,value=prerequisite_id.test_score if prerequisite_id.test_score else '')
+                                    prerequisite_count+=1
+                                
+                                
+                            for corequisite_id in itinerary_id.itinerary_subject_inherit_id.core_corequisite_ids:
+                                
+                                ws2.cell(column=22,row=corequisite_count,value=corequisite_id.corequisite_subject_id.code+" "+corequisite_id.corequisite_subject_id.name)
+                                corequisite_count+=1
+                            
+                            
+                            if max(prerequisite_count,corequisite_count) <= row_count:
+                                end_row=row_count
+                            else:
+                                end_row=max(prerequisite_count,corequisite_count)-1
+                            _logger.warning("row count"+str(row_count))
+                            _logger.warning("Prerequisite count: "+str(prerequisite_count))
+                            _logger.warning("corequisite count: "+str(corequisite_count))
+                            _logger.warning("MAX: "+str(end_row))
+                            _logger.warning(str())
+                            self.merge_no_color(ws2, "b"+str(row_count)+":b"+str(end_row), \
+                                                level_number, alCenter)
+                            self.merge_no_color(ws2, "d"+str(row_count)+":d"+str(end_row), \
+                                                itinerary_id.specialization_id.name+"\n" +itinerary_id.itinerary_subject_inherit_id.code+" "+itinerary_id.itinerary_subject_inherit_id.name, leftCenter)
+                        
+                            
+                            row_count=end_row+1    
+                        
+                        
+                        self.merge_with_border(ws2, "c"+str(itinerary_start)+":c"+str(end_row), plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name, alCenter, "FFF001")
+                        ws2.column_dimensions["C"].width=10
+                    else:
+                    #lineas de division
+                        lineas = prerequisite_count
+                        for x in range(5,24):
+                            ws2.cell(column=x,row=lineas).border = Border(top = Side(border_style='thin')) 
+                            
+
+                        for prerequisite_id in plan_line.subject_inherit_id.preq_subject_prerequisite_ids:
+                            #_logger.warning("Prerequisito :"+prerequisite_id.prerequisite_subject_code+" "+ prerequisite_id.prerequisite_subject_id.name)
+                            if prerequisite_id:
+                                ws2.cell(column=6,row=prerequisite_count,value=prerequisite_id.seq if prerequisite_id.seq else '')
+                                ws2.cell(column=8,row=prerequisite_count,value=prerequisite_id.conector if prerequisite_id.conector else '')
+                                ws2.cell(column=10,row=prerequisite_count,value=prerequisite_id.lparen if prerequisite_id.lparen else '')
+                                ws2.cell(column=12,row=prerequisite_count,value=prerequisite_id.test_code if prerequisite_id.test_code else '')
+                                ws2.cell(column=14,row=prerequisite_count,value=prerequisite_id.test_score if prerequisite_id.test_score else '')
+                                ws2.cell(column=16,row=prerequisite_count,value=str(prerequisite_id.prerequisite_subject_code if prerequisite_id.prerequisite_subject_code else '')+" "+str(prerequisite_id.prerequisite_subject_id.name if prerequisite_id.prerequisite_subject_id.name else ''))
+                                ws2.cell(column=18,row=prerequisite_count,value=prerequisite_id.score_id.name if prerequisite_id.score_id.name else '')
+                                ws2.cell(column=20,row=prerequisite_count,value=prerequisite_id.rparen if prerequisite_id.rparen else '')
+                                ws2.cell(column=22,row=prerequisite_count,value=prerequisite_id.prerequsite_type if prerequisite_id.prerequsite_type else '')
+                                ws2.cell(column=24,row=prerequisite_count).border = Border(right = Side(border_style='thin'))
+                                
+                                prerequisite_count+=1
+                            
+                        ws2.cell(column=24,row=prerequisite_count).border = Border(right = Side(border_style='thin'),bottom = Side(border_style='thin'))
+                        ws2.cell(column=24,row=prerequisite_count-1).border = Border(right = Side(border_style='thin'),bottom = Side(border_style='thin'))
+                        
+                        
+                        for corequisite_id in plan_line.subject_inherit_id.core_corequisite_ids:
+                            
+                            ws2.cell(column=22,row=corequisite_count,value=corequisite_id.corequisite_subject_id.code+" "+corequisite_id.corequisite_subject_id.name)
+                            corequisite_count+=1
+                        
+                    
+                            
+                        if max(prerequisite_count,corequisite_count) == row_count:
+                            end_row=row_count
+                        else: 
+                            end_row=max(prerequisite_count,corequisite_count)-1
+                        
+                        self.merge_no_color(ws2, "b"+str(row_count)+":b"+str(end_row), \
+                                            level_number, alCenter)
+                        self.merge_no_color(ws2, "d"+str(row_count)+":d"+str(end_row), \
+                                            plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name, leftCenter)
+                    
+                        
+                        row_count=end_row+1
 
     def create_prerequisite_oneline_sheet(self,wb,study_plan_id):
         alCenter = Alignment(horizontal="center", vertical="center", wrapText=True)        
         leftCenter=Alignment(horizontal="left",vertical="center", wrapText=True,shrinkToFit=True)
-        ws2 = wb.create_sheet("Prerequisitos formato horizontal", 2)
+        ws2 = wb.create_sheet("Prerequisitos formato horizontal", 3)
         
         self.merge_with_border(ws2, "A1:P1", "", alCenter, "851B1B")
         self.merge_no_color(ws2, "A2:P2", "PREREQUISITOS "+self.program_id.name, alCenter)
