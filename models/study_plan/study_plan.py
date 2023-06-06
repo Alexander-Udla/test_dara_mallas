@@ -440,7 +440,7 @@ class study_plan(models.Model):
 
 
         #self.merge_with_color(ws,"H1:H1", "CODIGO_FACULTAD", alCenter,"2B855C")
-        ws.cell(column=5,row=row,value=str(subject_id.scad_college_id.code))
+        ws.cell(column=5,row=row,value=str(subject_id.scad_college_id.code).zfill(2))
 
 
         #self.merge_with_color(ws,"J1:J1", "CODIGO_AREA", alCenter,"2B855C")

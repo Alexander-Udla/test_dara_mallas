@@ -203,7 +203,7 @@ class Subject_template(models.TransientModel):
 
 
             #self.merge_with_color(ws,"H1:H1", "CODIGO_FACULTAD", alCenter,"2B855C")
-            ws.cell(column=5,row=row,value=str(subject_id.scad_college_id.code))
+            ws.cell(column=5,row=row,value=str(subject_id.scad_college_id.code).zfill(2))
 
 
             #self.merge_with_color(ws,"J1:J1", "CODIGO_AREA", alCenter,"2B855C")
@@ -471,19 +471,19 @@ class Subject_template(models.TransientModel):
                 ws.cell(column=45,row=row,value="0")
 
             #self.merge_with_color(ws,"AX1:AX1", "SESIONES_DOCENCIA", alCenter,"2B855C")
-            ws.cell(column=46,row=row,value=str(subject_id.scad_teaching_sesions))
+            ws.cell(column=46,row=row,value="{:.2f}".format(subject_id.scad_teaching_sesions))
 
 
             #self.merge_with_color(ws,"AY1:AY1", "SESIONES_LABORATORIO", alCenter,"2B855C")
-            ws.cell(column=47,row=row,value=str(subject_id.scad_lab_sesions))
+            ws.cell(column=47,row=row,value="{:.2f}".format(subject_id.scad_lab_sesions))
 
 
             #self.merge_with_color(ws,"AZ1:AZ1", "SESIONES_EXTERNADO", alCenter,"2B855C")
-            ws.cell(column=48,row=row,value=str(subject_id.scad_externship_sesions))
+            ws.cell(column=48,row=row,value="{:.2f}".format(subject_id.scad_externship_sesions))
 
 
             #self.merge_with_color(ws,"BA1:BA1", "SESIONES_O", alCenter,"2B855C")
-            ws.cell(column=49,row=row,value=str(subject_id.scad_online_sesions))
+            ws.cell(column=49,row=row,value="{:.2f}".format(subject_id.scad_online_sesions))
 
 
             #self.merge_with_color(ws,"BB1:BB1", "SEMANAS_EXTERNADO", alCenter,"2B855C")
@@ -498,7 +498,7 @@ class Subject_template(models.TransientModel):
 
 
             #self.merge_with_color(ws,"BD1:BD1", "PONDERACION", alCenter,"2B855C")
-            ws.cell(column=53,row=row,value=str(subject_id.scadt_weighing_id.name))
+            ws.cell(column=53,row=row,value=str(subject_id.scadt_weighing_id.code))
 
 
             #self.merge_with_color(ws,"BE1:BE1", "COORDINADOR_SIGLA", alCenter,"2B855C")

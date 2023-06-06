@@ -168,7 +168,7 @@ class subject_create(models.Model):
                         'lab_application_hours':item['HORAS_APLICACION_LABORATORIO'],
                         'hybrid_lab_application_hours':item['HORAS_APLICACION_LAB_H'],
                         'online_lab_application_hours':item['HORAS_APLICACION_LAB_O'],
-                        'internship_hours':item['HORAS_PRACT_PREPROFESIONALES'],
+                        #'internship_hours':item['HORAS_PRACT_PREPROFESIONALES'],
                         'practicing_hours':item['HORAS_PRACT_PREPROFESIONALES'],
                         'hybrid_practicing_hours':item['HORAS_PRACT_PREPROF_H'],
                         'online_practicing_hours':item['HORAS_PRACT_PREPROF_O'],
