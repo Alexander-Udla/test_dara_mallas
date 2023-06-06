@@ -808,108 +808,111 @@ class credit_study_plan_report(models.TransientModel):
 
     
     def write_select_subject(self,ws,study_plan_id,row_count):
-        alCenter = Alignment(horizontal="center", vertical="center", wrapText=True)       
-        leftCenter=Alignment(horizontal="left",vertical="center", wrapText=True,shrinkToFit=True) 
-        select_start=row_count+9
-        write_legend=False
-        subject_exists = []
-        for plan_line_id in study_plan_id.study_plan_lines_ids:
-            for area_subject in plan_line_id.area_subject_inherit_area_ids:
-                plan_line = area_subject
-                if plan_line.subject_inherit_id.code not in subject_exists:
-                    if plan_line.subject_inherit_id.elective:
-                        
-                        
-                        write_legend=True
-                        select_count=0    
-                        
-                        
-                        for elective_id in plan_line.subject_inherit_id.elec_elective_ids:
-                            #===================================================================
-                            # CARGANDO LA SIGLA
-                            #===================================================================
-                            cell_range=self._get_init_column(7+select_count)+str(row_count)+":"+\
-                                            self._get_end_column(7+select_count)+str(row_count)
-                            color="ffffff"
-                            if plan_line.study_field_id:
-                                color=plan_line.study_field_id.color[-6:]
+        try:
+            alCenter = Alignment(horizontal="center", vertical="center", wrapText=True)       
+            leftCenter=Alignment(horizontal="left",vertical="center", wrapText=True,shrinkToFit=True) 
+            select_start=row_count+9
+            write_legend=False
+            subject_exists = []
+            for plan_line_id in study_plan_id.study_plan_lines_ids:
+                for area_subject in plan_line_id.area_subject_inherit_area_ids:
+                    plan_line = area_subject
+                    if plan_line.subject_inherit_id.code not in subject_exists:
+                        if plan_line.subject_inherit_id.elective:
                             
-                            range_font=Font(size=16, color=plan_line.study_field_id.font_color[-6:])
-                            _logger.warning(plan_line.study_field_id.name+" color: "+plan_line.study_field_id.font_color[-6:])    
-                            self.merge_with_border(ws, cell_range, elective_id.elective_subject_inherit_id.code, alCenter, color, range_font)
-                
-                            rd=ws.row_dimensions[row_count]
-                            rd.height=32
                             
-                            #===================================================================
-                            # CARGANDO EL NOMBRE DE LA ASIGNATURA
-                            #===================================================================
-                            cell_range=self._get_init_column(7+select_count)+str(row_count+1)+":"+\
-                                            self._get_end_column2(7+select_count)+str(row_count+2)
-                            self.merge_with_border(ws, cell_range, elective_id.elective_subject_inherit_id.name, alCenter, "ffffff", range_font)
+                            write_legend=True
+                            select_count=0    
                             
+                            
+                            for elective_id in plan_line.subject_inherit_id.elec_elective_ids:
+                                #===================================================================
+                                # CARGANDO LA SIGLA
+                                #===================================================================
+                                cell_range=self._get_init_column(7+select_count)+str(row_count)+":"+\
+                                                self._get_end_column(7+select_count)+str(row_count)
+                                color="ffffff"
+                                if plan_line.study_field_id:
+                                    color=plan_line.study_field_id.color[-6:]
+                                
+                                range_font=Font(size=16, color=plan_line.study_field_id.font_color[-6:])
+                                _logger.warning(plan_line.study_field_id.name+" color: "+plan_line.study_field_id.font_color[-6:])    
+                                self.merge_with_border(ws, cell_range, elective_id.elective_subject_inherit_id.code, alCenter, color, range_font)
+                    
+                                rd=ws.row_dimensions[row_count]
+                                rd.height=32
+                                
+                                #===================================================================
+                                # CARGANDO EL NOMBRE DE LA ASIGNATURA
+                                #===================================================================
+                                cell_range=self._get_init_column(7+select_count)+str(row_count+1)+":"+\
+                                                self._get_end_column2(7+select_count)+str(row_count+2)
+                                self.merge_with_border(ws, cell_range, elective_id.elective_subject_inherit_id.name, alCenter, "ffffff", range_font)
+                                
+                                rd=ws.row_dimensions[row_count+1]
+                                rd.height=32
+                                rd=ws.row_dimensions[row_count+2]
+                                rd.height=32
+                                rd=ws.row_dimensions[row_count+3]
+                                rd.height=32
+                                #===================================================================
+                                # CARGANDO CREDITOS
+                                #===================================================================
+                            
+                                cell_range=self._get_end_column(7+select_count)+str(row_count+1)+":"+\
+                                                self._get_end_column(7+select_count)+str(row_count+1)
+                                                
+                                self.merge_with_border(ws, cell_range, "CR ", alCenter, "ffffff", range_font)
+                    
+                                cell_range=self._get_end_column(7+select_count)+str(row_count+2)+":"+\
+                                                self._get_end_column(7+select_count)+str(row_count+2)
+
+                                self.merge_with_border(ws, cell_range, str(elective_id.elective_subject_inherit_id.scad_credits), alCenter, "ffffff", range_font)
+
+                                _logger.warning("ITINERARIO.."+elective_id.elective_subject_inherit_id.code+" "+elective_id.elective_subject_inherit_id.name)
+                                
+                                select_count+=1    
+                            
+                        
+                        #===============================================================
+                        # 
+                        # 
+                        # CREANDO CABECERA DE LAS ELECTIVAS
+                        # 
+                        # 
+                        #===============================================================
+                        
+                            cell_range=self._get_init_column(7)+str(row_count-1)+":"+\
+                                                self._get_end_column(7+select_count-1)+str(row_count-1)
+                            
+                            self.merge_no_color(ws, cell_range,plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name, alCenter,Font(size=16))
                             rd=ws.row_dimensions[row_count+1]
                             rd.height=32
-                            rd=ws.row_dimensions[row_count+2]
-                            rd.height=32
-                            rd=ws.row_dimensions[row_count+3]
-                            rd.height=32
-                            #===================================================================
-                            # CARGANDO CREDITOS
-                            #===================================================================
-                        
-                            cell_range=self._get_end_column(7+select_count)+str(row_count+1)+":"+\
-                                            self._get_end_column(7+select_count)+str(row_count+1)
-                                            
-                            self.merge_with_border(ws, cell_range, "CR ", alCenter, "ffffff", range_font)
-                
-                            cell_range=self._get_end_column(7+select_count)+str(row_count+2)+":"+\
-                                            self._get_end_column(7+select_count)+str(row_count+2)
-
-                            self.merge_with_border(ws, cell_range, str(elective_id.elective_subject_inherit_id.scad_credits), alCenter, "ffffff", range_font)
-
-                            _logger.warning("ITINERARIO.."+elective_id.elective_subject_inherit_id.code+" "+elective_id.elective_subject_inherit_id.name)
                             
-                            select_count+=1    
+                            row_count+=5   
+                            subject_exists.append(plan_line.subject_inherit_id.code)
                         
                     
-                    #===============================================================
-                    # 
-                    # 
-                    # CREANDO CABECERA DE LAS ELECTIVAS
-                    # 
-                    # 
-                    #===============================================================
-                    
-                        cell_range=self._get_init_column(7)+str(row_count-1)+":"+\
-                                            self._get_end_column(7+select_count-1)+str(row_count-1)
-                        
-                        self.merge_no_color(ws, cell_range,plan_line.subject_inherit_id.code+" "+plan_line.subject_inherit_id.name, alCenter,Font(size=16))
-                        rd=ws.row_dimensions[row_count+1]
-                        rd.height=32
-                        
-                        row_count+=5   
-                        subject_exists.append(plan_line.subject_inherit_id.code)
-                    
-                
-        #=======================================================================
-        # if write_legend:
-        #     cell_range="C"+str(itinerary_start-1)+":G"+str(itinerary_start-1)
-        #     self.merge_no_border(ws, cell_range, "ESPECIALIZACIONES",leftCenter,"ffffff",Font(size=28,color="851b1b"))
-        #     for specialization in study_plan_id.program_id.specializations_ids:
-        #         cell_range="C"+str(itinerary_start)+":G"+str(itinerary_start)
-        #         self.merge_with_border(ws, cell_range, specialization.name,leftCenter,"ffffff",Font(size=16))
-        #         cell_range="B"+str(itinerary_start)+":B"+str(itinerary_start)
-        #         self.merge_with_border(ws, cell_range, " ", leftCenter, specialization.color[-6:], Font(size=16))
-        #         itinerary_start+=1        
-        #         rd=ws.row_dimensions[itinerary_start]
-        #         rd.height=32
-        # 
-        # if write_legend:
-        #     return row_count
-        # return row_count+8
-        #=======================================================================
-        return row_count+8
+            #=======================================================================
+            # if write_legend:
+            #     cell_range="C"+str(itinerary_start-1)+":G"+str(itinerary_start-1)
+            #     self.merge_no_border(ws, cell_range, "ESPECIALIZACIONES",leftCenter,"ffffff",Font(size=28,color="851b1b"))
+            #     for specialization in study_plan_id.program_id.specializations_ids:
+            #         cell_range="C"+str(itinerary_start)+":G"+str(itinerary_start)
+            #         self.merge_with_border(ws, cell_range, specialization.name,leftCenter,"ffffff",Font(size=16))
+            #         cell_range="B"+str(itinerary_start)+":B"+str(itinerary_start)
+            #         self.merge_with_border(ws, cell_range, " ", leftCenter, specialization.color[-6:], Font(size=16))
+            #         itinerary_start+=1        
+            #         rd=ws.row_dimensions[itinerary_start]
+            #         rd.height=32
+            # 
+            # if write_legend:
+            #     return row_count
+            # return row_count+8
+            #=======================================================================
+            return row_count+8
+        except Exception as e:
+            print(e)
         
     def write_itinerary_subject(self,ws,study_plan_id,row_count):
         alCenter = Alignment(horizontal="center", vertical="center", wrapText=True)       
@@ -2199,7 +2202,32 @@ class credit_study_plan_report(models.TransientModel):
             17:'BO',
             18:'BS',
             19:'BW',
-            20:'CA'
+            20:'CA',
+            21:'CE',
+            22:'CI',
+            23:'CM',
+            24:'CQ',
+            25:'CU',
+            26:'CY',
+            27:'DC',
+            28:'DG',
+            29:'DK',
+            30:'DO',
+            31:'DS',
+            32:'DW',
+            33:'EA',
+            34:'EE',
+            35:'EI',
+            36:'EM',
+            37:'EQ',
+            38:'EU',
+            39:'EY',
+            40:'FC',
+            41:'FG',
+            42:'FK',
+            43:'FO',
+            44:'FS',
+            45:'FW',
     
             }
         
@@ -2227,7 +2255,32 @@ class credit_study_plan_report(models.TransientModel):
             17:'BQ',
             18:'BU',
             19:'BY',
-            20:'CC'
+            20:'CC',
+            21:'CG',
+            22:'CK',
+            23:'CO',
+            24:'CS',
+            25:'CW',
+            26:'DA',
+            27:'DE',
+            28:'DI',
+            29:'DM',
+            30:'DQ',
+            31:'DU',
+            32:'DY',
+            33:'EC',
+            34:'EG',
+            35:'EK',
+            36:'EO',
+            37:'ES',
+            38:'EW',
+            39:'FA',
+            40:'FE',
+            41:'FI',
+            42:'FM',
+            43:'FQ',
+            44:'FU',
+            45:'FY',
             }
         
         return switcher.get(count,"No index")
@@ -2254,7 +2307,32 @@ class credit_study_plan_report(models.TransientModel):
         17:'BP',
         18:'BT',
         19:'BX',
-        20:'CB'
+        20:'CB',
+        21:'CF',
+        22:'CJ',
+        23:'CN',
+        24:'CR',
+        25:'CV',
+        26:'CZ',
+        27:'DD',
+        28:'DH',
+        29:'DL',
+        30:'DP',
+        31:'DT',
+        32:'DX',
+        33:'EB',
+        34:'EF',
+        35:'EJ',
+        36:'EN',
+        37:'ER',
+        38:'EV',
+        39:'EZ',
+        40:'FD',
+        41:'FH',
+        42:'FL',
+        43:'FP',
+        44:'FT',
+        45:'FX',
             }
         
         return switcher.get(count,"No index")
