@@ -49,6 +49,7 @@
         'models/subjects/views/subject_description.xml',
         'models/subjects/reportes/subjects_report_template.xml',
         'models/subjects/reportes/subject_study_plan_report.xml',
+        'models/subjects/carga/subject_create_template.xml',
         'models/program/views/program.xml',
         'models/program/views/specialization_views.xml',
         'models/program/carga/program_create_template.xml',

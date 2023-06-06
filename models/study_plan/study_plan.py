@@ -540,7 +540,7 @@ class study_plan(models.Model):
         #=====================================================================
         #self.merge_with_color(ws,"X1:X1", "HORAS_DOCENCIA", alCenter,"2B855C")
         if subject_id.scad_face_to_face:
-            ws.cell(column=20,row=row,value=str(subject_id.scad_academic_hours))
+            ws.cell(column=20,row=row,value=str(subject_id.scad_academic_hours)) 
         else:
             ws.cell(column=20,row=row,value="0")
 

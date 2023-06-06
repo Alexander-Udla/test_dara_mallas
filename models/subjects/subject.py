@@ -84,8 +84,6 @@ class subject_rule_line(models.Model):
             result.append((rec.id,'%s - %s' % (str(rec.subject_rule_id.subject_id.code),str(rec.subject_rule_id.subject_id.name))))
         return result
 
-
-
 class homologation(models.Model):
     _name="dara_mallas.homologation"
     #_order="group_id,homologation_subject_id"

@@ -74,6 +74,7 @@ access_dara_mallas_field_wide,dara_mallas.field_wide,model_dara_mallas_field_wid
 access_dara_mallas_field_specific,dara_mallas.field_specific,model_dara_mallas_field_specific,dara_admin,1,1,1,1
 access_dara_mallas_field_detailed,dara_mallas.field_detailed,model_dara_mallas_field_detailed,dara_admin,1,1,1,1
 access_dara_mallas_resolutions,dara_mallas.resolutions,model_dara_mallas_resolutions,dara_admin,1,1,1,1
+access_dara_mallas_subject_create,dara_mallas.subject_create,model_dara_mallas_subject_create,dara_admin,1,1,1,1
 read_dara_mallas_subject,dara_mallas.subject,model_dara_mallas_subject,dara_mallas_read,1,0,0,0
 read_dara_mallas_subject_name,dara_mallas.subject_name,model_dara_mallas_subject_name,dara_mallas_read,1,0,0,0
 read_dara_mallas_college,dara_mallas.college,model_dara_mallas_college,dara_mallas_read,1,0,0,0
