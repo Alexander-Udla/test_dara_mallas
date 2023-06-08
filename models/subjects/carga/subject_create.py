@@ -77,7 +77,7 @@ class subject_create(models.Model):
             #UEC
             uec = self.env['dara_mallas.uec_credit'].search([('name','=',str(item['CREDITO_MINIMO']))]) 
 
-            #cobro
+            #cobro 
             cobro = self.env['dara_mallas.billed'].search([('name','=',str(item['COBRO_MINIMO']))])  
         
             #estatus
@@ -159,7 +159,7 @@ class subject_create(models.Model):
                         'hybrid_virtual_academic_hours':item['HORAS_DOCENCIA_VIRTUAL_H'],
                         'online_academic_hours':item['HORAS_DOCENCIA_O'],
                         'lab_practicing_hours':item['HORAS_LABORATORIO_DOCENCIA'],
-                        'hybrid_lab_practicing_hours':item['HORAS_LABORATORIO_DOCENCIA'],
+                        'hybrid_lab_practicing_hours':item['HORAS_LABORATORIO_DOCENCIA_H'],
                         'externship_hours':item['HORAS_EXTERNADO_DOCENCIA'],
                         'hybrid_externship_hours':item['HORAS_EXTERNADO_DOCENCIA_H'],
                         'application_hours':item['HORAS_APLICACION'],
@@ -185,6 +185,8 @@ class subject_create(models.Model):
                         'teaching_credits':item['OTRAS'],
                         #'asisted_hours':int(mat[13]if mat[13]!=None else 0)+int(mat[14]if mat[14]!=None else 0)+int(mat[17]if mat[17]!=None else 0),
                         'sesions':item['CONTACTO'],
+                        'externship_sesions':item['SESIONES_EXTERNADO'],
+                        'lab_sesions':item['SESIONES_LABORATORIO'],
                         'online_sesions':item['SESIONES_O'],
                         'externship_weeks':item['SEMANAS_EXTERNADO'],
                         'lab_weeks':item['SEMANAS_LABORATORIO'],

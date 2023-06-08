@@ -137,7 +137,7 @@ class elective_line(models.Model):
         objects = []
         for item in self.elective_ids:
             pre = {
-                'elective_subject_id':item.elective_subject_id.id,
+                'elective_subject_inherit_id':item.elective_subject_inherit_id.id,
                 'elective_line_id':new_object.id,
             }
             object_create = self.env['dara_mallas.elective'].create(pre)
