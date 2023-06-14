@@ -87,6 +87,7 @@ class subject_rule_line(models.Model):
 class homologation(models.Model):
     _name="dara_mallas.homologation"
     #_order="group_id,homologation_subject_id"
+    #_order="CASE WHEN subject_rule_subject_id is null THEN group_id desc ELSE 0"
 
     homologation_subject_id=fields.Many2one("dara_mallas.subject",track_visibility='always')
     homologation_subject_code=fields.Char("Sigla",related="homologation_subject_id.code",track_visibility='always')
@@ -101,6 +102,15 @@ class homologation(models.Model):
     rule_min_score_id=fields.Many2one('dara_mallas.rule_score', string="Calificacion minima")
 
     subject_rule_id = fields.Many2one("dara_mallas.subject_rule",track_visibility='always')
+
+    def _generate_order_by(self, order_spec, query):
+        order_by = super(homologation, self)._generate_order_by(order_spec, query)
+        my_order = "CASE WHEN subject_rule_subject_id is null  THEN 1 ELSE homologation_subject_id END ,group_id"            
+        #if order_spec:
+            #return super(sale_order, self)._generate_order_by(order_spec, query) + ", " + my_order
+        return " order by " + my_order
+
+    
 
     def name_get(self):
         result = []
