@@ -157,7 +157,7 @@ class study_plan(models.Model):
             objects.append(object_create.id)
         new_object.no_course_ids=[(6,0,objects)]
 
-
+        new_object.mallas_web = False
         return new_object
 
     def name_get(self):
