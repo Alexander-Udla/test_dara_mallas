@@ -518,6 +518,9 @@ class Subject_template(models.TransientModel):
 
             ws.cell(column=57,row=row,value=str(subject_id.new_subject))
 
+            #Aplicación Externado
+            ws.cell(column=59,row=row,value=str(subject_id.scad_externship_application_hours))
+
             row = row + 1
 
      

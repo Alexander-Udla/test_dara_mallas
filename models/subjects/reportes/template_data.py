@@ -59,6 +59,7 @@ def get_subjects():
         'CUENTA_EN_GPA':['BD','2B855C',20],
         'SIGLA_NUEVA':['BE','2B855C',15],
         'ESTADO_BOT':['BF','2B855C',15],
+        'HORAS_APLICACION_EXTERNADO':['BG','2B855C',15], 
         }
     return labels
 

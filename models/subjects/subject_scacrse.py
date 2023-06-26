@@ -150,9 +150,9 @@ class subject_scacrse(models.Model):
             raise ValidationError("ya existe el registro "+str(self.subject_id.code)+str(self.period_id.name))
 
 
-    @api.onchange('practicing_hours','application_hours','community_service_hours','lab_application_hours') 
+    @api.onchange('practicing_hours','application_hours','community_service_hours','lab_application_hours','externship_application_hours') 
     def onchange_asisted_hours(self):
-        self.asisted_hours=self.practicing_hours+self.application_hours+self.community_service_hours+self.lab_application_hours       
+        self.asisted_hours=self.practicing_hours+self.application_hours+self.community_service_hours+self.lab_application_hours +self.externship_application_hours      
         self.check_total_hours()
     @api.onchange('academic_hours','lab_practicing_hours','externship_hours') 
     def onchange_academic_face_to_face_hours(self):

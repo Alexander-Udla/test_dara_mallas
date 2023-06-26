@@ -132,7 +132,6 @@ class rule_score(models.Model):
     
     name=fields.Char("Calificacion")  
 
-
 class elective_line(models.Model):
     _name="dara_mallas.elective_line"
      
@@ -160,6 +159,7 @@ class elective_line(models.Model):
         for rec in self:
             result.append((rec.id,'%s - %s' % (str(rec.subject_code),str(rec.subject_id.name))))
         return result
+
 class elective(models.Model):
     _name="dara_mallas.elective"
    
@@ -173,7 +173,6 @@ class elective(models.Model):
         for rec in self:
             result.append((rec.id,'%s' % (str(rec.elective_subject_code))))
         return result
-
 
 class itinerary_line(models.Model):
     _name="dara_mallas.itinerary_line"
