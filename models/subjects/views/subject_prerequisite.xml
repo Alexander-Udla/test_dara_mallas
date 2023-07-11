@@ -15,8 +15,7 @@
                               
                               <field name="period_id"/>
                               <field name="subject_id"/>
-                            
-                              
+                              <field name="prerequisites_check"  style=' max-width: 1150px;  width: 600px' readonly="1"  force_save="1"/>
                               
                           </group>
                           <notebook>
