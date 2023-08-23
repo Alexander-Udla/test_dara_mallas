@@ -32,8 +32,10 @@
                                   </tree>
                                 </field>
                             </page>
-                      </notebook>
-						            		    
+                </notebook>
+                  <button name="copy_rules"   type="object" >
+                                                                  Generar Reglas
+                                                                  </button>   
             		    
             		    </sheet>
                 </form>     	            	  

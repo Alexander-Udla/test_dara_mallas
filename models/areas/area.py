@@ -16,7 +16,7 @@ class area_homologation(models.Model):
     #subject_rule_line_ids = fields.One2many("dara_mallas.subject_rule_line",inverse_name="area_homologation_id")
     subject_inherit_area_ids = fields.One2many("dara_mallas.subject_inherit_area",inverse_name="area_homologation_id",string="Asignaturas")
 
-    @api.onchange('subject_inherit_area_ids') 
+    #@api.onchange('subject_inherit_area_ids') 
     def onchange_subject_inherit_area_ids(self):
         
         if not self.dinamic:
@@ -48,10 +48,7 @@ class area_homologation(models.Model):
                             object_create = self.env['dara_mallas.subject_inherit_homologation'].create(pre)
                             objects.append(object_create.id)
                         else:
-                            raise UserError("""La asignatura %s en el area %s no tiene reglas de homologacion \n crear en /asginaturas/reglas """%(subject_inherit.subject_id.code,self.area_id.name))
-
-            
-            
+                            raise UserError("""La asignatura %s en el area %s no tiene reglas de homologacion \n crear en /asginaturas/reglas """%(subject_inherit.subject_id.code,self.area_id.name))     
 
     def copy(self,default=None):
         new_object=super(area_homologation,self).copy(default=default)
@@ -68,6 +65,49 @@ class area_homologation(models.Model):
             objects.append(object_create.id)
         new_object.subject_inherit_area_ids=[(6,0,objects)]
         return new_object
+
+    def copy_rules(self):
+        for item in self.subject_inherit_area_ids:
+            subject_rule_all = self.env['dara_mallas.subject_rule'].search([
+                ('subject_id','=',item.subject_id.id),
+                ('area_id','=',self.area_id.id),
+                ])
+            if subject_rule_all:
+                period_max = max(subject_rule_all, key=lambda rule: rule.period_id.name)
+                subject_rule = self.env['dara_mallas.subject_rule'].search([
+                    ('subject_id','=',item.subject_id.id),
+                    ('area_id','=',self.area_id.id),
+                    ('period_id','=',period_max.period_id.id),
+                    ],limit=1)
+                
+                subject_rule = self.env['dara_mallas.subject_rule'].search([
+                    ('id','=',subject_rule.id),
+                    ])
+                if self.period_id.name != subject_rule.period_id.name:
+                    subject_rule.copy({'period_id':self.period_id.id})
+            else:
+                subject_rule_all = self.env['dara_mallas.subject_rule'].search([
+                ('subject_id','=',item.subject_id.id),
+                ])
+                if subject_rule_all:
+                    period_max = max(subject_rule_all, key=lambda rule: rule.period_id.name)
+                    subject_rule = self.env['dara_mallas.subject_rule'].search([
+                        ('subject_id','=',item.subject_id.id),
+                        ('period_id','=',period_max.period_id.id),
+                        ],limit=1)
+                    
+                    subject_rule = self.env['dara_mallas.subject_rule'].search([
+                        ('id','=',subject_rule.id),
+                        ])
+                    subject_rule.copy({'area_id':self.area_id.id,'period_id':self.period_id.id})
+                else:
+                    object = {
+                        'subject_id':item.subject_id.id,
+                        'area_id':self.area_id.id,
+                        'period_id':self.period_id.id
+
+                    }
+                    object_create = self.env['dara_mallas.subject_rule'].create(object)
 
     def name_get(self):
         result = []
