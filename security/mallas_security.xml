@@ -20,6 +20,17 @@
             <field name="name">Asignaturas</field>
             <field name="category_id" ref="dara_mallas_menus_group"/>
         </record>
+           <!-- Permisos adicionales-->
+
+        <record model="ir.module.category" id="dara_mallas_group_aditional">
+            <field name="name">DARA Permisos Adicionales</field>
+            <field name="sequence">102</field>
+        </record>
+
+        <record model="res.groups" id="dara_mallas_read_prerequisites"> 
+            <field name="name">Prerequisitos / Lectura</field>
+            <field name="category_id" ref="dara_mallas_group_aditional"/>
+        </record>
 
 
          <!-- asignaturas -->
@@ -33,6 +44,7 @@
             <field name="name">Lectura</field>
             <field name="category_id" ref="dara_mallas_group"/>
         </record>
+      
 
         
          <!-- reportes -->
