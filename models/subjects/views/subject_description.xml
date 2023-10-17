@@ -17,10 +17,10 @@
                 	<sheet>
                         <group col="2" >
                             
-                            <field name="subject_id"/>
+                            <field name="subject_id"  readonly="1"/>
                             <field name="subject_name_en"/>
                             <field name="subject_code"/>
-                            <field name ="period_id"/>
+                            <field name ="period_id" readonly="1"/>
                             <field name ="tipo"/>
                             <field name="content_description"/>
                             <field name="content_description_en"/>

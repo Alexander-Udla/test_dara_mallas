@@ -13,6 +13,7 @@
                   <header>
                 		<field name="state" widget="statusbar" clickable="False"/>
                 		<button name="graphic_plan" string="Malla grafica con creditos" type="object" class="oe_right oe_highlight"/>
+                		<button name="open_subject_description" string="Descripción de Asignaturas" type="object" class="oe_right oe_highlight"/>
                 		
                   </header>
                 
@@ -189,9 +190,26 @@
               </p>
             </field>
          </record>
+        <record id="action_open_vigente_study_plan" model="ir.actions.act_window">
+           <field name="name">Mallas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dara_mallas.study_plan</field>
+            <field name="view_mode">tree,form</field> 
+            <field name="domain">[('state','=','vigente')]</field>
+    		<field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Administre el registro de la planificacion curricular anual
+              </p><p>
+                
+                Created by Intsoltecs
+                www.intsoltec.com	
+              </p>
+            </field>
+         </record>
  		
 		</data>
 	  <menuitem id="dara_study_plan_tree_menu" name="Mallas" parent="dara_study_plans_menu" sequence="2" />
+		<menuitem id="dara_study_plans_vigente" name="Vigente" parent="dara_study_plan_tree_menu" action="action_open_vigente_study_plan" sequence="10"/>
 		<menuitem id="dara_study_plans" name="Todas" parent="dara_study_plan_tree_menu" action="action_open_all_study_plan" sequence="20"/>
 
 	

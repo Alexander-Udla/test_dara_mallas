@@ -173,7 +173,22 @@ class study_plan(models.Model):
             res.append((element.id, name))
         return res
       
-    
+    #abrir descripciones
+    def open_subject_description(self):
+        subject_ids = []
+        for item in self.study_plan_lines_simple_ids:
+            subject_ids.append(item.subject_id.id)
+        return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'dara_mallas.subject_description_line',
+                'view_mode': 'tree,form',
+                'target': 'concurrent',
+                'name': 'Descripción de Asignaturas',
+                'domain': [('subject_id.id','in',subject_ids)],
+                #'view_id': view_id,
+                #'view_type': 'form', 
+
+            } 
 
     @api.onchange('study_plan_lines_ids') 
     def onchange_study_plan_lines_ids(self):
