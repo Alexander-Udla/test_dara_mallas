@@ -7,7 +7,7 @@ class subject(models.Model):
     name=fields.Char("Asignatura, curso o equivalente")
     name_en=fields.Char("Subject, course or equivalent ") 
 
-    short_name=fields.Char("Nombre Corto", size=30)
+    short_name=fields.Char("Nombre Corto", size=27)
     code=fields.Char("Sigla", default='ccc-nnnn')
     course_number=fields.Char("Course", size=4, default="nnnn")
     subject_name_id=fields.Many2one("dara_mallas.subject_name")
