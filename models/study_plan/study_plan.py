@@ -40,7 +40,10 @@ class study_plan(models.Model):
     
     period_id=fields.Many2one("dara_mallas.period")
     description=fields.Char("Descripcion")
-    #grade=fields.Char("Nivel")
+
+    #Malla congelada
+    study_plan_stop = fields.Boolean("Malla congelada")
+
     grade_id=fields.Many2one("dara_mallas.grade")
     banner_grade_id=fields.Many2one("dara_mallas.banner_grade")
 

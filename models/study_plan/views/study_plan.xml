@@ -11,7 +11,8 @@
                 <field name="arch" type="xml">
                 <form>
                   <header>
-                		<field name="state" widget="statusbar" clickable="False"/>
+                		<!-- <field name="state" widget="statusbar" clickable="False"/> -->
+                		<field name="state" widget="statusbar" />
                 		<button name="graphic_plan" string="Malla grafica con creditos" type="object" class="oe_right oe_highlight"/>
                 		<button name="open_subject_description" string="Descripción de Asignaturas" type="object" class="oe_right oe_highlight"/>
                 		
@@ -21,7 +22,7 @@
             		  <group>
 	            		  <field name="college_id"/>
 	            		  <field name="program_id" string="Programa"/>
-                    <field name="program_name_en" /> 
+                                <field name="program_name_en" /> 
 	            		  <field name="program_codes_ids" widget="many2many_tags"/> 
 	            		  <h3><field name="period_id" string="Perido de la MALLA"/></h3>
             		  </group>
@@ -59,9 +60,11 @@
                                               </tree>
                                             </field>
                                       </page>
-                                      <page string="Publicaciones Web"> 
+                                      <page string="Configuraciones"> 
                                             <group col="2" >
                                                 <field name="mallas_web" />
+	            		                  <field name="study_plan_stop" /> 
+
                                             </group>
                                              
                                       </page>
