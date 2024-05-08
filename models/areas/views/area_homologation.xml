@@ -16,8 +16,9 @@
               		  		<field name="area_id"/>
                         <field name="period_id"/>
                         <field name="dinamic"/>
-              		  		
-              		  		
+              		  		<field name = "file" filename="file_name" readonly="1"/>
+              		  		<field name = "file_name" invisible="1"/>
+        
               		  </group>
               	<notebook>
                           <page string="Asignaturas">
@@ -32,11 +33,16 @@
                                   </tree>
                                 </field>
                             </page>
-                </notebook>
+                  </notebook>
                   <button name="copy_rules"   type="object" >
                                                                   Generar Reglas
                                                                   </button>   
-            		    
+            		  <button name="create_area_history"   type="object" confirm="¿Crear copia?">
+                                                                  Copiar
+                                                                  </button>     
+                  <button name="create_changes_report"   type="object">
+                                                                  Crear reporte
+                                                                  </button>                                                     
             		    </sheet>
                 </form>     	            	  
                 </field>
