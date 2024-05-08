@@ -33,6 +33,14 @@
                                   </tree>
                                 </field>
                             </page>
+                          <page string="Versiones">
+                                <field name="history_ids">
+                                  <tree >
+                                    <field name ="area_id"/>
+                                    <field name ="period_id"/>
+                                  </tree>
+                                </field>
+                            </page>
                   </notebook>
                   <button name="copy_rules"   type="object" >
                                                                   Generar Reglas
