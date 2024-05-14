@@ -21,8 +21,8 @@ class subject(models.Model):
     ## se controla que la longitud maxima del nombre de la asignatura sea 27 mantenimiento los 30 caracteres.
     @api.onchange('name')
     def check_name_field_length(self):
-        if self.name:
-            if len(self.name) > 27:
+        if self.short_name:
+            if len(self.short_name) > 27:
                 raise ValidationError("El campo debe tener máximo 27 caracteres.")
 
     @api.onchange('subject_name_id','course_number')
