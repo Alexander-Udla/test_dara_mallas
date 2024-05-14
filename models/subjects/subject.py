@@ -19,7 +19,7 @@ class subject(models.Model):
     new_subject = fields.Boolean("Nueva", default=True,track_visibility='always')
 
     ## se controla que la longitud maxima del nombre de la asignatura sea 27 mantenimiento los 30 caracteres.
-    @api.onchange('name')
+    @api.onchange('short_name')
     def check_name_field_length(self):
         if self.short_name:
             if len(self.short_name) > 27:
