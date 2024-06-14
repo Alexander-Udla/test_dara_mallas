@@ -21,7 +21,7 @@ class area_homologation(models.Model):
     file=fields.Binary("Reporte")
     file_name=fields.Char("Reporte de cambios")
 
-
+    previous_area = fields.Many2one("dara_mallas.area_homologation")
     #@api.onchange('subject_inherit_area_ids') 
     def onchange_subject_inherit_area_ids(self):
         
@@ -57,6 +57,13 @@ class area_homologation(models.Model):
                             raise UserError("""La asignatura %s en el area %s no tiene reglas de homologacion \n crear en /asginaturas/reglas """%(subject_inherit.subject_id.code,self.area_id.name))     
 
     def copy(self,default=None):
+        previous_area = self.id
+
+        if default is None:
+            default = {}
+
+        default['previous_area'] = previous_area
+
         new_object=super(area_homologation,self).copy(default=default)
         objects = []
         for item in self.subject_inherit_area_ids:
@@ -73,6 +80,30 @@ class area_homologation(models.Model):
         return new_object
 
     def copy_rules(self):
+        '''
+        validar si la homologacion esta en Malla C 
+            si la nueva homologacion esta en MC se reemplaza con la actual
+        se busca con el nuevo campo   
+        '''
+        # Lógica correcta con las mallas congeladas, pero se está eliminando el registro de la regla
+    
+        if self.previous_area:
+            previous_area = self.env['dara_mallas.area_homologation'].search([
+                ('id', '=', self.previous_area.id)
+            ], limit=1)
+
+            if not self.is_stop_study_plan_area(previous_area.area_id):
+                print("NO ESTA EN MALLA CONGELADA EL AREA ANTERIOR:", previous_area.display_name)
+                for previous_subject in previous_area.subject_inherit_area_ids:
+                    previous_subject_rules = self.env['dara_mallas.subject_rule'].search([
+                        ('subject_id', '=', previous_subject.subject_id.id),
+                        ('area_id', '=', previous_area.area_id.id),
+                    ])
+                    
+                    for rule in previous_subject_rules:
+                        if rule.period_id.name < self.period_id.name:
+                            rule.unlink()
+
         for item in self.subject_inherit_area_ids:
             subject_rule_all = self.env['dara_mallas.subject_rule'].search([
                 ('subject_id','=',item.subject_id.id),
@@ -90,7 +121,8 @@ class area_homologation(models.Model):
                     ('id','=',subject_rule.id),
                     ])
                 if self.period_id.name != subject_rule.period_id.name:
-                    subject_rule.copy({'period_id':self.period_id.id})
+                    new_subject_rule = subject_rule.copy({'period_id':self.period_id.id})
+                    self.update_subject_inherit_homologation(item.subject_inherit_id, new_subject_rule)
             else:
                 subject_rule_all = self.env['dara_mallas.subject_rule'].search([
                 ('subject_id','=',item.subject_id.id),
@@ -105,7 +137,9 @@ class area_homologation(models.Model):
                     subject_rule = self.env['dara_mallas.subject_rule'].search([
                         ('id','=',subject_rule.id),
                         ])
-                    subject_rule.copy({'area_id':self.area_id.id,'period_id':self.period_id.id})
+                    new_subject_rule = subject_rule.copy({'area_id':self.area_id.id,'period_id':self.period_id.id})
+                    self.update_subject_inherit_homologation(item.subject_inherit_id, new_subject_rule)
+
                 else:
                     object = {
                         'subject_id':item.subject_id.id,
@@ -114,7 +148,19 @@ class area_homologation(models.Model):
 
                     }
                     object_create = self.env['dara_mallas.subject_rule'].create(object)
+                    self.update_subject_inherit_homologation(item.subject_inherit_id, object_create)
 
+    def update_subject_inherit_homologation(self, subject_inherit, new_subject_rule):
+        '''
+        Actualiza el campo subject_inherit_homologation_ids de la ficha de la asignatura
+        para incluir la nueva regla de homologación creada.
+        '''
+        homologation_data = {
+            'subject_rule_id': new_subject_rule.id,
+            'subject_inherit_id': subject_inherit.id,
+        }
+        self.env['dara_mallas.subject_inherit_homologation'].create(homologation_data)
+        
     def name_get(self):
         result = []
         for rec in self:
@@ -125,10 +171,8 @@ class area_homologation(models.Model):
         """
         Crear una copia del área en la tabla area_homologation_history
         """
-        if not self.is_stop_study_plan_area():
+        if not self.is_stop_study_plan_area(self):
             raise UserError(f"El área {self.area_id.name} en el período {self.period_id.display_name} no está en una malla congelada.")
-
-
 
         # Verificar si ya existe un registro en el historial para el mismo área y período
         existing_history = self.env['dara_mallas.area_homologation_history'].search([
@@ -202,17 +246,17 @@ class area_homologation(models.Model):
                 })
 
 
-    def is_stop_study_plan_area(self):
+    def is_stop_study_plan_area(self, area):
         """
         Validar si el área está dentro de una malla congelada
         """
-        if self.area_id.name[0].isalpha():
-            search_string = self.area_id.name[1:3]
+        if area.name[0].isalpha():
+            search_string = area.name[1:3]
         else:
-            search_string = self.area_id.name[0:3]
-        
+            search_string = area.name[0:3]
+
         program_code = self.env['dara_mallas.program_code'].search([
-            ('name', 'like', '%%%s'%(search_string))
+            ('name', 'like', '%%%s' % search_string)
         ])
 
         for code in program_code:
@@ -224,8 +268,8 @@ class area_homologation(models.Model):
                     ('program_id', '=', program.id)
                 ])
                 for study_plan in study_plans:
-                    for area in study_plan.study_plan_lines_ids:
-                        if self.id == area.area_homologation_id.id and study_plan.study_plan_stop:
+                    for plan_line in study_plan.study_plan_lines_ids:
+                        if area.id == plan_line.area_homologation_id.id and study_plan.study_plan_stop:
                             return True
         return False
 
@@ -362,9 +406,9 @@ class area_homologation(models.Model):
                 # Unir las dos listas en una cadena de texto
                 differences_text = f"Período nuevo:{self.period_id.display_name}\nÁrea {self.area_id.display_name} \nPeríodo anterior:{last_area_max_period.period_id.display_name} \n"
                 for removed_subject in removed_subject_names:
-                        differences_text += f"Asignatura(s) eliminada(s): {removed_subject}\n"
+                        differences_text += f"Asignatura(s) añadida(s): {removed_subject}\n"
                 for added_subject in added_subject_names:
-                        differences_text += f"Asignatura(s) añadida(s): {added_subject}\n"
+                        differences_text += f"Asignatura(s) eliminada(s): {added_subject}\n"
                     
                 # Escribir el contenido del archivo de texto en el campo 'file' del objeto actual
                 self.write({
@@ -372,7 +416,63 @@ class area_homologation(models.Model):
                         'file_name': 'reporte.txt'
                     })
 
-                      
+    def compare_area_with_area_hist(self, area_record):
+        """
+        Comparar con el área que tenga el período menor al último registro, pero que sea el máximo entre los registros existentes.
+        """
+        current_areas = self.search([('area_id', '=', area_record.area_id.id)])
+
+        current_period = area_record.period_id.name
+
+        period_max = None 
+
+        for area in current_areas:
+            period = area.period_id.name
+            if period < current_period and (period_max is None or period > period_max):
+                period_max = period
+
+        if period_max is None:
+            return f"No existe un período menor para realizar la comparativa para el área {area_record.area_id.display_name}.\n"
+
+        last_area_max_period = self.search([
+            ('area_id', '=', area_record.area_id.id),
+            ('period_id', '=', period_max)
+        ], limit=1)
+
+        if not last_area_max_period:
+            return f"No existe un período anterior al {area_record.period_id.name} con el cual realizar la comparativa para el área {area_record.area_id.display_name}.\n"
+        else:
+            existing_area_subject_ids = set(subject.subject_inherit_id.id for subject in area_record.subject_inherit_area_ids)
+            previous_record_subject_ids = set(subject.subject_inherit_id.id for subject in last_area_max_period.subject_inherit_area_ids)
+
+            removed_subject_ids = existing_area_subject_ids - previous_record_subject_ids
+            added_subject_ids = previous_record_subject_ids - existing_area_subject_ids
+
+            # Obtener los nombres de las asignaturas eliminadas
+            removed_subject_names = []
+            for subject_id in removed_subject_ids:
+                subject = self.env['dara_mallas.subject_inherit'].search([('id', '=', subject_id)])
+                if subject:
+                    removed_subject_names.append(subject.display_name)
+
+            # Obtener los nombres de las asignaturas añadidas
+            added_subject_names = []
+            for subject_id in added_subject_ids:
+                subject = self.env['dara_mallas.subject_inherit'].search([('id', '=', subject_id)])
+                if subject:
+                    added_subject_names.append(subject.display_name)
+
+            if len(added_subject_names) == 0 and len(removed_subject_names) == 0:
+                differences_text = f"Área: {area_record.area_id.display_name}\nPeríodo nuevo: {area_record.period_id.display_name}\nPeríodo anterior: {last_area_max_period.period_id.display_name}\nNo se registran cambios.\n"
+            else:
+                differences_text = f"Área: {area_record.area_id.display_name}\nPeríodo nuevo: {area_record.period_id.display_name}\nPeríodo anterior: {last_area_max_period.period_id.display_name}\n"
+                for removed_subject in removed_subject_names:
+                    differences_text += f"Asignatura(s) añadida(s): {removed_subject}\n"
+                for added_subject in added_subject_names:
+                    differences_text += f"Asignatura(s) eliminada(s): {added_subject}\n"
+
+            return differences_text
+
 class area_homologation_history(models.Model):
     _name = 'dara_mallas.area_homologation_history'
     
