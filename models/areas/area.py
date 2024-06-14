@@ -14,14 +14,16 @@ class area_homologation(models.Model):
     period_id=fields.Many2one("dara_mallas.period")
     area_id=fields.Many2one("dara_mallas.area")
     dinamic=fields.Boolean("Areas Dinamicas",default=False)
-    #subject_rule_line_ids = fields.One2many("dara_mallas.subject_rule_line",inverse_name="area_homologation_id")
     subject_inherit_area_ids = fields.One2many("dara_mallas.subject_inherit_area",inverse_name="area_homologation_id",string="Asignaturas")
 
     # campos que almacenarán el reporte
     file=fields.Binary("Reporte")
     file_name=fields.Char("Reporte de cambios")
 
-    previous_area = fields.Many2one("dara_mallas.area_homologation")
+    previous_area = fields.Many2one("dara_mallas.area_homologation")    # Campo computado para obtener historial relacionado
+    history_ids = fields.One2many('dara_mallas.area_homologation_history', 'area_homologation_id', string='Historial de Homologación')
+
+
     #@api.onchange('subject_inherit_area_ids') 
     def onchange_subject_inherit_area_ids(self):
         
@@ -480,4 +482,4 @@ class area_homologation_history(models.Model):
     period_id = fields.Many2one('dara_mallas.period', string='Period')
     area_id = fields.Many2one('dara_mallas.area', string='Area')
     dinamic = fields.Boolean(string='Dinamic')
-    subject_inherit_area_ids = fields.One2many('dara_mallas.subject_inherit_area_history',inverse_name='area_homologation_history_id',string='Asignaturas')
+    subject_inherit_area_ids = fields.One2many('dara_mallas.subject_inherit_area_history',inverse_name='area_homologation_history_id',string='Asignaturas') 
