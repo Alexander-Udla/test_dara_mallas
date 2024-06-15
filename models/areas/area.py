@@ -82,29 +82,69 @@ class area_homologation(models.Model):
         return new_object
 
     def copy_rules(self):
-        '''
-        validar si la homologacion esta en Malla C 
-            si la nueva homologacion esta en MC se reemplaza con la actual
-        se busca con el nuevo campo   
-        '''
-        # Lógica correcta con las mallas congeladas, pero se está eliminando el registro de la regla
-    
+        # verificar si existe un área anterior
         if self.previous_area:
-            previous_area = self.env['dara_mallas.area_homologation'].search([
-                ('id', '=', self.previous_area.id)
-            ], limit=1)
+            # obtener el área anterior desde la base de datos
+            previous_area = self.env['dara_mallas.area_homologation'].browse(self.previous_area.id)
 
             if not self.is_stop_study_plan_area(previous_area.area_id):
-                print("NO ESTA EN MALLA CONGELADA EL AREA ANTERIOR:", previous_area.display_name)
-                for previous_subject in previous_area.subject_inherit_area_ids:
-                    previous_subject_rules = self.env['dara_mallas.subject_rule'].search([
-                        ('subject_id', '=', previous_subject.subject_id.id),
-                        ('area_id', '=', previous_area.area_id.id),
+                current_subject_rules = self.env['dara_mallas.subject_rule'].search([
+                    ('area_id', '=', self.area_id.id)
+                ])
+                for rule in current_subject_rules:
+                    # quitar relaciones entre reglas 
+                    rule.write({
+                        'subject_homologation_ids': [(5, 0, 0)],
+                        'area_id': False,
+                        'period_id': False,
+                        'subject_id': False,
+                        'subject_code': False
+                    })
+                    # quitar relaciones entre rule y homol
+                    inherit_homologations = self.env['dara_mallas.subject_inherit_homologation'].search([
+                        ('subject_rule_id', '=', rule.id)
                     ])
-                    
-                    for rule in previous_subject_rules:
-                        if rule.period_id.name < self.period_id.name:
-                            rule.unlink()
+                    for inherit_homologation in inherit_homologations:
+                        inherit_homologation.unlink()
+                        #inherit_homologation.write({'subject_rule_id': False})
+            
+            for previous_subject in previous_area.subject_inherit_area_ids:
+                previous_subject_rules = self.env['dara_mallas.subject_rule'].search([
+                    ('subject_id', '=', previous_subject.subject_id.id),
+                    ('area_id', '=', previous_area.area_id.id),
+                ])
+                for rule in previous_subject_rules:
+                    # validar si la regla existe 
+                    existing_rule = self.env['dara_mallas.subject_rule'].search([
+                        ('subject_id', '=', rule.subject_id.id),
+                        ('area_id', '=', self.area_id.id),
+                        ('period_id', '=', self.period_id.id)
+                    ], limit=1)
+
+                    if not existing_rule:
+                        # copiar si no existe en el área actual
+                        new_subject_rule = rule.copy({
+                            'area_id': self.area_id.id,
+                            'period_id': self.period_id.id
+                        })
+                        new_subject_rule.write({
+                            'subject_homologation_ids': [(6, 0, rule.subject_homologation_ids.ids)],
+                            'subject_id': rule.subject_id.id,
+                            'subject_code': rule.subject_code,
+                        })
+                        self.update_subject_inherit_homologation(previous_subject.subject_inherit_id, new_subject_rule)
+
+                    else:
+                        existing_rule.write({
+                            'subject_homologation_ids': [(6, 0, rule.subject_homologation_ids.ids)],
+                            'subject_code': rule.subject_code,
+                        })
+                        inherit_homologation = self.env['dara_mallas.subject_inherit_homologation'].search([
+                            ('subject_rule_id', '=', existing_rule.id),
+                            ('subject_inherit_id', '=', previous_subject.subject_inherit_id.id),
+                        ])
+                        if not inherit_homologation:
+                            self.update_subject_inherit_homologation(previous_subject.subject_inherit_id, existing_rule)
 
         for item in self.subject_inherit_area_ids:
             subject_rule_all = self.env['dara_mallas.subject_rule'].search([
