@@ -1,5 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
+
 class subject(models.Model):
    
     _name="dara_mallas.subject"
@@ -7,7 +9,7 @@ class subject(models.Model):
     name=fields.Char("Asignatura, curso o equivalente")
     name_en=fields.Char("Subject, course or equivalent ") 
 
-    short_name=fields.Char("Nombre Corto", size=27)
+    short_name=fields.Char("Nombre Corto", size=30)
     code=fields.Char("Sigla", default='ccc-nnnn')
     course_number=fields.Char("Course", size=4, default="nnnn")
     subject_name_id=fields.Many2one("dara_mallas.subject_name")
@@ -15,6 +17,13 @@ class subject(models.Model):
     subject_class_ids = fields.One2many("dara_mallas.subject_class",inverse_name="subject_id")
 
     new_subject = fields.Boolean("Nueva", default=True,track_visibility='always')
+
+    ## se controla que la longitud maxima del nombre de la asignatura sea 27 mantenimiento los 30 caracteres.
+    @api.onchange('short_name')
+    def check_name_field_length(self):
+        if self.short_name:
+            if len(self.short_name) > 27:
+                raise ValidationError("El campo debe tener máximo 27 caracteres.")
 
     @api.onchange('subject_name_id','course_number')
     def onchange_subject_code(self):
