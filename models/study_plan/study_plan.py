@@ -1309,7 +1309,7 @@ class study_plan_line(models.Model):
     line_order=fields.Integer("No.")
     area_homologation_id=fields.Many2one("dara_mallas.area_homologation", string="Areas")
     area_homologation_code=fields.Char("Codigo Area",related="area_homologation_id.area_id.code")
-    area_subject_inherit_area_ids=fields.One2many(related="area_homologation_id.subject_inherit_area_ids") 
+    area_subject_inherit_area_ids=fields.One2many(related="area_homologation_id.subject_inherit_area_ids")  
     #level_id=fields.Many2one("dara_mallas.level")
     #study_field_id=fields.Many2one("dara_mallas.study_field")
     #study_field_order_number=fields.Integer("Orden para malla",related="study_field_id.number", store=True)
