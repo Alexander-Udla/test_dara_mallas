@@ -46,11 +46,11 @@
                   <button name="copy_rules"   type="object" >
                                                                   Generar Reglas
                                                                   </button>   
-            		  <button name="create_area_history"   type="object" confirm="¿Crear copia?">
-                                                                  Copiar
+            		  <button name="create_area_history"   type="object" confirm="¿Crear historial del área?">
+                                                                  Crear historial
                                                                   </button>     
                   <button name="create_changes_report"   type="object">
-                                                                  Crear reporte
+                                                                  Ver cambios
                                                                   </button>                                                     
             		    </sheet>
                 </form>     	            	  

@@ -160,7 +160,7 @@ class area_homologation(models.Model):
         """
         Crear una copia del área en la tabla area_homologation_history
         """
-        if not self.is_stop_study_plan_area(self):
+        if not self.is_stop_study_plan_area(self.area_id):
             raise UserError(f"El área {self.area_id.name} en el período {self.period_id.display_name} no está en una malla congelada.")
 
         # Verificar si ya existe un registro en el historial para el mismo área y período
@@ -173,7 +173,7 @@ class area_homologation(models.Model):
         if existing_history:
 
             # Validar lista de asignaturas
-            existing_subject_ids = [item.subject_inherit_id.id for item in existing_history.subject_inherit_area_ids]
+            existing_subject_ids = [item.subject_inherit_history_id.id for item in existing_history.subject_inherit_area_ids]
 
             new_subject_ids = [item.subject_inherit_id.id for item in self.subject_inherit_area_ids]
 
@@ -187,18 +187,28 @@ class area_homologation(models.Model):
                     'area_id': self.area_id.id,
                     'dinamic': self.dinamic
                 })
+            
+            new_history_subject_ids = []
 
-                # Crear las asignaturas relacionadas con la cabecera
-                new_history_subject_ids = []
-                for subject in self.subject_inherit_area_ids:
-                    history_model_subject = self.env['dara_mallas.subject_inherit_area_history'].create({
-                        'subject_inherit_id': subject.subject_inherit_id.id,
-                        'line_order': subject.line_order,
-                        'study_field_id': subject.study_field_id.id,
+            for subject in self.subject_inherit_area_ids:
+                subject_inherit_model = self.env['dara_mallas.subject_inherit_area_history'].create(
+                    {
+                        'subject_id': subject.subject_id.id,
+                        'subject_code': subject.subject_code,
                         'organization_unit_id': subject.organization_unit_id.id,
+                        'study_field_id': subject.study_field_id.id,
+                        #'subject_scarse_period_id': subject.subject_scarse_period_id.id,
                         'area_homologation_history_id': history_model.id
-                    })
-                    new_history_subject_ids.append(history_model_subject.id)
+                    }
+                )
+                history_model_subject = self.env['dara_mallas.subject_inherit_area_history'].create({
+                    'subject_inherit_history_id': subject_inherit_model.id,
+                    'line_order': subject.line_order,
+                    'study_field_id': subject.study_field_id.id,
+                    'organization_unit_id': subject.organization_unit_id.id,
+                    'area_homologation_history_id': history_model.id
+                })
+                new_history_subject_ids.append(history_model_subject.id)
 
                 # Actualizar la cabecera con las asignaturas creadas
                 history_model.write({
@@ -217,11 +227,26 @@ class area_homologation(models.Model):
                     'dinamic': self.dinamic
                 })
 
-                # Crear las asignaturas relacionadas con la cabecera
                 new_history_subject_ids = []
+                inherit_homologation_ids = []
                 for subject in self.subject_inherit_area_ids:
+                    # crear fichas de asignatura historicas
+                    
+                    subject_inherit_model = self.env['dara_mallas.subject_inherit_history'].create(
+                        {
+                            'subject_id': subject.subject_id.id,
+                            'subject_inherit_homologation_ids': subject.subject_inherit_id.subject_inherit_homologation_ids # lista de asignaturas homologan
+                        }
+                    )
+                    for subject_inherit_homologation in subject.subject_inherit_id.subject_inherit_homologation_ids:
+                        inherit_homologation_ids.append(subject_inherit_homologation.id)
+
+                    subject_inherit_model.write({
+                        'subject_inherit_homologation_ids':[(6,0, inherit_homologation_ids)]
+                    })
+
                     history_model_subject = self.env['dara_mallas.subject_inherit_area_history'].create({
-                        'subject_inherit_id': subject.subject_inherit_id.id,
+                        'subject_inherit_history_id': subject_inherit_model.id, # asignar fichas de asignatura historicas
                         'line_order': subject.line_order,
                         'study_field_id': subject.study_field_id.id,
                         'organization_unit_id': subject.organization_unit_id.id,
@@ -229,10 +254,11 @@ class area_homologation(models.Model):
                     })
                     new_history_subject_ids.append(history_model_subject.id)
 
-                # Actualizar la cabecera con las asignaturas creadas
-                history_model.write({
-                    'subject_inherit_area_ids': [(6, 0, new_history_subject_ids)]
-                })
+                    # Actualizar la cabecera con las asignaturas creadas
+                    history_model.write({
+                        'subject_inherit_area_ids': [(6, 0, new_history_subject_ids)]
+                    })
+
 
     def is_stop_study_plan_area(self, area):
         """
@@ -273,8 +299,8 @@ class area_homologation(models.Model):
         Método para enlazar al botón de creación de reportes, crea el reporte según sea o no malla congelada
         """
         print("Id del area actual: ", self.area_id.id)
-        print(self.is_stop_study_plan_area())
-        if self.is_stop_study_plan_area():
+        print(self.is_stop_study_plan_area(self.area_id))
+        if self.is_stop_study_plan_area(self.area_id):
             self.compare_with_area_history()
         else:
             self.compare_with_area_instance()
@@ -289,31 +315,33 @@ class area_homologation(models.Model):
             ], order='id desc', limit=1)
 
         if existing_history:
-                # Obtener los IDs de las asignaturas en el historial
-                history_subject_ids = set(subject.subject_inherit_id.id for subject in existing_history.subject_inherit_area_ids)
+                
+                history_rules_ids = set(subject.id for subject in existing_history.subject_inherit_area_ids.subject_inherit_history_id.subject_inherit_homologation_ids.id)
 
-                # Obtener los IDs de las asignaturas actuales
-                current_area_subject_ids = set(subject.subject_inherit_id.id for subject in self.subject_inherit_area_ids)
+                print('Ids de las reglas históricas: ',history_rules_ids)
 
+                current_area_rules_ids = set(subject.id for subject in self.subject_inherit_area_ids.subject_inherit_id.subject_inherit_homologation_ids)
 
-                removed_subject_ids = history_subject_ids - current_area_subject_ids
+                print('Ids de las reglas actuales',current_area_rules_ids)
 
-                added_subject_ids = current_area_subject_ids - history_subject_ids
+                removed_rules_ids = history_rules_ids - current_area_rules_ids
 
-                if not removed_subject_ids and not added_subject_ids:
+                added_rules_ids = current_area_rules_ids - history_rules_ids
+
+                if not removed_rules_ids and not added_rules_ids:
                     raise UserError(f"La copia del área {self.area_id.name} en el período {self.period_id.display_name} existe, pero no se han realizado cambios.")
             
 
-                # Obtener los nombres de las asignaturas eliminadas
+                # Obtener los nombres de las reglas eliminadas
                 removed_subject_names = []
-                for subject_id in removed_subject_ids:
+                for subject_id in removed_rules_ids:
                     subject = self.env['dara_mallas.subject_inherit'].search([('id', '=', subject_id)])
                     if subject:
                         removed_subject_names.append(subject.display_name)
 
                 # Obtener los nombres de las asignaturas añadidas
                 added_subject_names = []
-                for subject_id in added_subject_ids:
+                for subject_id in added_rules_ids:
                     subject = self.env['dara_mallas.subject_inherit'].search([('id', '=', subject_id)])
                     if subject:
                         added_subject_names.append(subject.display_name)

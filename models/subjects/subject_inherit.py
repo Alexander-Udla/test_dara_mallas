@@ -264,16 +264,19 @@ class subject_inherit_homologation(models.Model):
 
     #reverse name
     subject_inherit_id = fields.Many2one("dara_mallas.subject_inherit")
+    # relacion con la ficha de asignatura historica
+    subject_inherit_history_id = fields.Many2one('dara_mallas.subject_inherit_history')
 
 class subject_inherit_area_history(models.Model):
     _name="dara_mallas.subject_inherit_area_history"
 
     _order="line_order asc"
-    subject_inherit_id=fields.Many2one("dara_mallas.subject_inherit")
-    subject_id=fields.Many2one(related="subject_inherit_id.subject_id")
-    subject_code=fields.Char(related="subject_inherit_id.subject_id.code")
-    subject_name=fields.Char(related="subject_inherit_id.subject_id.name")
-    subject_scarse_period_id=fields.Many2one(related="subject_inherit_id.scad_period_id")
+    # relacion con fichas de asignatura historicas
+    subject_inherit_history_id=fields.Many2one("dara_mallas.subject_inherit_history")
+    subject_id=fields.Many2one(related="subject_inherit_history_id.subject_id")
+    subject_code=fields.Char(related="subject_inherit_history_id.subject_id.code")
+    subject_name=fields.Char(related="subject_inherit_history_id.subject_id.name")
+    #subject_scarse_period_id=fields.Many2one(related="subject_inherit_id.scad_period_id")
     line_order=fields.Integer("No.")
     study_field_id=fields.Many2one("dara_mallas.study_field")
     organization_unit_id=fields.Many2one("dara_mallas.organization_unit")
@@ -281,10 +284,12 @@ class subject_inherit_area_history(models.Model):
     #relacion reversa con el modelo del area_homo_history
     area_homologation_history_id = fields.Many2one("dara_mallas.area_homologation_history")
 
-
-
-
-
-        
-
-    
+class subject_inherit_history(models.Model):
+    _name= 'dara_mallas.subject_inherit_history'
+    #subject
+    subject_id = fields.Many2one("dara_mallas.subject")
+    code=fields.Char(related="subject_id.code")
+    name=fields.Char(related="subject_id.name")
+    #reglas de homologacion
+    subject_inherit_homologation_ids = fields.One2many("dara_mallas.subject_inherit_homologation",inverse_name ="subject_inherit_history_id")      
+    subject_inherit_area_history = fields.One2many("dara_mallas.subject_inherit_area_history",inverse_name ="subject_inherit_history_id")      

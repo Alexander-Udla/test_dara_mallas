@@ -26,7 +26,6 @@
                                   <tree editable="false">
                                     <field name ="line_order"/>
                                     <field name ="subject_code"/>
-                                    <field name="subject_inherit_id"/>
                                     <field name="study_field_id"/>
                                     <field name="organization_unit_id"/>
                                     <field name="area_homologation_history_id" invisible="1"/>
