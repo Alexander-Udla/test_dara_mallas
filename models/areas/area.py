@@ -20,7 +20,6 @@ class area_homologation(models.Model):
     file=fields.Binary("Reporte")
     file_name=fields.Char("Reporte de cambios")
 
-    previous_area = fields.Many2one("dara_mallas.area_homologation")    # Campo computado para obtener historial relacionado
     history_ids = fields.One2many('dara_mallas.area_homologation_history', 'area_homologation_id', string='Historial de Homologación')
 
 
@@ -59,13 +58,9 @@ class area_homologation(models.Model):
                             raise UserError("""La asignatura %s en el area %s no tiene reglas de homologacion \n crear en /asginaturas/reglas """%(subject_inherit.subject_id.code,self.area_id.name))     
 
     def copy(self,default=None):
-        previous_area = self.id
 
         if default is None:
             default = {}
-
-        default['previous_area'] = previous_area
-
         new_object=super(area_homologation,self).copy(default=default)
         objects = []
         for item in self.subject_inherit_area_ids:
@@ -128,6 +123,7 @@ class area_homologation(models.Model):
                     object_create = self.env['dara_mallas.subject_rule'].create(object)
                     subject_rule_new.append(object_create)
 
+
         #buscar ficha
         for subject in subject_rule_new:
             subject_inherit_homologations = []
@@ -137,8 +133,20 @@ class area_homologation(models.Model):
             for subject_homologation in subject_inherit.subject_inherit_homologation_ids:
                 if subject_homologation.subject_rule_id.area_id.id != subject.area_id.id:
                     subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
-                elif subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and self.is_stop_study_plan_area(subject_homologation.subject_rule_id.area_id):#revisar error
-                    subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
+                else:
+                    
+                    valida_study_plan_stop_new = self.is_stop_study_plan_area(subject.area_id,subject,new = True)
+                    if not valida_study_plan_stop_new:
+                        #comprueba que sea del mismo area y que este en una malla congelada
+                        valida_study_plan_stop = self.is_stop_study_plan_area(subject_homologation.subject_rule_id.area_id,subject_homologation.subject_rule_id)
+                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and valida_study_plan_stop:#revisar error
+                            subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
+                    else:
+                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and subject_homologation.subject_rule_id.period_id.name >subject.period_id.name:
+                            subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
+
+                        
+                        
             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject.id}))
             for modelo_subject in subject_inherit:
                 modelo_subject.write({'subject_inherit_homologation_ids': [(5,)]})
@@ -149,6 +157,17 @@ class area_homologation(models.Model):
 
 
         print(subject_rule_new)
+
+    def update_subject_inherit_homologation(self, subject_inherit, new_subject_rule):
+        '''
+        Actualiza el campo subject_inherit_homologation_ids de la ficha de la asignatura
+        para incluir la nueva regla de homologación creada.
+        '''
+        homologation_data = {
+            'subject_rule_id': new_subject_rule.id,
+            'subject_inherit_id': subject_inherit.id,
+        }
+        self.env['dara_mallas.subject_inherit_homologation'].create(homologation_data)
         
     def name_get(self):
         result = []
@@ -260,37 +279,40 @@ class area_homologation(models.Model):
                     })
 
 
-    def is_stop_study_plan_area(self, area):
+
+    def is_stop_study_plan_area(self, area,rule,new=False):#regla
         """
         Validar si el área está dentro de una malla congelada
         """
-        if not area:
-            return False
-
-        area_name = area.name
-        print(f'Area Name: {area_name}')  # Depuración
-
-        if area_name[0].isalpha():
-            search_string = area_name[1:3]
+        if area.name[0].isalpha():
+            search_string = area.name[1:3]
         else:
-            search_string = area_name[0:3]
+            search_string = area.name[0:3]
 
-        program_codes = self.env['dara_mallas.program_code'].search([
+        program_code = self.env['dara_mallas.program_code'].search([
             ('name', 'like', '%%%s' % search_string)
         ])
-        for code in program_codes:
+
+        for code in program_code:
             programs = self.env['dara_mallas.program'].search([
                 ('id', '=', code.program_id.id)
             ])
-    
             for program in programs:
                 study_plans = self.env['dara_mallas.study_plan'].search([
                     ('program_id', '=', program.id)
                 ])
                 for study_plan in study_plans:
-                    for plan_line in study_plan.study_plan_lines_ids:
-                        if area.id == plan_line.area_homologation_id.area_id.id and study_plan.study_plan_stop:
-                            return True
+                    if study_plan.period_id.name <= rule.period_id.name:
+                        for plan_line in study_plan.study_plan_lines_ids:
+                            #if area.id == plan_line.area_homologation_id.area_id.id and study_plan.study_plan_stop: #subject_inherit_area_ids
+                            if not new:
+                                for subject_inherit in plan_line.area_homologation_id.subject_inherit_area_ids:
+                                    for subject_rule_si in subject_inherit.subject_inherit_id.subject_inherit_homologation_ids:
+                                        if subject_rule_si.subject_rule_id.id == rule.id and rule.area_id.id == plan_line.area_homologation_id.area_id.id and study_plan.study_plan_stop and study_plan.period_id.name>=rule.period_id.name:
+                                            return True
+                            else: 
+                                if area.id == plan_line.area_homologation_id.area_id.id and study_plan.study_plan_stop:
+                                    return True
         return False
 
 

@@ -15,6 +15,7 @@
                 		<field name="state" widget="statusbar" />
                 		<button name="graphic_plan" string="Malla grafica con creditos" type="object" class="oe_right oe_highlight"/>
                 		<button name="open_subject_description" string="Descripción de Asignaturas" type="object" class="oe_right oe_highlight"/>
+                		<button name="generate_word" string="Reporte descripción de Asignaturas" type="object" class="oe_right oe_highlight"/>
                 		
                   </header>
                 

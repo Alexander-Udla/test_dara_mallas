@@ -26,6 +26,8 @@ from .template_data import get_general,get_write_STVMAJR,get_subjects,get_SMAALI
 from .template_data import get_SOACURR,get_SFAMHRS,get_homologations_rule_rule
 import logging
 from datetime import date, datetime
+from docx import Document
+from docx.shared import Pt
 
 _logger = logging.getLogger(__name__)
 
@@ -179,7 +181,42 @@ class study_plan(models.Model):
             name += element.period_id.name or ''
             res.append((element.id, name))
         return res
-      
+    
+    def search_subject_descriptions(self, subject_id_value, period_id_value):   
+        # Realizar la búsqueda utilizando self.env
+        subject_descriptions = self.env['dara_mallas.subject_description_line'].search([
+            ('subject_id', '=', subject_id_value),
+            ('period_id.name', '<=', period_id_value)
+        ],limit=1)
+        
+        return subject_descriptions.content_description_en
+    #generar word con descripciones en ingles
+    def generate_word(self):
+        # Crear un nuevo documento
+        doc = Document()
+
+        for item in self.study_plan_lines_ids:
+            for subject in item.area_homologation_id.subject_inherit_area_ids:
+                # Añadir el título del curso
+                title = doc.add_heading(level=1)
+                run = title.add_run(subject.subject_inherit_id.subject_id.code+" "+subject.subject_inherit_id.subject_id.name_en)
+                run.bold = True
+                run.font.size = Pt(16)
+
+                # Añadir créditos y horas de contacto
+                doc.add_paragraph('Credits and contact hours: %s credits'%(subject.subject_inherit_id.subject_scacrse_id.credits))
+
+                # Añadir la descripción del curso
+                course_description = (
+                    self.search_subject_descriptions(subject.subject_inherit_id.subject_id.id,self.period_id.name)
+                )
+
+                # Añadir la descripción del curso al documento
+                doc.add_paragraph(course_description)
+
+        # Guardar el documento
+        doc.save('/home/welintong/Descargas/reporte.docx')
+
     #abrir descripciones
     def open_subject_description(self):
         subject_ids = []
@@ -196,6 +233,7 @@ class study_plan(models.Model):
                 #'view_type': 'form', 
 
             } 
+
 
     @api.onchange('study_plan_lines_ids') 
     def onchange_study_plan_lines_ids(self):
@@ -1309,7 +1347,7 @@ class study_plan_line(models.Model):
     line_order=fields.Integer("No.")
     area_homologation_id=fields.Many2one("dara_mallas.area_homologation", string="Areas")
     area_homologation_code=fields.Char("Codigo Area",related="area_homologation_id.area_id.code")
-    area_subject_inherit_area_ids=fields.One2many(related="area_homologation_id.subject_inherit_area_ids") 
+    area_subject_inherit_area_ids=fields.One2many(related="area_homologation_id.subject_inherit_area_ids")  
     #level_id=fields.Many2one("dara_mallas.level")
     #study_field_id=fields.Many2one("dara_mallas.study_field")
     #study_field_order_number=fields.Integer("Orden para malla",related="study_field_id.number", store=True)

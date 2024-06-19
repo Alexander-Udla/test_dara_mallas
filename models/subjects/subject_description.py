@@ -19,5 +19,4 @@ class subject_description(models.Model):
 
 
 
-
     
