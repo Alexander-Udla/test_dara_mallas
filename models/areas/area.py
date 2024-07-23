@@ -123,7 +123,7 @@ class area_homologation(models.Model):
                     object_create = self.env['dara_mallas.subject_rule'].create(object)
                     subject_rule_new.append(object_create)
 
-
+        #print("Reglas nuevas:", subject_rule_new)
         #buscar ficha
         for subject in subject_rule_new:
             subject_inherit_homologations = []
@@ -131,27 +131,25 @@ class area_homologation(models.Model):
                         ('subject_id','=',subject.subject_id.id),
                         ])
             for subject_homologation in subject_inherit.subject_inherit_homologation_ids:
+                #valida si la regla nueva esta en la misma area
                 if subject_homologation.subject_rule_id.area_id.id != subject.area_id.id:
                     subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
                 else:
-                    
-                    #valida_study_plan_stop_new = self.is_stop_study_plan_area(subject.area_id,subject,new = True)
                     valida_study_plan_stop_new = self.stop_study_plan_flag(subject.area_id,subject)
+                    #print(f"{subject.area_id.display_name} MC:",valida_study_plan_stop_new)
                     if not valida_study_plan_stop_new:
+                        print("Periodo regla nueva", subject_homologation.subject_rule_id.period_id.name)
+                        print("Periodo regla antigua",subject.period_id.name)
                         #comprueba que sea del mismo area y que este en una malla congelada
-                        #valida_study_plan_stop = self.is_stop_study_plan_area(subject_homologation.subject_rule_id.area_id,subject_homologation.subject_rule_id)
-                        valida_study_plan_stop = self.stop_study_plan_flag(subject_homologation.subject_rule_id.area_id,subject_homologation.subject_rule_id)
+                        valida_study_plan_stop = self.is_stop_study_plan_area(subject_homologation.subject_rule_id.area_id,subject_homologation.subject_rule_id)
                         if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and valida_study_plan_stop:#revisar error
                             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
+                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and subject_homologation.subject_rule_id.period_id.name > subject.period_id.name and not valida_study_plan_stop:#revisar error
+                            subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))    
                     # cuando es malla congelada
                     else:
                         #if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and subject_homologation.subject_rule_id.period_id.name >subject.period_id.name:
-                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and (subject_homologation.subject_rule_id.period_id.name < subject.period_id.name or subject_homologation.subject_rule_id.period_id.name == '000000'):               
-                        #if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id or subject_homologation.subject_rule_id.period_id.name == '000000':               
-                            #print("Area de la regla nueva:",subject_homologation.subject_rule_id.area_id.display_name)
-                            #print("Periodo regla nueva:",subject_homologation.subject_rule_id.period_id.name)
-                            #print("Area anterior:",subject.area_id.display_name)
-                            #print("Periodo anteiror:",subject.period_id.name)
+                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and subject_homologation.subject_rule_id.period_id.name >subject.period_id.name:               
                             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
 
                         
@@ -205,7 +203,6 @@ class area_homologation(models.Model):
                                             return True
                             else: 
                                 # area.id == plan_line.area_homologation_id.area_id.id
-                                # posible error aquí, las areas nunca coinciden 
                                 if area.id == plan_line.area_homologation_id.area_id.id and study_plan.study_plan_stop:
                                     return True
         return False
