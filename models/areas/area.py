@@ -276,7 +276,7 @@ class area_homologation(models.Model):
                     ('program_id', '=', program.id)
                 ])
                 for study_plan in study_plans:
-                    if study_plan.period_id.name <= rule.period_id.name:
+                    if  rule.period_id.name <=  study_plan.period_id.name:
                         for plan_line in study_plan.study_plan_lines_ids:
                             #if area.id == plan_line.area_homologation_id.area_id.id and study_plan.study_plan_stop: #subject_inherit_area_ids
                             if not new:
