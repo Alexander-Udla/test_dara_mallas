@@ -26,8 +26,8 @@ from .template_data import get_general,get_write_STVMAJR,get_subjects,get_SMAALI
 from .template_data import get_SOACURR,get_SFAMHRS,get_homologations_rule_rule
 import logging
 from datetime import date, datetime
-from docx import Document
-from docx.shared import Pt
+#from docx import Document
+#from docx.shared import Pt
 
 _logger = logging.getLogger(__name__)
 
@@ -191,31 +191,31 @@ class study_plan(models.Model):
         
         return subject_descriptions.content_description_en
     #generar word con descripciones en ingles
-    def generate_word(self):
+    #def generate_word(self):
         # Crear un nuevo documento
-        doc = Document()
+       # doc = Document()
 
-        for item in self.study_plan_lines_ids:
-            for subject in item.area_homologation_id.subject_inherit_area_ids:
-                # Añadir el título del curso
-                title = doc.add_heading(level=1)
-                run = title.add_run(subject.subject_inherit_id.subject_id.code+" "+subject.subject_inherit_id.subject_id.name_en)
-                run.bold = True
-                run.font.size = Pt(16)
+       # for item in self.study_plan_lines_ids:
+         #   for subject in item.area_homologation_id.subject_inherit_area_ids:
+          #      # Añadir el título del curso
+           #     title = doc.add_heading(level=1)
+            #    run = title.add_run(subject.subject_inherit_id.subject_id.code+" "+subject.subject_inherit_id.subject_id.name_en)
+              #  run.bold = True
+             #   run.font.size = Pt(16)
 
                 # Añadir créditos y horas de contacto
-                doc.add_paragraph('Credits and contact hours: %s credits'%(subject.subject_inherit_id.subject_scacrse_id.credits))
+               # doc.add_paragraph('Credits and contact hours: %s credits'%(subject.subject_inherit_id.subject_scacrse_id.credits))
 
                 # Añadir la descripción del curso
-                course_description = (
-                    self.search_subject_descriptions(subject.subject_inherit_id.subject_id.id,self.period_id.name)
-                )
+                #course_description = (
+                 #   self.search_subject_descriptions(subject.subject_inherit_id.subject_id.id,self.period_id.name)
+                #)
 
                 # Añadir la descripción del curso al documento
-                doc.add_paragraph(course_description)
+                #doc.add_paragraph(course_description)
 
         # Guardar el documento
-        doc.save('/home/welintong/Descargas/reporte.docx')
+        #doc.save('/home/welintong/Descargas/reporte.docx')
 
     #abrir descripciones
     def open_subject_description(self):

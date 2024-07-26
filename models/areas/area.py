@@ -83,6 +83,7 @@ class area_homologation(models.Model):
                 ('subject_id','=',item.subject_id.id),
                 ('area_id','=',self.area_id.id),
                 ])
+
             if subject_rule_all:
                 period_max = max(subject_rule_all, key=lambda rule: rule.period_id.name)
                 subject_rule = self.env['dara_mallas.subject_rule'].search([
@@ -94,13 +95,18 @@ class area_homologation(models.Model):
                 subject_rule = self.env['dara_mallas.subject_rule'].search([
                     ('id','=',subject_rule.id),
                     ])
+                print("REGLA A VALIDAR SI ESTA EN EL MISMO PERIODO: ", subject_rule.display_name)
+                print(f"periodo area actual: {self.period_id.name}, periodo regla encontrada: {subject_rule.period_id.name}")
                 if self.period_id.name != subject_rule.period_id.name:
+                    print("periodos distintos, se procede a copiar la regla con el periodo actual")
                     subject_rule_new_create = subject_rule.copy({'period_id':self.period_id.id})
                     subject_rule_new.append(subject_rule_new_create)
+                    
             else:
                 subject_rule_all = self.env['dara_mallas.subject_rule'].search([
                 ('subject_id','=',item.subject_id.id),
                 ])
+
                 if subject_rule_all:
                     period_max = max(subject_rule_all, key=lambda rule: rule.period_id.name)
                     subject_rule = self.env['dara_mallas.subject_rule'].search([
@@ -111,9 +117,11 @@ class area_homologation(models.Model):
                     subject_rule = self.env['dara_mallas.subject_rule'].search([
                         ('id','=',subject_rule.id),
                         ])
+                    print("--caso 2 regla ya existe pero está en otra area y otro periodo, debera crearse: ", subject_rule.display_name)
                     subject_rule_new_create = subject_rule.copy({'area_id':self.area_id.id,'period_id':self.period_id.id})
                     subject_rule_new.append(subject_rule_new_create)
                 else:
+                    print("la regla no existe, se creara una nueva")
                     object = {
                         'subject_id':item.subject_id.id,
                         'area_id':self.area_id.id,
@@ -123,7 +131,7 @@ class area_homologation(models.Model):
                     object_create = self.env['dara_mallas.subject_rule'].create(object)
                     subject_rule_new.append(object_create)
 
-        #print("Reglas nuevas:", subject_rule_new)
+
         #buscar ficha
         for subject in subject_rule_new:
             subject_inherit_homologations = []
@@ -131,25 +139,18 @@ class area_homologation(models.Model):
                         ('subject_id','=',subject.subject_id.id),
                         ])
             for subject_homologation in subject_inherit.subject_inherit_homologation_ids:
-                #valida si la regla nueva esta en la misma area
                 if subject_homologation.subject_rule_id.area_id.id != subject.area_id.id:
                     subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
                 else:
-                    valida_study_plan_stop_new = self.stop_study_plan_flag(subject.area_id,subject)
-                    #print(f"{subject.area_id.display_name} MC:",valida_study_plan_stop_new)
+                    
+                    valida_study_plan_stop_new = self.is_stop_study_plan_area(subject.area_id,subject,new = True)
                     if not valida_study_plan_stop_new:
-                        print("Periodo regla nueva", subject_homologation.subject_rule_id.period_id.name)
-                        print("Periodo regla antigua",subject.period_id.name)
                         #comprueba que sea del mismo area y que este en una malla congelada
                         valida_study_plan_stop = self.is_stop_study_plan_area(subject_homologation.subject_rule_id.area_id,subject_homologation.subject_rule_id)
                         if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and valida_study_plan_stop:#revisar error
                             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
-                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and subject_homologation.subject_rule_id.period_id.name > subject.period_id.name and not valida_study_plan_stop:#revisar error
-                            subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))    
-                    # cuando es malla congelada
                     else:
-                        #if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and subject_homologation.subject_rule_id.period_id.name >subject.period_id.name:
-                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and subject_homologation.subject_rule_id.period_id.name >subject.period_id.name:               
+                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and (subject_homologation.subject_rule_id.period_id.name >subject.period_id.name):
                             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
 
                         
@@ -164,12 +165,102 @@ class area_homologation(models.Model):
 
 
         print(subject_rule_new)
-    
+
+    def update_subject_inherit_homologation(self, subject_inherit, new_subject_rule):
+        '''
+        Actualiza el campo subject_inherit_homologation_ids de la ficha de la asignatura
+        para incluir la nueva regla de homologación creada.
+        '''
+        homologation_data = {
+            'subject_rule_id': new_subject_rule.id,
+            'subject_inherit_id': subject_inherit.id,
+        }
+        self.env['dara_mallas.subject_inherit_homologation'].create(homologation_data)
+        
     def name_get(self):
         result = []
         for rec in self:
             result.append((rec.id,'%s - %s' % (str(rec.area_id.name),str(rec.period_id.name))))
         return result
+
+    def create_area_history(self):
+        """
+        Crear una copia del área en la tabla area_homologation_history
+        """
+        if not self.is_stop_study_plan_area(self):
+            raise UserError(f"El área {self.area_id.name} en el período {self.period_id.display_name} no está en una malla congelada.")
+
+        # Verificar si ya existe un registro en el historial para el mismo área y período
+        existing_history = self.env['dara_mallas.area_homologation_history'].search([
+            ('area_id', '=', self.area_id.id),
+            ('period_id', '=', self.period_id.id)
+        ],order='id desc', limit=1)
+        
+
+        if existing_history:
+
+            # Validar lista de asignaturas
+            existing_subject_ids = [item.subject_inherit_id.id for item in existing_history.subject_inherit_area_ids]
+
+            new_subject_ids = [item.subject_inherit_id.id for item in self.subject_inherit_area_ids]
+
+            if existing_subject_ids != new_subject_ids:
+
+                # Si las listas de asignaturas son diferentes, crear una nueva copia
+                # Crear la cabecera del historial
+                history_model = self.env['dara_mallas.area_homologation_history'].create({
+                    'area_homologation_id': self.id,
+                    'period_id': self.period_id.id,
+                    'area_id': self.area_id.id,
+                    'dinamic': self.dinamic
+                })
+
+                # Crear las asignaturas relacionadas con la cabecera
+                new_history_subject_ids = []
+                for subject in self.subject_inherit_area_ids:
+                    history_model_subject = self.env['dara_mallas.subject_inherit_area_history'].create({
+                        'subject_inherit_id': subject.subject_inherit_id.id,
+                        'line_order': subject.line_order,
+                        'study_field_id': subject.study_field_id.id,
+                        'organization_unit_id': subject.organization_unit_id.id,
+                        'area_homologation_history_id': history_model.id
+                    })
+                    new_history_subject_ids.append(history_model_subject.id)
+
+                # Actualizar la cabecera con las asignaturas creadas
+                history_model.write({
+                    'subject_inherit_area_ids': [(6, 0, new_history_subject_ids)]
+                })
+
+            else:
+                raise UserError(f"La copia del área {self.area_id.name} en el período {self.period_id.display_name} ya existe.")
+        else:
+                
+                # Crear la cabecera del historial
+                history_model = self.env['dara_mallas.area_homologation_history'].create({
+                    'area_homologation_id': self.id,
+                    'period_id': self.period_id.id,
+                    'area_id': self.area_id.id,
+                    'dinamic': self.dinamic
+                })
+
+                # Crear las asignaturas relacionadas con la cabecera
+                new_history_subject_ids = []
+                for subject in self.subject_inherit_area_ids:
+                    history_model_subject = self.env['dara_mallas.subject_inherit_area_history'].create({
+                        'subject_inherit_id': subject.subject_inherit_id.id,
+                        'line_order': subject.line_order,
+                        'study_field_id': subject.study_field_id.id,
+                        'organization_unit_id': subject.organization_unit_id.id,
+                        'area_homologation_history_id': history_model.id
+                    })
+                    new_history_subject_ids.append(history_model_subject.id)
+
+                # Actualizar la cabecera con las asignaturas creadas
+                history_model.write({
+                    'subject_inherit_area_ids': [(6, 0, new_history_subject_ids)]
+                })
+
 
     def is_stop_study_plan_area(self, area,rule,new=False):#regla
         """
@@ -193,7 +284,7 @@ class area_homologation(models.Model):
                     ('program_id', '=', program.id)
                 ])
                 for study_plan in study_plans:
-                    if study_plan.period_id.name <= rule.period_id.name:
+                    if  rule.period_id.name <=  study_plan.period_id.name:
                         for plan_line in study_plan.study_plan_lines_ids:
                             #if area.id == plan_line.area_homologation_id.area_id.id and study_plan.study_plan_stop: #subject_inherit_area_ids
                             if not new:
@@ -202,7 +293,6 @@ class area_homologation(models.Model):
                                         if subject_rule_si.subject_rule_id.id == rule.id and rule.area_id.id == plan_line.area_homologation_id.area_id.id and study_plan.study_plan_stop and study_plan.period_id.name>=rule.period_id.name:
                                             return True
                             else: 
-                                # area.id == plan_line.area_homologation_id.area_id.id
                                 if area.id == plan_line.area_homologation_id.area_id.id and study_plan.study_plan_stop:
                                     return True
         return False

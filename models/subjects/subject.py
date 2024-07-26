@@ -58,8 +58,8 @@ class subject_rule(models.Model):
         Almacena los valores originales previo a realizar modificaciones en las tablas espejo de 
         la cabecera de reglas (subject_rule) y su detalle (homologations)
         '''
-        print("Area actual de la regla:",self.area_id)
-        print("ID de la regla actual:", self.id)
+        #print("Area actual de la regla:",self.area_id)
+        #print("ID de la regla actual:", self.id)
         stop_study_plan = self.env['dara_mallas.area_homologation'].stop_study_plan_flag(self.area_id, self)
         if stop_study_plan:    
             for record in self:
@@ -101,20 +101,6 @@ class subject_rule(models.Model):
                             'subject_homologation_ids':[(6,0, new_homologation_ids)]
                         }
                     )
-
-                    print("---------------------------")
-                    print("Regla creada: ",new_subject_rule_mirror.subject_id.display_name)
-
-                    for regla in new_subject_rule_mirror.subject_homologation_ids:
-                        if regla.homologation_subject_id.display_name:
-                            print("Homologacion: ",regla.homologation_subject_id.display_name)
-                        else: 
-                            print("Homologacion: ",regla.test)
-                else:
-                    print("Copia ya existe")
-        else:
-            print("NO SE CREARA LA COPIA EN ESPEJO")
-        
         return super(subject_rule, self).write(vals)
 
 
