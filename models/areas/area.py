@@ -85,23 +85,33 @@ class area_homologation(models.Model):
                 ])
 
             if subject_rule_all:
-                period_max = max(subject_rule_all, key=lambda rule: rule.period_id.name)
-                subject_rule = self.env['dara_mallas.subject_rule'].search([
+                
+                subject_rule_duplicate = self.env['dara_mallas.subject_rule'].search([
                     ('subject_id','=',item.subject_id.id),
                     ('area_id','=',self.area_id.id),
-                    ('period_id','=',period_max.period_id.id),
+                    ('period_id','=',self.period_id.id),
                     ],limit=1)
                 
-                subject_rule = self.env['dara_mallas.subject_rule'].search([
-                    ('id','=',subject_rule.id),
-                    ])
-                print("REGLA A VALIDAR SI ESTA EN EL MISMO PERIODO: ", subject_rule.display_name)
-                print(f"periodo area actual: {self.period_id.name}, periodo regla encontrada: {subject_rule.period_id.name}")
-                if self.period_id.name != subject_rule.period_id.name:
-                    print("periodos distintos, se procede a copiar la regla con el periodo actual")
-                    subject_rule_new_create = subject_rule.copy({'period_id':self.period_id.id})
-                    subject_rule_new.append(subject_rule_new_create)
+                if not subject_rule_duplicate:
+                    print(f"Regla: {subject_rule_duplicate.display_name} con periodo {self.period_id.name} ya existe") 
+                    period_max = max(subject_rule_all, key=lambda rule: rule.period_id.name)
+                    subject_rule = self.env['dara_mallas.subject_rule'].search([
+                        ('subject_id','=',item.subject_id.id),
+                        ('area_id','=',self.area_id.id),
+                        ('period_id','=',period_max.period_id.id),
+                        ],limit=1)
                     
+                    subject_rule = self.env['dara_mallas.subject_rule'].search([
+                        ('id','=',subject_rule.id),
+                        ])
+                    print("REGLA A VALIDAR SI ESTA EN EL MISMO PERIODO: ", subject_rule.display_name)
+                    print(f"periodo area actual: {self.period_id.name}, periodo regla encontrada: {subject_rule.period_id.name}")
+                    if self.period_id.name != subject_rule.period_id.name:
+                        print("periodos distintos, se procede a copiar la regla con el periodo actual")
+                        subject_rule_new_create = subject_rule.copy({'period_id':self.period_id.id})
+                        subject_rule_new.append(subject_rule_new_create)
+                else:
+                    subject_rule_new.append(subject_rule_duplicate)        
             else:
                 subject_rule_all = self.env['dara_mallas.subject_rule'].search([
                 ('subject_id','=',item.subject_id.id),
