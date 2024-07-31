@@ -93,21 +93,37 @@ class area_homologation(models.Model):
                     ],limit=1)
                 
                 if not subject_rule_duplicate:
-                    print(f"Regla: {subject_rule_duplicate.display_name} con periodo {self.period_id.name} ya existe") 
+                    #print(f"Regla: {subject_rule_duplicate.display_name} con periodo {self.period_id.name} ya existe") 
                     period_max = max(subject_rule_all, key=lambda rule: rule.period_id.name)
                     subject_rule = self.env['dara_mallas.subject_rule'].search([
                         ('subject_id','=',item.subject_id.id),
                         ('area_id','=',self.area_id.id),
-                        ('period_id','=',period_max.period_id.id),
+                        ('period_id','=',period_max.period_id.id)
                         ],limit=1)
+                    
+                    limbo_period = self.env['dara_mallas.period'].search(
+                        [
+                            ('name', '=', '000000')
+                        ]
+                    )
+
+                    limbo_subject_rule = self.env['dara_mallas.subject_rule'].search([
+                        ('subject_id','=',item.subject_id.id),
+                        ('area_id','=',self.area_id.id),
+                        ('period_id','=',limbo_period.id),
+                        ],limit=1)
+                    
                     
                     subject_rule = self.env['dara_mallas.subject_rule'].search([
                         ('id','=',subject_rule.id),
                         ])
-                    print("REGLA A VALIDAR SI ESTA EN EL MISMO PERIODO: ", subject_rule.display_name)
-                    print(f"periodo area actual: {self.period_id.name}, periodo regla encontrada: {subject_rule.period_id.name}")
-                    if self.period_id.name != subject_rule.period_id.name:
-                        print("periodos distintos, se procede a copiar la regla con el periodo actual")
+                    #print("REGLA A VALIDAR SI ESTA EN EL MISMO PERIODO: ", subject_rule.display_name)
+                    #print(f"periodo area actual: {self.period_id.name}, periodo regla encontrada: {subject_rule.period_id.name}")
+                    if self.period_id.name != subject_rule.period_id.name and limbo_subject_rule:
+                        #print("periodos distintos, se procede a copiar la regla con el periodo actual")
+                        subject_rule_new_create = limbo_subject_rule.copy({'period_id':self.period_id.id})
+                        subject_rule_new.append(subject_rule_new_create)
+                    elif self.period_id.name != subject_rule.period_id.name:
                         subject_rule_new_create = subject_rule.copy({'period_id':self.period_id.id})
                         subject_rule_new.append(subject_rule_new_create)
                 else:
@@ -127,11 +143,11 @@ class area_homologation(models.Model):
                     subject_rule = self.env['dara_mallas.subject_rule'].search([
                         ('id','=',subject_rule.id),
                         ])
-                    print("--caso 2 regla ya existe pero está en otra area y otro periodo, debera crearse: ", subject_rule.display_name)
+                    #print("--caso 2 regla ya existe pero está en otra area y otro periodo, debera crearse: ", subject_rule.display_name)
                     subject_rule_new_create = subject_rule.copy({'area_id':self.area_id.id,'period_id':self.period_id.id})
                     subject_rule_new.append(subject_rule_new_create)
                 else:
-                    print("la regla no existe, se creara una nueva")
+                    #print("la regla no existe, se creara una nueva")
                     object = {
                         'subject_id':item.subject_id.id,
                         'area_id':self.area_id.id,
@@ -149,20 +165,37 @@ class area_homologation(models.Model):
                         ('subject_id','=',subject.subject_id.id),
                         ])
             for subject_homologation in subject_inherit.subject_inherit_homologation_ids:
-                if subject_homologation.subject_rule_id.area_id.id != subject.area_id.id:
+                # validar si son de la misma area
+                # si el area es la misma y no es malla congelada no añadir
+                if subject.area_id.name and subject_homologation.subject_rule_id.area_id.name and subject_homologation.subject_rule_id.period_id.name and subject.period_id.name:
+                    existing_area_major = subject.area_id.name[0:3]
+                    new_rule_area_major = subject_homologation.subject_rule_id.area_id.name[0:3]
+                #    new_rule_period = subject_homologation.subject_rule_id.period_id.name
+                #    existing_rule_period = subject.period_id.name
+                    #if subject_homologation.subject_rule_id.area_id.id != subject.area_id.id and existing_area_major != new_rule_area_major and :
+                       # subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
+                if subject_homologation.subject_rule_id.area_id.id != subject.area_id.id and existing_area_major != new_rule_area_major:
                     subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
                 else:
-                    
                     valida_study_plan_stop_new = self.is_stop_study_plan_area(subject.area_id,subject,new = True)
-                    if not valida_study_plan_stop_new:
+                    if not valida_study_plan_stop_new:       
                         #comprueba que sea del mismo area y que este en una malla congelada
                         valida_study_plan_stop = self.is_stop_study_plan_area(subject_homologation.subject_rule_id.area_id,subject_homologation.subject_rule_id)
-                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and valida_study_plan_stop:#revisar error
+                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and valida_study_plan_stop and subject_homologation.subject_rule_id.period_id.name != '000000': #revisar error
                             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
+                        elif subject_homologation.subject_rule_id.area_id.id != subject.area_id.id and valida_study_plan_stop:
+                            subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
+                            #----------------------------------------------------
+                            # no añadir mas de una regla en el mismo major distintas areas    
+                        elif subject_homologation.subject_rule_id.area_id.id != subject.area_id.id and existing_area_major != new_rule_area_major:
+                            subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))        
+                        if subject_homologation.subject_rule_id.period_id.name == '000000':
+                            subject_homologation.subject_rule_id.unlink()
                     else:
-                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and (subject_homologation.subject_rule_id.period_id.name >subject.period_id.name):
+                        if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and subject_homologation.subject_rule_id.period_id.name > subject.period_id.name and subject_homologation.subject_rule_id.period_id.name != '000000':
                             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
-
+                        if subject_homologation.subject_rule_id.period_id.name == '000000':
+                            subject_homologation.subject_rule_id.unlink()
                         
                         
             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject.id}))
