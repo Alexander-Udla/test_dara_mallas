@@ -196,7 +196,7 @@ class area_homologation(models.Model):
                             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
                         if subject_homologation.subject_rule_id.period_id.name == '000000':
                             subject_homologation.subject_rule_id.unlink()
-                        
+                       
                         
             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject.id}))
             for modelo_subject in subject_inherit:
@@ -225,27 +225,29 @@ class area_homologation(models.Model):
             ('period_id.name', '=', max_period_name)
         ])
 
+        # lógica para eliminar reglas de asignaturas eliminadas del área (asignaturas que ya no están en la malla)
         subjects_in_max_period = {rule.subject_id.id for rule in max_period_rules}
         current_subject_ids = {subject.subject_id.id for subject in current_subjects}
         subjects_to_remove = subjects_in_max_period - current_subject_ids
 
 
-        for subject_id in subjects_to_remove:
-            subject_inherit = self.env['dara_mallas.subject_inherit'].search([
-                ('subject_id', '=', subject_id)
-            ])
-            
-            for modelo_subject in subject_inherit:
-                homologations_to_remove = []
-                for homologation in modelo_subject.subject_inherit_homologation_ids:
-                    if homologation.subject_rule_id.area_id.id == self.area_id.id:
-                        #validar si la regla está en una malla congelada
-                        valida_study_plan_stop = self.is_stop_study_plan_area(homologation.subject_rule_id.area_id, homologation.subject_rule_id)
-                        if not valida_study_plan_stop:
-                            homologations_to_remove.append((3, homologation.id))
+        if not self.period_id.name == '000000':
+            for subject_id in subjects_to_remove:
+                subject_inherit = self.env['dara_mallas.subject_inherit'].search([
+                    ('subject_id', '=', subject_id)
+                ])
                 
-                if homologations_to_remove:
-                    modelo_subject.write({'subject_inherit_homologation_ids': homologations_to_remove})
+                for modelo_subject in subject_inherit:
+                    homologations_to_remove = []
+                    for homologation in modelo_subject.subject_inherit_homologation_ids:
+                        if homologation.subject_rule_id.area_id.id == self.area_id.id:
+                            #validar si la regla está en una malla congelada
+                            valida_study_plan_stop = self.is_stop_study_plan_area(homologation.subject_rule_id.area_id, homologation.subject_rule_id)
+                            if not valida_study_plan_stop:
+                                homologations_to_remove.append((3, homologation.id))
+                    
+                    if homologations_to_remove:
+                        modelo_subject.write({'subject_inherit_homologation_ids': homologations_to_remove})
 
 
 
