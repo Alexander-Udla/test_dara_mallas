@@ -220,7 +220,7 @@ class area_homologation(models.Model):
 
         max_period_name = '000000'
         for rule in major_existing_rules:
-            if rule.period_id.name > max_period_name and max_period_name < self.period_id.name:
+            if rule.period_id.name > max_period_name: #and max_period_name < self.period_id.name:
                 max_period_name = rule.period_id.name
 
         max_period_rules = self.env['dara_mallas.subject_rule'].search([
