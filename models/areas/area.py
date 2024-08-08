@@ -166,7 +166,7 @@ class area_homologation(models.Model):
                         ])
             for subject_homologation in subject_inherit.subject_inherit_homologation_ids:
                 # validar si son de la misma area
-                # si el area es la misma y no es malla congelada no añadir
+                # si vel area es la misma y no es malla congelada no añadir
                 if subject.area_id.name and subject_homologation.subject_rule_id.area_id.name and subject_homologation.subject_rule_id.period_id.name and subject.period_id.name:
                     existing_area_major = subject.area_id.name[0:3]
                     new_rule_area_major = subject_homologation.subject_rule_id.area_id.name[0:3]
@@ -194,6 +194,9 @@ class area_homologation(models.Model):
                     else:
                         if subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and subject_homologation.subject_rule_id.period_id.name > subject.period_id.name and subject_homologation.subject_rule_id.period_id.name != '000000':
                             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
+                        # evitar que se eliminen materias de otras areas en periodo limbo
+                        if subject_homologation.subject_rule_id.area_id.id != subject.area_id.id and existing_area_major == new_rule_area_major and self.period_id.name == '000000':
+                            subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))
                         if subject_homologation.subject_rule_id.period_id.name == '000000':
                             subject_homologation.subject_rule_id.unlink()
                        
@@ -217,7 +220,7 @@ class area_homologation(models.Model):
 
         max_period_name = '000000'
         for rule in major_existing_rules:
-            if rule.period_id.name > max_period_name:
+            if rule.period_id.name > max_period_name and max_period_name < self.period_id.name:
                 max_period_name = rule.period_id.name
 
         max_period_rules = self.env['dara_mallas.subject_rule'].search([
