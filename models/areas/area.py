@@ -218,14 +218,25 @@ class area_homologation(models.Model):
 
         current_subjects = self.subject_inherit_area_ids
 
-        max_period_name = '000000'
-        for rule in major_existing_rules:
-            if rule.period_id.name > max_period_name: #and max_period_name < self.period_id.name:
-                max_period_name = rule.period_id.name
+        #max_period_name = '000000'
+        #for rule in major_existing_rules:
+        #    if rule.period_id.name > max_period_name: #and max_period_name < self.period_id.name:
+        #        max_period_name = rule.period_id.name
+
+        current_areas = self.search([('area_id', '=', self.area_id.id)])
+
+        current_period = self.period_id.name
+
+        period_max = None 
+
+        for area in current_areas:
+            period = area.period_id.name
+            if period < current_period and (period_max is None or period > period_max):
+                period_max = period
 
         max_period_rules = self.env['dara_mallas.subject_rule'].search([
             ('area_id', '=', self.area_id.id),
-            ('period_id.name', '=', max_period_name)
+            ('period_id.name', '=', period_max)
         ])
 
         # lógica para eliminar reglas de asignaturas eliminadas del área (asignaturas que ya no están en la malla)
