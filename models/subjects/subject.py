@@ -49,6 +49,61 @@ class subject_rule(models.Model):
     area_id=fields.Many2one("dara_mallas.area") 
     subject_homologation_ids = fields.One2many("dara_mallas.homologation",inverse_name="subject_rule_id",string="Homologaciones")
 
+    #relacion con el espejo
+    subject_rule_mirror_ids = fields.One2many("dara_mallas.subject_rule_mirror",inverse_name="subject_rule_id",string="Versiones")
+
+
+    def write(self,vals):
+        '''
+        Almacena los valores originales previo a realizar modificaciones en las tablas espejo de 
+        la cabecera de reglas (subject_rule) y su detalle (homologations)
+        '''
+        #print("Area actual de la regla:",self.area_id)
+        #print("ID de la regla actual:", self.id)
+        stop_study_plan = self.env['dara_mallas.area_homologation'].stop_study_plan_flag(self.area_id, self)
+        if stop_study_plan:    
+            for record in self:
+                existing_rule_mirror = self.env['dara_mallas.subject_rule_mirror'].search([
+                ('subject_rule_id', '=', record.id)
+                ])
+                if not existing_rule_mirror:
+                    new_subject_rule_mirror = self.env['dara_mallas.subject_rule_mirror'].create(
+                    {
+                    'period_id': record.period_id.id,
+                    'subject_id': record.subject_id.id,
+                    'subject_code': record.subject_code,
+                    'area_id': record.area_id.id,
+                    'subject_rule_id': record.id,
+                    }
+                    )
+                    new_homologation_ids = []
+
+                    for homo in record.subject_homologation_ids:
+                        new_homologation = self.env['dara_mallas.homologation_mirror'].create(
+                        {
+                            'homologation_subject_id': homo.homologation_subject_id.id,
+                            'homologation_subject_code': homo.homologation_subject_code,
+                            'subject_rule_subject_id': homo.subject_rule_subject_id.id,
+                            'subject_attributes_id': homo.subject_attributes_id.id,
+                            'group_id': homo.group_id.id,
+                            'condition': homo.condition,
+                            'test': homo.test,
+                            'min_score': homo.min_score,
+                            'max_score': homo.max_score,
+                            'rule_min_score_id': homo.rule_min_score_id.id,
+                            'subject_rule_id': new_subject_rule_mirror.id
+                        }
+                    )
+                        new_homologation_ids.append(new_homologation.id)
+                
+                    new_subject_rule_mirror.write(
+                        {
+                            'subject_homologation_ids':[(6,0, new_homologation_ids)]
+                        }
+                    )
+        return super(subject_rule, self).write(vals)
+
+
     def copy(self,default=None):
         new_object=super(subject_rule,self).copy(default=default)
         objects = []
@@ -76,6 +131,35 @@ class subject_rule(models.Model):
         for rec in self:
             result.append((rec.id,'%s - %s' % (str(rec.subject_id.code),str(rec.subject_id.name))))
         return result
+
+class subject_rule_mirror(models.Model):
+    _name="dara_mallas.subject_rule_mirror"
+
+    period_id=fields.Many2one("dara_mallas.period")
+    subject_id=fields.Many2one("dara_mallas.subject")
+    subject_code=fields.Char(related="subject_id.code")
+    area_id=fields.Many2one("dara_mallas.area") 
+    subject_homologation_ids = fields.One2many("dara_mallas.homologation_mirror",inverse_name="subject_rule_id",string="Homologaciones")
+
+    #relacion con la tabla original
+    subject_rule_id = fields.Many2one("dara_mallas.subject_rule")
+    
+class homologation_mirror(models.Model):
+    _name="dara_mallas.homologation_mirror"
+   
+    homologation_subject_id=fields.Many2one("dara_mallas.subject",track_visibility='always')
+    homologation_subject_code=fields.Char("Sigla",related="homologation_subject_id.code",track_visibility='always')
+    #subject_rule_rule_id = fields.Many2one("dara_mallas.subject_rule",track_visibility='always')
+    subject_rule_subject_id = fields.Many2one("dara_mallas.subject_inherit",track_visibility='always')
+    subject_attributes_id = fields.Many2one("dara_mallas.subject_attributes")
+    group_id=fields.Many2one("dara_mallas.group_rule",track_visibility='always') 
+    condition=fields.Char("Condiciones",track_visibility='always')
+    test=fields.Char("Prueba",track_visibility='always')
+    min_score=fields.Integer("Puntaje Minimo",track_visibility='always')
+    max_score=fields.Integer("Puntaje maximo",track_visibility='always')
+    rule_min_score_id=fields.Many2one('dara_mallas.rule_score', string="Calificacion minima")
+    subject_rule_id = fields.Many2one("dara_mallas.subject_rule_mirror",track_visibility='always')
+
 
 class subject_rule_line(models.Model):
     _name="dara_mallas.subject_rule_line"

@@ -75,6 +75,10 @@ class study_plan(models.Model):
     homologation_file=fields.Binary("Archivo")
     homologation_file_name=fields.Char("nombre de archivo")
     
+    # reporte de cambios en áreas
+    historic_file=fields.Binary("Archivo")
+    historic_file_name=fields.Char("nombre de archivo")
+
     sniese_program_id=fields.Many2one("dara_mallas.sniese_program")
     redesign_code_id=fields.Many2one("dara_mallas.sniese_program" , string="Código de Rediseño")
 
@@ -1302,6 +1306,40 @@ class study_plan(models.Model):
         coordinador = list(filter(lambda x:x.period_id.name == periodo_max,scadtls))
         return coordinador[0].coordinador_id.idbanner if coordinador else ""
 
+    def generate_area_history(self):
+        differences = ''    
+        area_homologation_model = self.env['dara_mallas.area_homologation']
+        found_areas = []
+
+        if len(self.study_plan_lines_ids) >= 1:
+            for sp_line in self.study_plan_lines_ids:
+                area_id = sp_line.area_homologation_id
+                found_area = area_homologation_model.search([('id', '=', area_id.id)], limit=1)
+                if found_area:
+                    found_areas.append(found_area)
+                else:
+                    print('No existe historial del área', area_id.display_name)
+
+        if len(found_areas) >= 1:
+            for area in found_areas:
+                differences += area_homologation_model.compare_area_with_area_hist(area)
+        else:
+            print('No existe más de un sp line')
+
+        if differences:
+            file_content = base64.b64encode(differences.encode())
+            file_name = f'reporte_{self.display_name}.txt'
+            
+            self.write({
+                'historic_file': file_content,
+                'historic_file_name': file_name
+            })
+        else:
+            print('No se encontraron diferencias para generar el reporte.')
+
+        print(differences)
+
+        
 class study_plan_line(models.Model):
     _name="dara_mallas.study_plan_line"
     #_rec_name="subject_id"
@@ -1309,7 +1347,7 @@ class study_plan_line(models.Model):
     line_order=fields.Integer("No.")
     area_homologation_id=fields.Many2one("dara_mallas.area_homologation", string="Areas")
     area_homologation_code=fields.Char("Codigo Area",related="area_homologation_id.area_id.code")
-    area_subject_inherit_area_ids=fields.One2many(related="area_homologation_id.subject_inherit_area_ids") 
+    area_subject_inherit_area_ids=fields.One2many(related="area_homologation_id.subject_inherit_area_ids")  
     #level_id=fields.Many2one("dara_mallas.level")
     #study_field_id=fields.Many2one("dara_mallas.study_field")
     #study_field_order_number=fields.Integer("Orden para malla",related="study_field_id.number", store=True)

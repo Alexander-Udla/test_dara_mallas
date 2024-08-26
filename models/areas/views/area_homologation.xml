@@ -33,16 +33,24 @@
                                   </tree>
                                 </field>
                             </page>
+                          <page string="Versiones">
+                                <field name="history_ids">
+                                  <tree >
+                                    <field name ="area_id"/>
+                                    <field name ="period_id"/>
+                                  </tree>
+                                </field>
+                            </page>
                   </notebook>
                   <button name="copy_rules"   type="object" >
                                                                   Generar Reglas
-                                                                  </button>   
-            		  <button name="create_area_history"   type="object" confirm="¿Crear copia?">
-                                                                  Copiar
+                                                                  </button>
+            		  <button name="create_area_history"   type="object" confirm="¿Crear historial del área?">
+                                                                  Crear historial
                                                                   </button>     
                   <button name="create_changes_report"   type="object">
-                                                                  Crear reporte
-                                                                  </button>                                                     
+                                                                  Ver cambios
+                                                                  </button>                                         
             		    </sheet>
                 </form>     	            	  
                 </field>

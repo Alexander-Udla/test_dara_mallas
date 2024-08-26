@@ -55,11 +55,14 @@
         'models/program/carga/program_create_template.xml',
         'models/areas/views/area.xml',
         'models/areas/views/area_homologation.xml',
+        'models/areas/views/area_homologation_history.xml',
         'models/period/views/period.xml',
         'models/college/views/college.xml',
         'models/study_plan/views/study_plan.xml',
         'models/study_plan/views/study_plan_line.xml',
         'models/study_plan/views/graphic_study_plan_report_V2_.xml',
+        'models/subjects/reportes/views/current_homologations.xml',
+        'models/subjects/reportes/views/stop_homologations.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

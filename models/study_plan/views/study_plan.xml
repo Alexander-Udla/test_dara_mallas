@@ -120,7 +120,11 @@
                                                 <field name="homologation_file_name" invisible="1"/>
                                                 <button name="generate_homologation_template" type="object" string="Exportar a Excel" class="oe_right oe_highlight"  />
 							</page>
-							
+							<page string="Reporte histórico"> 
+								<field name="historic_file" readonly="1" filename="historic_file_name" />
+                                                <field name="historic_file_name" invisible="1"/>
+                                                <button name="generate_area_history" type="object" string="Generar reporte histórico" class="oe_right oe_highlight"/>
+							</page>
 						
 						</notebook>	
               		  		

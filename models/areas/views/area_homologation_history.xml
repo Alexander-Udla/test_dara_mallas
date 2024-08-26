@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		  <!-- Anual curricular planning FORM  -->
+		
+  	    <record id="dara_mallas_area_homologation_history_history_form" model="ir.ui.view">
+                <field name="name">view.dara_mallas.area_homologation_history.form</field>
+                <field name="model">dara_mallas.area_homologation_history</field>
+                <field name="priority" eval="25" />
+                <field name="arch" type="xml">
+                <form>
+                	<sheet>
+            		    <group col="2" >
+              		  		
+              		  		<field name="area_id"/>
+                        <field name="period_id"/>
+                        <field name="dinamic"/>
+              		  		<!-- <field name = "file" filename="file_name" readonly="1"/> -->
+              		  		<!-- <field name = "file_name" invisible="1"/> -->
+        
+              		  </group>
+              	<notebook>
+                          <page string="Asignaturas">
+                                <field name="subject_inherit_area_ids">
+                                  <tree editable="false">
+                                    <field name ="line_order"/>
+                                    <field name ="subject_code"/>
+                                    <field name="study_field_id"/>
+                                    <field name="organization_unit_id"/>
+                                    <field name="area_homologation_history_id" invisible="1"/>
+                                  </tree>
+                                </field>
+                            </page>
+                  </notebook>
+                                                                
+            		    </sheet>
+                </form>     	            	  
+                </field>
+        </record> 
+
+</data>
+
+
+</openerp>	

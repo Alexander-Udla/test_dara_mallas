@@ -105,7 +105,7 @@
         <field name="type">ir.actions.act_window</field>
        
         <field name="view_mode">form</field>
-        <field name="target">new</field>
+        <!--<field name="target">new</field>-->
      
     </record>
 
@@ -149,12 +149,13 @@
                 </field>
     </record> 
 	
-    
+
 	<menuitem id="subject_study_plan_men" 
     groups="dara_mallas_malla_de_sigla"
+    name="Mallas de sigla" 
     parent="dara_subjects_reports"  
-    name="Mallas de sigla." 
     action="action_subject_study_plan_report_m2m" 
+    sequence= "4"
     /> 
 
 
