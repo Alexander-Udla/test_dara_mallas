@@ -1215,12 +1215,20 @@ class study_plan(models.Model):
 
                 for homologations in area_subject.subject_inherit_id.subject_inherit_homologation_ids:
                     #periodo maximo
-                    periodo = [ 
+                    if self.period_id.name == '000000':
+                        periodo = [ 
+                            int(item.subject_rule_id.period_id.name) 
+                            if item.homo_area_id.code == line.area_homologation_code and int(item.subject_rule_id.period_id.name) > int(self.period_id.name)
+                                else 0 
+                            for item in area_subject.subject_inherit_id.subject_inherit_homologation_ids
+                        ]
+                    else:
+                        periodo = [ 
                             int(item.subject_rule_id.period_id.name) 
                             if item.homo_area_id.code == line.area_homologation_code and int(item.subject_rule_id.period_id.name) <= int(self.period_id.name)
                                 else 0 
                             for item in area_subject.subject_inherit_id.subject_inherit_homologation_ids
-                    ]
+                        ]
                     if homologations.homo_area_id.code == line.area_homologation_code or (line.area_homologation_id.dinamic and homologations.homo_area_id.code == line.area_homologation_code):
 
                             homologations_item = homologations.subject_rule_id 

@@ -189,6 +189,9 @@ class area_homologation(models.Model):
                             # no añadir mas de una regla en el mismo major distintas areas    
                         elif subject_homologation.subject_rule_id.area_id.id != subject.area_id.id and existing_area_major != new_rule_area_major:
                             subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))        
+                        elif subject_homologation.subject_rule_id.area_id.id == subject.area_id.id and existing_area_major == new_rule_area_major and self.period_id.name == '000000':
+                            subject_inherit_homologations.append((0,0,{'subject_rule_id':subject_homologation.subject_rule_id.id}))        
+                        
                         if subject_homologation.subject_rule_id.period_id.name == '000000':
                             subject_homologation.subject_rule_id.unlink()
                     else:
