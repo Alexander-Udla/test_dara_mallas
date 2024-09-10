@@ -7,7 +7,7 @@
             <form>
                 <group>
                     <!--<field name="subject"/>-->
-                    <field name="period"/>
+                    <!--<field name="period"/>-->
                     <field name="file" filename="file_name" readonly="1"/>
                     <field name="file_name" invisible="1"/>
                 </group>
