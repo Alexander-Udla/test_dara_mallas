@@ -101,6 +101,7 @@
 
 </data>
 
-		<menuitem id="dara_subject_prerequisite" name="Prerrequisitos" parent="dara_subjects_tree_menu" action="action_open_prerequisite_line" sequence="20"/>
+		<menuitem id="dara_subject_prerequisite" name="Prerrequisitos" parent="dara_subjects_tree_menu" action="action_open_prerequisite_line" groups="dara_admin" sequence="20"/>
+		<menuitem id="dara_subject_prerequisite_user" name="Prerrequisitos" action="action_open_prerequisite_line" groups="dara_mallas_read_prerequisites,dara_mallas_update_prerequisites" sequence="20"/>
 
 </openerp>	
