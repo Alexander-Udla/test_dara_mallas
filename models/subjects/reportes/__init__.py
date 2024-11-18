@@ -1,3 +1,4 @@
+from . import data_homologation
 from . import homologation_report_models
 from . import subjects_template
 from . import subject_study_plan_report

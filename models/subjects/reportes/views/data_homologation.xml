@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_data_homologation_form" model="ir.ui.view">
+            <field name="name">data.homologation.form</field>
+            <field name="model">dara_mallas.data_homologations</field>
+            <field name="arch" type="xml">
+                <form string="Homologación de Datos">
+                    <sheet>
+                        <group>
+                            <field name="status" string="Selección de la base"/>
+                            <field name="period" string="Periodo"/>
+                        </group>
+                        
+                        <footer>
+                            <button name="generate_pdf" 
+                                    type="object" 
+                                    string="Generar PDF" 
+                                    class="btn-primary"/>
+
+                            <button name="generate_excel" 
+                                    type="object" 
+                                    string="Exportar Excel" 
+                                    class="btn-secondary"/>
+                        </footer>
+                    </sheet>
+                    <field name="pdf_file" invisible="1"/>
+                    <field name="excel_file" invisible="1"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_data_homologation_form" model="ir.actions.act_window">
+            <field name="name">Selección Base</field>
+            <field name="res_model">dara_mallas.data_homologations</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_data_homologation_form"/>
+        </record>
+
+        <menuitem id="data_homologation_menu" 
+                  name="Cambio de Base" 
+                  parent="dara_homologations_reports" 
+                  action="action_data_homologation_form" 
+                  sequence="1"/>
+
+        <record id="data_homologation_report_action" model="ir.actions.report">
+            <field name="name">Reporte de Homologación</field>
+            <field name="model">dara_mallas.data_homologations</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">dara_mallas.data_homologation_report_template</field>
+            <field name="print_report_name">'Homologacion_%s' % (object.period.name or '')</field>
+        </record>
+
+
+        <template id="data_homologation_report_template">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                        <h2 style="text-align:center;">Reporte de Homologación</h2>
+                        <p><strong>Estado:</strong> <t t-esc="doc.status"/></p>
+                        <p><strong>Periodo:</strong> <t t-esc="doc.period.name or 'Sin Definir'"/></p>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
