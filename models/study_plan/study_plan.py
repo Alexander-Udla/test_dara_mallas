@@ -1310,7 +1310,7 @@ class study_plan(models.Model):
     def get_coordinador(self,code):
         subject = self.env['dara_mallas.subject'].search([('code','=',code)])
         scadtls = self.env['dara_mallas.subject_scadtl'].search([('subject_id','=',subject.id)])
-        periodo_max = max([item.period_id.name for item in scadtls])
+        periodo_max = max([item.period_id.name for item in scadtls]) if scadtls else 0
         coordinador = list(filter(lambda x:x.period_id.name == periodo_max,scadtls))
         return coordinador[0].coordinador_id.idbanner if coordinador else ""
 
