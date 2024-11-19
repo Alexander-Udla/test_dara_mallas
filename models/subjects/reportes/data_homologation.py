@@ -1,10 +1,15 @@
 import xlsxwriter # type: ignore
 import psycopg2 # type: ignore
-import base64
+import base64,io
 from odoo import fields, models, api # type: ignore
 from odoo.exceptions import UserError # type: ignore
 from io import BytesIO
 from reportlab.pdfgen import canvas
+import pandas as pd
+from . import metodos_validador as metodos
+from datetime import date
+# Obtener la fecha actual
+fecha_actual = date.today()
 
 
 class DataHomologation(models.Model):
@@ -12,105 +17,245 @@ class DataHomologation(models.Model):
     _description = "Conexión a base de datos y generación de PDF"
 
     status = fields.Selection(selection=[("pruebas", "Pruebas"), ("produccion", "Producción")], string="Estado")
-    period = fields.Many2one('dara_mallas.period', string="Periodo", domain=[])
-    pdf_file = fields.Binary("Archivo PDF")    
-    excel_file = fields.Binary("Archivo Excel")
-    
-    pdf_file_name = fields.Char("Nombre del Archivo PDF")
-    excel_file_name = fields.Char("Nombre del Archivo Excel")
-    
-    @api.onchange('status')
-    def _onchange_status(self):
-        self.period = False
-        if not self.status:
-            return {
-                'domain': {'period': [('id', '=', False)]}
-            }
-        
-        db_name = 'mallas-prueba' if self.status == 'pruebas' else 'mallas'
+    period_id=fields.Many2one("dara_mallas.period",'Periodo')
 
-        try:
-            conn = psycopg2.connect(
-                dbname=db_name,
-                user="alex",
-                password="root123",
-                host="localhost",
-                port="5432"
+    file = fields.Binary("Archivo")    
+    file_name = fields.Char("Nombre del Archivo")
+    
+    def generate_report(self):
+        database_banner = 'banner' if self.status == 'produccion' else 'banner_test'
+        data = []
+        validador = metodos.Validator(database_banner=database_banner)
+        period = str(self.period_id.name)
+        #res = self.read_csv()
+        res = validador.get_homologations_for_period(period=period)
+        subjects_odoo_empty = []
+        subjects_banner_empty = []
+        #for i,item in res.iterrows():
+        for item in res:
+            
+            homologaciones_odoo = validador.get_homologations_for_subject_period_area(
+                subject_code=item['REGLA'],
+                period=item['PERIODO'],
+                area=item['AREA'],
+                period_val=period
+                )
+            homologaciones_banner = validador.get_homologations_for_subject_period_area_banner(
+                subject_code=item['REGLA'],
+                #period=item['PERIODO'],
+                period=period,
+                area=item['AREA']
             )
-            cur = conn.cursor()
-            cur.execute("SELECT id, name FROM dara_mallas_period;")
-            result = cur.fetchall()
-            cur.close()
-            conn.close()
+            if not homologaciones_odoo:
+                subjects_odoo_empty.append([item['REGLA'],
+                item['PERIODO'],
+                item['AREA']])
+            if not homologaciones_banner:
+                subjects_banner_empty.append([item['REGLA'],
+                item['PERIODO'],
+                item['AREA']])
+                data.append(
+                    {
+                        'PERIODO':item['PERIODO'],
+                        'AREA':item['AREA'],
+                        'REGLA': item['REGLA'],
+                        'CONECTOR':'',
+                        'SIGLA':'',
+                        'PRUEBA':'',
+                        'TEST_PUNTAJE_MINIMO':'',
+                        'TEST_PUNTAJE_MAXIMO':'',
+                        'REGLA_PUNTAJE_MINIMO':'',
+                        'REGLA_ATRIBUTO':'',
+                        'ESTADO': 'En Banner %s no se encontro'%(item['REGLA'])
+                    }
+                )
+            
+            if homologaciones_banner and homologaciones_odoo:
+                data_compare_to = self.compare_to(homologaciones_odoo=homologaciones_odoo,homologaciones_banner=homologaciones_banner)
+                data.extend(data_compare_to)
 
-            if not result:
-                raise UserError("No se encontraron periodos en la base de datos.")
+            else:
+                pass
 
-            period_ids = [p[0] for p in result]
-            existing_periods = self.env['dara_mallas.period'].search([('id', 'in', period_ids)])
-            new_periods = [p for p in result if p[0] not in existing_periods.ids]
-            for period in new_periods:
-                self.env['dara_mallas.period'].create({'id': period[0], 'name': period[1]})
-
-            return {
-                'domain': {'period': [('id', 'in', period_ids)]}
-            }
-
-        except Exception as e:
-            raise UserError(f"No se pudo conectar a la base de datos {db_name}: {str(e)}")
-
-    
-    def generate_pdf(self):
-        if not self.period:
-            raise UserError("Por favor, seleccione un periodo para generar el PDF.")
-        return self.env.ref('dara_mallas.data_homologation_report_action').report_action(self) 
-    
-   
-   
-   
-    
-    def generate_excel(self):
-        if not self.period:
-            raise UserError("Por favor, seleccione un periodo para generar el archivo Excel.")
-
-        output = BytesIO()
-        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-        
-        sheet = workbook.add_worksheet("Homologación")
-        
-        format1 = workbook.add_format({'font_size': 13, 'align': 'vcenter', 'bold': True})
-        format2 = workbook.add_format({'font_size': 13, 'align': 'vcenter'})
-        header_format = workbook.add_format({'bold': True, 'bg_color': '#FFFF00', 'border': 1})
-        
-        
-        # Escribir encabezados
-        headers = ["Estado", "Periodo", "Descripción de Prueba"]
-        for col, header in enumerate(headers):
-            sheet.write(0, col, header, header_format)
-
-        # Escribir datos
-        sheet.write(1, 0, dict(self._fields['status'].selection).get(self.status), format1)
-        sheet.write(1, 1, self.period.name or "Sin Definir", format2)        
-        
-        workbook.close()
+        output = io.BytesIO()
+        resultado = pd.DataFrame(data)
+        fecha = fecha_actual.strftime("%d%m%Y")
+        resultado.to_csv()
         output.seek(0)
-
-        encoded_excel = base64.b64encode(output.read())
-
-        # Imprimir el contenido base64 en consola para verificar
-        print(f"Excel generado (base64): {encoded_excel[:100]}...")  # Imprime los primeros 100 caracteres del base64
-
         self.write({
-            'excel_file': encoded_excel,
-            'excel_file_name': "Homologacion_{}.xlsx".format(self.period)
-        })
+            
+            'file_result':base64.b64encode(output.getvalue()),
+            'name_file_result':'homologaciones-%s-%s.csv'%(fecha,self.period_id.name)
+            
+            
+            })
+        
 
-        output.close()
 
-        # Retornar acción de descarga directa
-        return {
-            'type': 'ir.actions.act_url',
-            'url': f'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{self.excel_file.decode()}',
-            'target': 'self',
-            'download': self.excel_file_name,
-        }
+
+    def compare_to(self,homologaciones_odoo='',homologaciones_banner=''):
+        data = []
+        data_compare = []
+        for item_odoo in homologaciones_odoo:
+            errores = ""
+            exists = False
+            conector = False
+            for item_banner in homologaciones_banner:
+                if item_odoo['PERIODO'] == item_banner['PERIODO'] and item_odoo['AREA'] == item_banner['AREA'] and item_odoo['REGLA'] == item_banner['REGLA']:
+                    if item_odoo['SIGLA'] == item_banner['SIGLA'] and not item_odoo['PRUEBA']:
+                        exists = True
+                        if item_odoo['CONECTOR'] == item_banner['CONECTOR']:
+                            conector = True
+                            if item_odoo['PRUEBA'] == item_banner['PRUEBA']:
+                                errores += ""
+                            else:
+                                errores += "Error en prueba %s , %s"%(item_odoo['PRUEBA'],item_banner['PRUEBA'])
+
+                            if item_odoo['TEST_PUNTAJE_MINIMO'] == item_banner['TEST_PUNTAJE_MINIMO']:
+                                errores += ""
+                            else:
+                                errores += "Error en TEST_PUNTAJE_MINIMO %s , %s"%(item_odoo['TEST_PUNTAJE_MINIMO'],item_banner['TEST_PUNTAJE_MINIMO'])
+                            
+                            if item_odoo['TEST_PUNTAJE_MAXIMO'] == item_banner['TEST_PUNTAJE_MAXIMO']:
+                                errores += ""
+                            else:
+                                errores += "Error en TEST_PUNTAJE_MAXIMO %s , %s"%(item_odoo['TEST_PUNTAJE_MAXIMO'],item_banner['TEST_PUNTAJE_MAXIMO'])
+
+                            if item_odoo['REGLA_PUNTAJE_MINIMO'] == item_banner['REGLA_PUNTAJE_MINIMO']:
+                                errores += ""
+                            else:
+                                errores += "Error en REGLA_PUNTAJE_MINIMO %s , %s"%(item_odoo['REGLA_PUNTAJE_MINIMO'],item_banner['REGLA_PUNTAJE_MINIMO'])
+                            
+                            if item_odoo['REGLA_ATRIBUTO'] == item_banner['REGLA_ATRIBUTO']:
+                                errores += ""
+                            else:
+                                errores += "Error en REGLA_ATRIBUTO %s , %s"%(item_odoo['REGLA_ATRIBUTO'],item_banner['REGLA_ATRIBUTO'])
+                        else:
+                            next
+                    if item_odoo['PRUEBA']:
+                        if item_odoo['PRUEBA'] == item_banner['PRUEBA']:
+                            exists = True
+                            if item_odoo['CONECTOR'] == item_banner['CONECTOR']:
+                                conector = True
+                                errores += ""
+                            else:
+                                errores += "Error en conector %s , %s"%(item_odoo['CONECTOR'],item_banner['CONECTOR'])
+                            
+                            if item_odoo['PRUEBA'] == item_banner['PRUEBA']:
+                                errores += ""
+                            else:
+                                errores += "Error en prueba %s , %s"%(item_odoo['PRUEBA'],item_banner['PRUEBA'])
+
+                            if item_odoo['PRUEBA'][:3]=='ENG':
+                                min = item_odoo['TEST_PUNTAJE_MINIMO']
+                                maximo = item_odoo['TEST_PUNTAJE_MAXIMO']
+                            else:
+                                if not item_odoo['PRUEBA'][:3] in ['DAL','DEL','FRA']:
+                                    min = '0'+str(item_odoo['TEST_PUNTAJE_MINIMO']) if len(str(item_odoo['TEST_PUNTAJE_MINIMO']))==1 else item_odoo['TEST_PUNTAJE_MINIMO']
+                                    maximo = '0'+str(item_odoo['TEST_PUNTAJE_MAXIMO']) if len(str(item_odoo['TEST_PUNTAJE_MAXIMO']))==1 else item_odoo['TEST_PUNTAJE_MAXIMO']
+                                else:
+                                    min = str(item_odoo['TEST_PUNTAJE_MINIMO'])
+                                    maximo = str(item_odoo['TEST_PUNTAJE_MAXIMO'])
+                            if str(min) == item_banner['TEST_PUNTAJE_MINIMO']:
+                                errores += ""
+                            else:
+                                errores += "Error en TEST_PUNTAJE_MINIMO %s , %s"%(item_odoo['TEST_PUNTAJE_MINIMO'],item_banner['TEST_PUNTAJE_MINIMO'])
+                            
+                            
+                            if str(maximo) == item_banner['TEST_PUNTAJE_MAXIMO']:
+                                errores += ""
+                            else:
+                                errores += "Error en TEST_PUNTAJE_MAXIMO %s , %s"%(item_odoo['TEST_PUNTAJE_MAXIMO'],item_banner['TEST_PUNTAJE_MAXIMO'])
+
+                            if item_odoo['REGLA_PUNTAJE_MINIMO'] == item_banner['REGLA_PUNTAJE_MINIMO']:
+                                errores += ""
+                            else:
+                                errores += "Error en REGLA_PUNTAJE_MINIMO %s , %s"%(item_odoo['REGLA_PUNTAJE_MINIMO'],item_banner['REGLA_PUNTAJE_MINIMO'])
+                            
+                            if item_odoo['REGLA_ATRIBUTO'] == item_banner['REGLA_ATRIBUTO']:
+                                errores += ""
+                            else:
+                                errores += "Error en REGLA_ATRIBUTO %s , %s"%(item_odoo['REGLA_ATRIBUTO'],item_banner['REGLA_ATRIBUTO'])
+
+                    if item_odoo['REGLA_ATRIBUTO'] and not exists:
+                        if item_odoo['REGLA_ATRIBUTO'] == item_banner['REGLA_ATRIBUTO']:
+                            exists = True
+                            if item_odoo['CONECTOR'] == item_banner['CONECTOR']:
+                                conector = True
+                                errores += ""
+                            else:
+                                errores += "Error en conector %s , %s"%(item_odoo['CONECTOR'],item_banner['CONECTOR'])
+                            
+                            if item_odoo['PRUEBA'] == item_banner['PRUEBA']:
+                                errores += ""
+                            else:
+                                errores += "Error en prueba %s , %s"%(item_odoo['PRUEBA'],item_banner['PRUEBA'])
+
+                            min = '0'+str(item_odoo['TEST_PUNTAJE_MINIMO']) if len(str(item_odoo['TEST_PUNTAJE_MINIMO']))==1 else item_odoo['TEST_PUNTAJE_MINIMO']
+                            if min=='4':
+                                print("h")
+                            if min == item_banner['TEST_PUNTAJE_MINIMO']:
+                                errores += ""
+                            else:
+                                errores += "Error en TEST_PUNTAJE_MINIMO %s , %s"%(item_odoo['TEST_PUNTAJE_MINIMO'],item_banner['TEST_PUNTAJE_MINIMO'])
+                            
+                            maximo = '0'+str(item_odoo['TEST_PUNTAJE_MAXIMO']) if len(str(item_odoo['TEST_PUNTAJE_MAXIMO']))==1 else item_odoo['TEST_PUNTAJE_MAXIMO']
+                            if str(maximo) == item_banner['TEST_PUNTAJE_MAXIMO']:
+                                errores += ""
+                            else:
+                                errores += "Error en TEST_PUNTAJE_MAXIMO %s , %s"%(item_odoo['TEST_PUNTAJE_MAXIMO'],item_banner['TEST_PUNTAJE_MAXIMO'])
+
+                            if item_odoo['REGLA_PUNTAJE_MINIMO'] == item_banner['REGLA_PUNTAJE_MINIMO']:
+                                errores += ""
+                            else:
+                                errores += "Error en REGLA_PUNTAJE_MINIMO %s , %s"%(item_odoo['REGLA_PUNTAJE_MINIMO'],item_banner['REGLA_PUNTAJE_MINIMO'])
+                            
+                            if item_odoo['REGLA_ATRIBUTO'] == item_banner['REGLA_ATRIBUTO']:
+                                errores += ""
+                            else:
+                                errores += "Error en REGLA_ATRIBUTO %s , %s"%(item_odoo['REGLA_ATRIBUTO'],item_banner['REGLA_ATRIBUTO'])
+            if not exists:
+                errores += "Sigla no existe en Banner %s "%(item_odoo['SIGLA'])
+            if not conector and exists:
+                errores += "Sigla existe en Banner %s pero el conector es incorrecto %s "%(item_odoo['SIGLA'] if item_odoo['SIGLA'] else item_odoo['PRUEBA'],item_odoo['CONECTOR'])
+            data_compare.append(
+                {
+                    'PERIODO':item_odoo['PERIODO'],
+                    'AREA':item_odoo['AREA'],
+                    'REGLA': item_odoo['REGLA'],
+                    'CONECTOR':item_odoo['CONECTOR'],
+                    'SIGLA':item_odoo['SIGLA'],
+                    'PRUEBA':item_odoo['PRUEBA'],
+                    'TEST_PUNTAJE_MINIMO':item_odoo['TEST_PUNTAJE_MINIMO'],
+                    'TEST_PUNTAJE_MAXIMO':item_odoo['TEST_PUNTAJE_MAXIMO'],
+                    'REGLA_PUNTAJE_MINIMO':item_odoo['REGLA_PUNTAJE_MINIMO'],
+                    'REGLA_ATRIBUTO':item_odoo['REGLA_ATRIBUTO'],
+                    'ESTADO': errores if errores else 'OK'
+                }
+            )        
+
+
+        #===================================================
+        #  VERIFICA SI EN BANNER EXISTE UNA SIGLA ADICIONAL
+        #==================================================
+        odoo = [item['SIGLA']+str(item['CONECTOR']) if item['SIGLA'] else item['PRUEBA'] for item in homologaciones_odoo]
+        filtrada = list(filter(lambda x:(x['SIGLA']+str(x['CONECTOR']) if x['SIGLA'] else x['PRUEBA']) not in odoo, homologaciones_banner))
+        if filtrada:
+            for item_banner in filtrada:
+                data_compare.append(
+                    {
+                        'PERIODO':item_banner['PERIODO'],
+                        'AREA':item_banner['AREA'],
+                        'REGLA': item_banner['REGLA'],
+                        'CONECTOR':item_banner['CONECTOR'],
+                        'SIGLA':item_banner['SIGLA'],
+                        'PRUEBA':item_banner['PRUEBA'],
+                        'TEST_PUNTAJE_MINIMO':item_banner['TEST_PUNTAJE_MINIMO'],
+                        'TEST_PUNTAJE_MAXIMO':item_banner['TEST_PUNTAJE_MAXIMO'],
+                        'REGLA_PUNTAJE_MINIMO':item_banner['REGLA_PUNTAJE_MINIMO'],
+                        'REGLA_ATRIBUTO':item_banner['REGLA_ATRIBUTO'],
+                        'ESTADO': 'En Banner %s no se encontro en odoo'%(item_banner['SIGLA'])
+                    }
+                )
+        data.extend(data_compare)
+        return data

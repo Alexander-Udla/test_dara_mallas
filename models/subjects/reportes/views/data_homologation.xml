@@ -9,23 +9,19 @@
                     <sheet>
                         <group>
                             <field name="status" string="Selección de la base"/>
-                            <field name="period" string="Periodo"/>
+                            <field name="period_id" string="Periodo"/>
+                            <field name="file" filename="file_name" readonly="1"/>
+                            <field name="file_name" invisible="1"/>
                         </group>
                         
                         <footer>
-                            <button name="generate_pdf" 
+                            <button name="generate_report" 
                                     type="object" 
-                                    string="Generar PDF" 
+                                    string="Generar" 
                                     class="btn-primary"/>
 
-                            <button name="generate_excel" 
-                                    type="object" 
-                                    string="Exportar Excel" 
-                                    class="btn-secondary"/>
                         </footer>
                     </sheet>
-                    <field name="pdf_file" invisible="1"/>
-                    <field name="excel_file" invisible="1"/>
                 </form>
             </field>
         </record>
@@ -48,7 +44,7 @@
             <field name="model">dara_mallas.data_homologations</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">dara_mallas.data_homologation_report_template</field>
-            <field name="print_report_name">'Homologacion_%s' % (object.period.name or '')</field>
+            <field name="print_report_name">'Homologacion_%s' % (object.period_id.name or '')</field>
         </record>
 
 
@@ -58,7 +54,7 @@
                     <div class="page">
                         <h2 style="text-align:center;">Reporte de Homologación</h2>
                         <p><strong>Estado:</strong> <t t-esc="doc.status"/></p>
-                        <p><strong>Periodo:</strong> <t t-esc="doc.period.name or 'Sin Definir'"/></p>
+                        <p><strong>Periodo:</strong> <t t-esc="doc.period_id.name or 'Sin Definir'"/></p>
                     </div>
                 </t>
             </t>
