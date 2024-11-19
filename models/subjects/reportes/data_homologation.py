@@ -32,8 +32,10 @@ class DataHomologation(models.Model):
         subjects_odoo_empty = []
         subjects_banner_empty = []
         #for i,item in res.iterrows():
+        print("Total de Homologaciones : ",len(res))
+        cont = 1
         for item in res:
-            
+            print(cont+" de "+str(len(res)) )
             homologaciones_odoo = validador.get_homologations_for_subject_period_area(
                 subject_code=item['REGLA'],
                 period=item['PERIODO'],
@@ -76,6 +78,7 @@ class DataHomologation(models.Model):
 
             else:
                 pass
+            cont +=1
 
         output = io.BytesIO()
         resultado = pd.DataFrame(data)
