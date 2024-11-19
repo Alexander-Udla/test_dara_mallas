@@ -35,7 +35,7 @@ class DataHomologation(models.Model):
         print("Total de Homologaciones : ",len(res))
         cont = 1
         for item in res:
-            print(cont+" de "+str(len(res)) )
+            print(str(cont)+" de "+str(len(res)) )
             homologaciones_odoo = validador.get_homologations_for_subject_period_area(
                 subject_code=item['REGLA'],
                 period=item['PERIODO'],
@@ -83,12 +83,12 @@ class DataHomologation(models.Model):
         output = io.BytesIO()
         resultado = pd.DataFrame(data)
         fecha = fecha_actual.strftime("%d%m%Y")
-        resultado.to_csv()
+        resultado.to_csv(output, index=False, encoding='utf-8')
         output.seek(0)
         self.write({
             
-            'file_result':base64.b64encode(output.getvalue()),
-            'name_file_result':'homologaciones-%s-%s.csv'%(fecha,self.period_id.name)
+            'file':base64.b64encode(output.getvalue()),
+            'file_name':'homologaciones-%s-%s.csv'%(fecha,self.period_id.name)
             
             
             })
