@@ -6,7 +6,7 @@ from odoo.exceptions import UserError # type: ignore
 from io import BytesIO
 from reportlab.pdfgen import canvas
 import pandas as pd
-from . import metodos_validador as metodos
+from ..validador.homologaciones import metodos_validador as metodos
 from datetime import date
 # Obtener la fecha actual
 fecha_actual = date.today()

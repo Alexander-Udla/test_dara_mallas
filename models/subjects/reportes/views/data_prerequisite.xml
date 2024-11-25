@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="view_data_homologation_form" model="ir.ui.view">
-            <field name="name">data.homologation.form</field>
-            <field name="model">dara_mallas.data_homologations</field>
+        <record id="view_data_prerequisite_form" model="ir.ui.view">
+            <field name="name">data.prerequisite.form</field>
+            <field name="model">dara_mallas.data_prerequisite</field>
             <field name="arch" type="xml">
-                <form string="Homologación de Datos">
+                <form string="Prerequisitos de Datos">
                     <sheet>
                         <group>
                             <field name="status" string="Selección de la base"/>
@@ -15,7 +15,7 @@
                         </group>
                         
                         <footer>
-                            <button name="generate_report" 
+                            <button name="load_or_prerequisitos" 
                                     type="object" 
                                     string="Generar" 
                                     class="btn-primary"/>
@@ -26,33 +26,33 @@
             </field>
         </record>
 
-        <record id="action_data_homologation_form" model="ir.actions.act_window">
-            <field name="name">Homologaciones</field>
-            <field name="res_model">dara_mallas.data_homologations</field>
+        <record id="action_data_prerequisite_form" model="ir.actions.act_window">
+            <field name="name">Prerequisitos</field>
+            <field name="res_model">dara_mallas.data_prerequisite</field>
             <field name="view_mode">form</field>
-            <field name="view_id" ref="view_data_homologation_form"/>
+            <field name="view_id" ref="view_data_prerequisite_form"/>
         </record>
 
-        <menuitem id="data_homologation_menu" 
-                  name="Homologación" 
+        <menuitem id="data_prerequisite_menu" 
+                  name="Prerequisitos" 
                   parent="dara_homologations_reports" 
-                  action="action_data_homologation_form" 
-                  sequence="1"/>
+                  action="action_data_prerequisite_form" 
+                  sequence="2"/>
 
-        <record id="data_homologation_report_action" model="ir.actions.report">
-            <field name="name">Reporte de Homologación</field>
-            <field name="model">dara_mallas.data_homologations</field>
+        <record id="data_prerequisite_report_action" model="ir.actions.report">
+            <field name="name">Reporte de Prerequisito</field>
+            <field name="model">dara_mallas.data_prerequisite</field>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">dara_mallas.data_homologation_report_template</field>
-            <field name="print_report_name">'Homologacion_%s' % (object.period_id.name or '')</field>
+            <field name="report_name">dara_mallas.data_prerequisite_report_template</field>
+            <field name="print_report_name">'Prerequisito_%s' % (object.period_id.name or '')</field>
         </record>
 
 
-        <template id="data_homologation_report_template">
+        <template id="data_prerequisite_report_template">
             <t t-call="web.basic_layout">
                 <t t-foreach="docs" t-as="doc">
                     <div class="page">
-                        <h2 style="text-align:center;">Reporte de Homologación</h2>
+                        <h2 style="text-align:center;">Reporte de Prerequisitos</h2>
                         <p><strong>Estado:</strong> <t t-esc="doc.status"/></p>
                         <p><strong>Periodo:</strong> <t t-esc="doc.period_id.name or 'Sin Definir'"/></p>
                     </div>
