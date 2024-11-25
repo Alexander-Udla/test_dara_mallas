@@ -218,7 +218,7 @@ class BaseExternalDbsource:
             dsnStr = cx_Oracle.makedsn(host="ocora02.udla-ec.int", port= "1521", service_name="DBPROD_BA.db.bannerredprod.oraclevcn.com")
             conexion = cx_Oracle.connect( user='INT_MALLAS', password='8jAbdj4TWRX8@3q*', dsn=dsnStr)
         if option == 'banner_test':
-            dsnStr = cx_Oracle.makedsn("10.1.2.108", "1521", "TEST")
+            dsnStr = cx_Oracle.makedsn(host="10.1.2.108", port="1521", service_name="DBTESTBA_PDB1.db.bannerredtest.oraclevcn.com")
             conexion = cx_Oracle.connect( user='INT_MALLAS', password='123456', dsn=dsnStr)
         if option == 'banner_devl':
             dsnStr = cx_Oracle.makedsn("sntsora02.udla-ec.int", "1521", "DEVL")
