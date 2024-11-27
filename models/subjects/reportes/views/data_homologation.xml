@@ -19,7 +19,6 @@
                                     type="object" 
                                     string="Generar" 
                                     class="btn-primary"/>
-
                         </footer>
                     </sheet>
                 </form>
@@ -46,7 +45,6 @@
             <field name="report_name">dara_mallas.data_homologation_report_template</field>
             <field name="print_report_name">'Homologacion_%s' % (object.period_id.name or '')</field>
         </record>
-
 
         <template id="data_homologation_report_template">
             <t t-call="web.basic_layout">

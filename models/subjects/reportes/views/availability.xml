@@ -7,13 +7,13 @@
                  <form>
                     <sheet>
                         <group col="2">
-                        <field name="type" string ="Seleccione"/>
+                        <field name="type"/>
                         </group>
                         <group col="4" >                                    
-                            <field name="subject" string="Asignatura"/>
-                            <field name="result" string="Resultado"/>
+                            <field name="subject" string="Asignatura" attrs="{'readonly': [('type', '=', False)]}"/>
+                            <field name="result"/>
                         </group>
-                        <button string="Buscar" class="btn-primary"/>
+                        <button string="Buscar" class="btn-primary" type="object" name="action_search_availability" attrs="{'invisible': [('subject', '=', False)]}" />
                     </sheet>
                 </form>
             </field>

@@ -1,1 +1,1 @@
-from . import metodos_validador
+from ...repository import metodos_validador

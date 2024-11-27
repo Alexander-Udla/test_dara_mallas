@@ -3,7 +3,7 @@ from . import subjects_template
 from . import subject_study_plan_report
 from . import scadtl_report
 from .database import base_external_dbsource
-from .validador.homologaciones import metodos_validador
+from .repository import metodos_validador
 from .validador.prerequisitos import metodos
 from . import categorias
 from . import repository
