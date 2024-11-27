@@ -35,8 +35,6 @@ class AcronymComparison(models.Model):
     )
     
     def findAcronym(self):
-       
-        # Obtén las siglas de los campos actuales
         acronym1 = self.acronym1
         acronym2 = self.acronym2
         
@@ -62,9 +60,7 @@ class AcronymComparison(models.Model):
                 result_term_202210.append(item)
             elif item['TERM'] == '202310':
                 result_term_202310.append(item)
-
      
-        #Lista 202210
         for record in result_term_202210:
             cleaned_record = {}            
             
@@ -86,134 +82,101 @@ class AcronymComparison(models.Model):
             if 'HORAS_DOCENCIA' in cleaned_record:
                 data_to_store['horas_docencia'] = cleaned_record['HORAS_DOCENCIA']
 
-            # Agregar horas de docencia presencial
             if 'HORAS_DOCENCIA_PRESENCIAL_H' in cleaned_record:
                 data_to_store['horas_docencia_presencial_h'] = cleaned_record['HORAS_DOCENCIA_PRESENCIAL_H']
 
-            # Agregar horas de docencia virtual
             if 'HORAS_DOCENCIA_VIRTUAL_H' in cleaned_record:
                 data_to_store['horas_docencia_virtual_h'] = cleaned_record['HORAS_DOCENCIA_VIRTUAL_H']
 
-            # Agregar horas de docencia en otras modalidades
             if 'HORAS_DOCENCIA_O' in cleaned_record:
                 data_to_store['horas_docencia_o'] = cleaned_record['HORAS_DOCENCIA_O']
 
-            # Agregar horas de laboratorio de docencia
             if 'HORAS_LABORATORIO_DOCENCIA' in cleaned_record:
                 data_to_store['horas_laboratorio_docencia'] = cleaned_record['HORAS_LABORATORIO_DOCENCIA']
 
-            # Agregar horas de laboratorio de docencia presencial
             if 'HORAS_LABORATORIO_DOCENCIA_H' in cleaned_record:
                 data_to_store['horas_laboratorio_docencia_h'] = cleaned_record['HORAS_LABORATORIO_DOCENCIA_H']
 
-            # Agregar horas de externado de docencia
             if 'HORAS_EXTERNADO_DOCENCIA' in cleaned_record:
                 data_to_store['horas_externado_docencia'] = cleaned_record['HORAS_EXTERNADO_DOCENCIA']
 
-            # Agregar horas de externado de docencia presencial
             if 'HORAS_EXTERNADO_DOCENCIA_H' in cleaned_record:
                 data_to_store['horas_externado_docencia_h'] = cleaned_record['HORAS_EXTERNADO_DOCENCIA_H']
 
-            # Agregar horas de aplicación
             if 'HORAS_APLICACION' in cleaned_record:
                 data_to_store['horas_aplicacion'] = cleaned_record['HORAS_APLICACION']
 
-            # Agregar horas de aplicación presencial
             if 'HORAS_APLICACION_H' in cleaned_record:
                 data_to_store['horas_aplicacion_h'] = cleaned_record['HORAS_APLICACION_H']
 
-            # Agregar horas de aplicación en otras modalidades
             if 'HORAS_APLICACION_O' in cleaned_record:
                 data_to_store['horas_aplicacion_o'] = cleaned_record['HORAS_APLICACION_O']
 
-            # Agregar horas de aplicación en laboratorio
             if 'HORAS_APLICACION_LABORATORIO' in cleaned_record:
                 data_to_store['horas_aplicacion_laboratorio'] = cleaned_record['HORAS_APLICACION_LABORATORIO']
 
-            # Agregar horas de aplicación en laboratorio presencial
             if 'HORAS_APLICACION_LAB_H' in cleaned_record:
                 data_to_store['horas_aplicacion_lab_h'] = cleaned_record['HORAS_APLICACION_LAB_H']
 
-            # Agregar horas de aplicación en laboratorio en otras modalidades
             if 'HORAS_APLICACION_LAB_O' in cleaned_record:
                 data_to_store['horas_aplicacion_lab_o'] = cleaned_record['HORAS_APLICACION_LAB_O']
 
-            # Agregar horas de prácticas pre-profesionales
             if 'HORAS_PRACT_PREPROFESIONALES' in cleaned_record:
                 data_to_store['horas_pract_preprofesionales'] = cleaned_record['HORAS_PRACT_PREPROFESIONALES']
 
-            # Agregar horas de prácticas pre-profesionales presencial
             if 'HORAS_PRACT_PREPROF_H' in cleaned_record:
                 data_to_store['horas_pract_preprof_h'] = cleaned_record['HORAS_PRACT_PREPROF_H']
 
-            # Agregar horas de prácticas pre-profesionales en otras modalidades
             if 'HORAS_PRACT_PREPROF_O' in cleaned_record:
                 data_to_store['horas_pract_preprof_o'] = cleaned_record['HORAS_PRACT_PREPROF_O']
 
-            # Agregar horas de servicio a la comunidad
             if 'HORAS_SERVICIO_COMUNIDAD' in cleaned_record:
                 data_to_store['horas_servicio_comunidad'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD']
 
-            # Agregar horas de servicio a la comunidad presencial
             if 'HORAS_SERVICIO_COMUNIDAD_H' in cleaned_record:
                 data_to_store['horas_servicio_comunidad_h'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD_H']
 
-            # Agregar horas de servicio a la comunidad en otras modalidades
             if 'HORAS_SERVICIO_COMUNIDAD_O' in cleaned_record:
                 data_to_store['horas_servicio_comunidad_o'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD_O']
 
-            # Agregar horas autónomas
             if 'TOTAL_HORAS_AUTONOMAS' in cleaned_record:
                 data_to_store['total_horas_autonomas'] = cleaned_record['TOTAL_HORAS_AUTONOMAS']
 
-            # Agregar horas autónomas presencial
             if 'TOTAL_HORAS_AUTONOMAS_H' in cleaned_record:
                 data_to_store['total_horas_autonomas_h'] = cleaned_record['TOTAL_HORAS_AUTONOMAS_H']
 
-            # Agregar horas autónomas en otras modalidades
             if 'TOTAL_HORAS_AUTONOMAS_O' in cleaned_record:
                 data_to_store['total_horas_autonomas_o'] = cleaned_record['TOTAL_HORAS_AUTONOMAS_O']
 
-            # Agregar horas de titulación
             if 'HORAS_TITULACION' in cleaned_record:
                 data_to_store['horas_titulacion'] = cleaned_record['HORAS_TITULACION']
 
-            # Agregar horas de titulación presencial
             if 'HORAS_TITULACION_H' in cleaned_record:
                 data_to_store['horas_titulacion_h'] = cleaned_record['HORAS_TITULACION_H']
 
-            # Agregar horas de titulación en otras modalidades
             if 'HORAS_TITULACION_O' in cleaned_record:
                 data_to_store['horas_titulacion_o'] = cleaned_record['HORAS_TITULACION_O']
 
-            # Agregar sesiones de docencia
             if 'SESIONES_DOCENCIA' in cleaned_record:
                 data_to_store['sesiones_docencia'] = cleaned_record['SESIONES_DOCENCIA']
 
-            # Agregar sesiones de laboratorio
             if 'SESIONES_LABORATORIO' in cleaned_record:
                 data_to_store['sesiones_laboratorio'] = cleaned_record['SESIONES_LABORATORIO']
 
-            # Agregar sesiones de externado
             if 'SESIONES_EXTERNADO' in cleaned_record:
                 data_to_store['sesiones_externado'] = cleaned_record['SESIONES_EXTERNADO']
 
-            # Agregar semanas de externado
             if 'SEMANAS_EXTERNADO' in cleaned_record:
                 data_to_store['semanas_externado'] = cleaned_record['SEMANAS_EXTERNADO']
 
-            # Agregar semanas de laboratorio
             if 'SEMANAS_LABORATORIO' in cleaned_record:
                 data_to_store['semanas_laboratorio'] = cleaned_record['SEMANAS_LABORATORIO']
 
-            # Agregar horas adicionales del silabo
             if 'HORAS_ADICIONALES_SILABO' in cleaned_record:
                 data_to_store['horas_adicionales_silabo'] = cleaned_record['HORAS_ADICIONALES_SILABO']
 
-            # Crear el registro en el modelo de Odoo
             self.env['dara_mallas.acronym_comparison_result_202210'].create(data_to_store)
 
-        #Lista 202310
         for record in result_term_202310:
             cleaned_record = {}            
             
@@ -235,131 +198,99 @@ class AcronymComparison(models.Model):
             if 'HORAS_DOCENCIA' in cleaned_record:
                 data_to_store['horas_docencia'] = cleaned_record['HORAS_DOCENCIA']
 
-            # Agregar horas de docencia presencial
             if 'HORAS_DOCENCIA_PRESENCIAL_H' in cleaned_record:
                 data_to_store['horas_docencia_presencial_h'] = cleaned_record['HORAS_DOCENCIA_PRESENCIAL_H']
 
-            # Agregar horas de docencia virtual
             if 'HORAS_DOCENCIA_VIRTUAL_H' in cleaned_record:
                 data_to_store['horas_docencia_virtual_h'] = cleaned_record['HORAS_DOCENCIA_VIRTUAL_H']
 
-            # Agregar horas de docencia en otras modalidades
             if 'HORAS_DOCENCIA_O' in cleaned_record:
                 data_to_store['horas_docencia_o'] = cleaned_record['HORAS_DOCENCIA_O']
 
-            # Agregar horas de laboratorio de docencia
             if 'HORAS_LABORATORIO_DOCENCIA' in cleaned_record:
                 data_to_store['horas_laboratorio_docencia'] = cleaned_record['HORAS_LABORATORIO_DOCENCIA']
 
-            # Agregar horas de laboratorio de docencia presencial
             if 'HORAS_LABORATORIO_DOCENCIA_H' in cleaned_record:
                 data_to_store['horas_laboratorio_docencia_h'] = cleaned_record['HORAS_LABORATORIO_DOCENCIA_H']
 
-            # Agregar horas de externado de docencia
             if 'HORAS_EXTERNADO_DOCENCIA' in cleaned_record:
                 data_to_store['horas_externado_docencia'] = cleaned_record['HORAS_EXTERNADO_DOCENCIA']
 
-            # Agregar horas de externado de docencia presencial
             if 'HORAS_EXTERNADO_DOCENCIA_H' in cleaned_record:
                 data_to_store['horas_externado_docencia_h'] = cleaned_record['HORAS_EXTERNADO_DOCENCIA_H']
 
-            # Agregar horas de aplicación
             if 'HORAS_APLICACION' in cleaned_record:
                 data_to_store['horas_aplicacion'] = cleaned_record['HORAS_APLICACION']
 
-            # Agregar horas de aplicación presencial
             if 'HORAS_APLICACION_H' in cleaned_record:
                 data_to_store['horas_aplicacion_h'] = cleaned_record['HORAS_APLICACION_H']
 
-            # Agregar horas de aplicación en otras modalidades
             if 'HORAS_APLICACION_O' in cleaned_record:
                 data_to_store['horas_aplicacion_o'] = cleaned_record['HORAS_APLICACION_O']
 
-            # Agregar horas de aplicación en laboratorio
             if 'HORAS_APLICACION_LABORATORIO' in cleaned_record:
                 data_to_store['horas_aplicacion_laboratorio'] = cleaned_record['HORAS_APLICACION_LABORATORIO']
 
-            # Agregar horas de aplicación en laboratorio presencial
             if 'HORAS_APLICACION_LAB_H' in cleaned_record:
                 data_to_store['horas_aplicacion_lab_h'] = cleaned_record['HORAS_APLICACION_LAB_H']
 
-            # Agregar horas de aplicación en laboratorio en otras modalidades
             if 'HORAS_APLICACION_LAB_O' in cleaned_record:
                 data_to_store['horas_aplicacion_lab_o'] = cleaned_record['HORAS_APLICACION_LAB_O']
 
-            # Agregar horas de prácticas pre-profesionales
             if 'HORAS_PRACT_PREPROFESIONALES' in cleaned_record:
                 data_to_store['horas_pract_preprofesionales'] = cleaned_record['HORAS_PRACT_PREPROFESIONALES']
 
-            # Agregar horas de prácticas pre-profesionales presencial
             if 'HORAS_PRACT_PREPROF_H' in cleaned_record:
                 data_to_store['horas_pract_preprof_h'] = cleaned_record['HORAS_PRACT_PREPROF_H']
 
-            # Agregar horas de prácticas pre-profesionales en otras modalidades
             if 'HORAS_PRACT_PREPROF_O' in cleaned_record:
                 data_to_store['horas_pract_preprof_o'] = cleaned_record['HORAS_PRACT_PREPROF_O']
 
-            # Agregar horas de servicio a la comunidad
             if 'HORAS_SERVICIO_COMUNIDAD' in cleaned_record:
                 data_to_store['horas_servicio_comunidad'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD']
 
-            # Agregar horas de servicio a la comunidad presencial
             if 'HORAS_SERVICIO_COMUNIDAD_H' in cleaned_record:
                 data_to_store['horas_servicio_comunidad_h'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD_H']
 
-            # Agregar horas de servicio a la comunidad en otras modalidades
             if 'HORAS_SERVICIO_COMUNIDAD_O' in cleaned_record:
                 data_to_store['horas_servicio_comunidad_o'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD_O']
 
-            # Agregar horas autónomas
             if 'TOTAL_HORAS_AUTONOMAS' in cleaned_record:
                 data_to_store['total_horas_autonomas'] = cleaned_record['TOTAL_HORAS_AUTONOMAS']
 
-            # Agregar horas autónomas presencial
             if 'TOTAL_HORAS_AUTONOMAS_H' in cleaned_record:
                 data_to_store['total_horas_autonomas_h'] = cleaned_record['TOTAL_HORAS_AUTONOMAS_H']
 
-            # Agregar horas autónomas en otras modalidades
             if 'TOTAL_HORAS_AUTONOMAS_O' in cleaned_record:
                 data_to_store['total_horas_autonomas_o'] = cleaned_record['TOTAL_HORAS_AUTONOMAS_O']
 
-            # Agregar horas de titulación
             if 'HORAS_TITULACION' in cleaned_record:
                 data_to_store['horas_titulacion'] = cleaned_record['HORAS_TITULACION']
 
-            # Agregar horas de titulación presencial
             if 'HORAS_TITULACION_H' in cleaned_record:
                 data_to_store['horas_titulacion_h'] = cleaned_record['HORAS_TITULACION_H']
 
-            # Agregar horas de titulación en otras modalidades
             if 'HORAS_TITULACION_O' in cleaned_record:
                 data_to_store['horas_titulacion_o'] = cleaned_record['HORAS_TITULACION_O']
 
-            # Agregar sesiones de docencia
             if 'SESIONES_DOCENCIA' in cleaned_record:
                 data_to_store['sesiones_docencia'] = cleaned_record['SESIONES_DOCENCIA']
 
-            # Agregar sesiones de laboratorio
             if 'SESIONES_LABORATORIO' in cleaned_record:
                 data_to_store['sesiones_laboratorio'] = cleaned_record['SESIONES_LABORATORIO']
 
-            # Agregar sesiones de externado
             if 'SESIONES_EXTERNADO' in cleaned_record:
                 data_to_store['sesiones_externado'] = cleaned_record['SESIONES_EXTERNADO']
 
-            # Agregar semanas de externado
             if 'SEMANAS_EXTERNADO' in cleaned_record:
                 data_to_store['semanas_externado'] = cleaned_record['SEMANAS_EXTERNADO']
 
-            # Agregar semanas de laboratorio
             if 'SEMANAS_LABORATORIO' in cleaned_record:
                 data_to_store['semanas_laboratorio'] = cleaned_record['SEMANAS_LABORATORIO']
 
-            # Agregar horas adicionales del silabo
             if 'HORAS_ADICIONALES_SILABO' in cleaned_record:
                 data_to_store['horas_adicionales_silabo'] = cleaned_record['HORAS_ADICIONALES_SILABO']
 
-            # Crear el registro en el modelo de Odoo
             self.env['dara_mallas.acronym_comparison_result_202310'].create(data_to_store)
 
 

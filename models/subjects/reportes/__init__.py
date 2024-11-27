@@ -7,3 +7,4 @@ from .repository import metodos_validador
 from .validador.prerequisitos import metodos
 from . import categorias
 from . import repository
+from . import seguridad

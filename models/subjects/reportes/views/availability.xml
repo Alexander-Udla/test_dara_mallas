@@ -10,7 +10,7 @@
                         <field name="type"/>
                         </group>
                         <group col="4" >                                    
-                            <field name="subject" string="Asignatura" attrs="{'readonly': [('type', '=', False)]}"/>
+                            <field name="subject" attrs="{'readonly': [('type', '=', False)]}"/>
                             <field name="result"/>
                         </group>
                         <button string="Buscar" class="btn-primary" type="object" name="action_search_availability" attrs="{'invisible': [('subject', '=', False)]}" />

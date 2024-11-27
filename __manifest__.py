@@ -70,7 +70,8 @@
         'models/subjects/reportes/views/data_prerequisite.xml',
         'models/subjects/reportes/views/acronym_comparison.xml',
         'models/subjects/reportes/views/prueba_acronym.xml',
-        'models/subjects/reportes/views/availability.xml'
+        'models/subjects/reportes/views/availability.xml',
+        'models/subjects/reportes/views/automation.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

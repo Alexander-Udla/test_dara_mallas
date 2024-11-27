@@ -20,10 +20,8 @@
 	<menuitem id="dara_reports_menu" name="Reportes"/>	
 		<menuitem id="dara_subjects_reports" name="Asignaturas" parent="dara_reports_menu" sequence="3" />
 		<menuitem id="dara_homologations_reports" name="Categoría" parent="dara_reports_menu" sequence="4" />
-
-
+		<menuitem id="dara_automatizacion" name="Seguridad" parent="dara_reports_menu" sequence="5"/>
 
 
 </data>
-
 </odoo>

@@ -5,13 +5,13 @@ class AvailabilityCourses(models.Model):
     _name ="dara_mallas.availability_courses"
     _description="Disponibilidad de materias"
     
-    subject = fields.Char("materia")
-    result = fields.Char(string="Disponibilidad", readonly=True)
+    subject = fields.Char(string="Código")
+    result = fields.Char(string="Respuesta", readonly=True)
     
     type = fields.Selection(
         selection=[("asignatura","Asignatura"),("corte","Corte")],
         required=True,
-        string="Disponibilidad de tipo: ",
+        string="Disponibilidad de : ",
         help="Seleccione el tipo de disponibilidad a buscar.")
     
     
@@ -31,17 +31,12 @@ class AvailabilityCourses(models.Model):
         subject = self.subject        
         
         repository = availabilityRepository()
-        result = None
-        #courses = repository.get_availability_couses(subject)
-        #curriculum = repository.get_availability_curriculum(subject)
-    
+        result = None    
             
         if self.type == 'asignatura':
-            result = repository.get_availability_couses(subject)
-            print("asignatura")     
+            result = repository.get_availability_couses(subject)               
         else:
-            result = repository.get_availability_curriculum(subject)
-            print("Corte")
+            result = repository.get_availability_curriculum(subject)            
         
         self.result = "Disponible" if result else "No Disponible"
 
