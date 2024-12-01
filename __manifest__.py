@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['mail','base'],
 
     # always loaded
     'data': [
@@ -71,7 +71,9 @@
         'models/subjects/reportes/views/acronym_comparison.xml',
         'models/subjects/reportes/views/prueba_acronym.xml',
         'models/subjects/reportes/views/availability.xml',
-        'models/subjects/reportes/views/automation.xml'
+        'models/subjects/reportes/views/automation.xml',
+
+        'models/subjects/reportes/views/email/prueba_correo.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

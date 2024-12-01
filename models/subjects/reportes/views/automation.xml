@@ -1,5 +1,11 @@
 <odoo>
-    <data>    
+    <data>  
+
+        <record id="model_dara_mallas_automation" model="ir.model">
+            <field name="name">dara_mallas.automation</field>
+            <field name="model">dara_mallas.automation</field>
+        </record>
+
         <record id="view_automation_form" model="ir.ui.view">
             <field name="name">dara_mallas.automation.form</field>
             <field name="model">dara_mallas.automation</field>
@@ -10,6 +16,10 @@
                             <field name="fecha_actual"/>
                             <button name="findProgram" type="object" string="Buscar Programas" class="btn-primary"/>
                         </group>
+
+                         <footer>
+                            <button name="send_email" type="object" string="Enviar Correo" class="btn-primary" />
+                        </footer>
 
                        <field name="line_ids">
                             <tree>

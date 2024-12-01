@@ -10,6 +10,7 @@ import pandas as pd
 from ..validador.homologaciones import metodos_validador as metodos
 from datetime import date
 
+
 # Obtener la fecha actual
 fecha_actual = date.today()
 
@@ -29,7 +30,7 @@ class DataHomologation(models.Model):
         
         # Obtener los homologaciones
         res = validador.get_homologations_for_period(period=period)
-
+        print("respuesta ", res)
         subjects_odoo_empty = []
         subjects_banner_empty = []
         data = []
@@ -71,6 +72,65 @@ class DataHomologation(models.Model):
             if homologaciones_banner and homologaciones_odoo:
                 data_compare_to = self.compare_to(homologaciones_odoo=homologaciones_odoo, homologaciones_banner=homologaciones_banner)
                 data.extend(data_compare_to)
+            
+        print("datos finales ", data)
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})  
+        sheet = workbook.add_worksheet("Reporte")
+        header_format = workbook.add_format({'bold': True, 'bg_color': '#FFFF00', 'border': 1})
+        format1 = workbook.add_format({'font_size': 13, 'align': 'vcenter', 'bold': True})
+        
+        headers = [
+            "Periodo", "Area", "Regla", "Conector", "Sigla", "Prueba", 
+            "Test Puntaje Mínimo", "Test Puntaje Máximo", 
+            "Regla Puntaje Mínimo", "Regla Atributo", "Errores"
+        ]
+        
+        for col, header in enumerate(headers):
+            sheet.write(0, col, header, header_format)
+            
+            
+        for i, row in enumerate(data, start=1):
+            sheet.write(i, 0, row.get('PERIODO', "Sin Definir"), format1)
+            sheet.write(i, 1, row.get('AREA', "Sin Definir"), format1)
+            sheet.write(i, 2, row.get('REGLA', "Sin Definir"), format1)
+            sheet.write(i, 3, row.get('CONECTOR', "Sin Definir"), format1)
+            sheet.write(i, 4, row.get('SIGLA', "Sin Definir"), format1)
+            sheet.write(i, 5, row.get('PRUEBA', "Sin Definir"), format1)
+            sheet.write(i, 6, row.get('TEST_PUNTAJE_MINIMO', "Sin Definir"), format1)
+            sheet.write(i, 7, row.get('TEST_PUNTAJE_MAXIMO', "Sin Definir"), format1)
+            sheet.write(i, 8, row.get('REGLA_PUNTAJE_MINIMO', "Sin Definir"), format1)
+            sheet.write(i, 9, row.get('REGLA_ATRIBUTO', "Sin Definir"), format1)
+
+            # Escribir la columna 'ERRORES', asegurando que si no existe se escribe "Sin Definir"
+            sheet.write(i, 10, row.get('ERRORES', "Sin Definir"), format1)
+
+        workbook.close()
+        output.seek(0)
+        
+        # Codificar en base64
+        encoded_excel = base64.b64encode(output.read())
+        # Guardar el archivo
+        """
+        self.write({
+            'file': encoded_excel,
+            'file_name': f"Homologacion_{self.period_id.name}.xlsx"
+        })
+        """
+        output.close()
+        
+        return {
+        'type': 'ir.actions.act_url',
+        'url': f'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{encoded_excel.decode()}',
+        'target': 'self',
+        'download': self.period_id.name,
+    }
+                
+                
+                
+                
+                
+        """
         
         # Generación del archivo Excel
         output = io.BytesIO()
@@ -80,12 +140,17 @@ class DataHomologation(models.Model):
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             resultado.to_excel(writer, index=False, sheet_name='Homologaciones')
         
-        output.seek(0)
-        
+        output.seek(0)        
         self.write({
             'file': base64.b64encode(output.getvalue()),
             'file_name': f'homologaciones-{fecha}-{self.period_id.name}.xlsx'
         })
+        
+        """
+   
+    
+
+
 
     def compare_to(self, homologaciones_odoo, homologaciones_banner):
         data_compare = []

@@ -13,7 +13,7 @@
                             <field name="file" filename="file_name" readonly="1"/>
                             <field name="file_name" invisible="1"/>
                         </group>
-                        
+                       
                         <footer>
                             <button name="generate_report" 
                                     type="object" 

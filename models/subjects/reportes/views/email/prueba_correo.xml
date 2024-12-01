@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+        <!-- Email template -->
+        <record id="file_aproved_mail_template" model="mail.template">
+            <field name="name">Archivo de graduados aprobado</field>
+            <field name="email_from">dara@udla.edu.ec</field>
+            <field name="email_to">alexander.gualotuna@udla.edu.ec</field>
+            <field name="subject">Registro de graduados</field>
+            <field name="model">dara_mallas.automation</field>
+            <field name="body_html">
+                <![CDATA[
+                <p>Estimado/a,</p>
+                <p>A continuación se detalla la información de los programas:</p>
+                <p>El archivo enviado para el período 
+                    ${object.fecha_actual} tiene errores. Por favor 
+                    revise el archivo adjunto donde encontrará el detalle de los errores detectados. 
+                    <br></br> <br></br>
+                </p>
+                <p>Valor de prueba: ${object.hello_message}</p>
+                
+                <!-- Tabla con los datos -->
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Programa</th>
+                            <th>Cohorte</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Iterar sobre los datos de result1 -->
+                        <t t-foreach="result1" t-as="program">
+                            <tr>
+                                <td>"Hola mundo"</td>
+                                <td><t t-esc="program['CODIGO_PROGRAMA']"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                
+                <p>Valor de prueba: ${hello_message}</p>
+                <p>Data: ${object.result1}</p> <!-- Aquí se mostrará el valor de result1 -->
+                
+                <p>Saludos cordiales,</p>
+                ]]>
+            </field>
+        </record>
+    </data>
+</odoo>
+
