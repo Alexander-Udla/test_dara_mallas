@@ -23,6 +23,7 @@ class Automation(models.Model):
     repository = automationRepository()
     result1 = repository.get_program_postrado(fecha_actual)   
     print("result1 ",type(result1))
+    print("result1 ",result1)
       
     
     
@@ -31,7 +32,8 @@ class Automation(models.Model):
         "automation_id", 
         string="Programas",        
         readonly=True
-    )    
+    )
+    
         
     def findProgram(self):
         today = self.fecha_actual
@@ -59,17 +61,34 @@ class Automation(models.Model):
             
     def send_email(self):
         template = self.env.ref('dara_mallas.file_aproved_mail_template', raise_if_not_found=False)
-        print("Cuerpo ", self.line_ids)
         if not template:
             _logger.error('No se encontró la plantilla de correo "file_aproved_mail_template".')
             return
 
         for record in self:
             _logger.info(f"Enviando correo para el registro con ID {record.id}")
+            
+            # Aquí recorremos los 'line_ids' y mostramos cada uno
+            _logger.info(f"Líneas asociadas (line_ids): {record.line_ids}")
+            for line in record.line_ids:
+                # Mostrar los valores dentro de cada línea
+                _logger.info(f"Código: {line.codigo}, Programa: {line.programa}, Cohorte: {line.corte_programa}")
+            
+            # Mostrar los valores de result1
+            _logger.info(f"Valor de result1: {record.result1}")
+            
+
+            # Puedes ver cada elemento de result1 si es una lista o diccionario
+            if isinstance(record.result1, list):
+                for res in record.result1:
+                    _logger.info(f"Elemento de result1: {res}")  # Aquí puedes ajustar el formato según la estructura de los datos
+
+            
             context = {
                 'object': record,
-                'hello_message': record.hello_message,  # Pasamos la variable 'hello_message' a la plantilla
-                'result1':record.line_ids
+                'hello_message': record.hello_message,
+                'result1': record.result1,
+                'lineIds': record.line_ids
             }
 
             # Enviar el correo con el contexto
