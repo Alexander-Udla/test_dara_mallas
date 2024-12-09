@@ -3,13 +3,18 @@ import psycopg2 # type: ignore
 import base64,io
 from odoo import fields, models, api # type: ignore
 from odoo.exceptions import UserError # type: ignore
+import logging
+
+_logger = logging.getLogger(__name__)
 from io import BytesIO
 from reportlab.pdfgen import canvas
 import pandas as pd
 from . import metodos_validador as metodos
+from . import tasks
 from datetime import date
 # Obtener la fecha actual
 fecha_actual = date.today()
+from celery.result import AsyncResult
 
 
 class DataHomologation(models.Model):
@@ -21,6 +26,7 @@ class DataHomologation(models.Model):
 
     file = fields.Binary("Archivo")    
     file_name = fields.Char("Nombre del Archivo")
+    task_id = fields.Char("Id tarea")
     
     def generate_report(self):
         database_banner = 'banner' if self.status == 'produccion' else 'banner_test'
@@ -93,8 +99,6 @@ class DataHomologation(models.Model):
             
             })
         
-
-
 
     def compare_to(self,homologaciones_odoo='',homologaciones_banner=''):
         data = []
@@ -262,3 +266,39 @@ class DataHomologation(models.Model):
                 )
         data.extend(data_compare)
         return data
+
+
+    
+    def iniciar_proceso(self):
+        # Cambia el estado a "procesando"
+        #self.write({'estado_tarea': 'procesando'})
+
+        # Envía la tarea a Celery
+        try:
+            database_banner = 'banner' if self.status == 'produccion' else 'banner_test'
+            resultado = tasks.procesar_homologaciones.delay(database_banner, self.period_id.name)
+            _logger.info(f"Tarea enviada: {resultado.id}")
+            #self.env['tarea.celery'].create({
+            #    'task_id': resultado.id,
+            #    'model_id': self.id,
+            #    'estado': 'pendiente'
+            #})
+            self.write({'task_id':resultado.id})
+        except Exception as e:
+            _logger.error(f"Error al enviar la tarea: {str(e)}")
+            #self.write({'estado_tarea': 'fallida'})
+
+    def verificar_estado_tarea(self):
+
+        resultado = AsyncResult(self.task_id)
+        if resultado.state == 'SUCCESS':
+            resultado_data = resultado.result
+            print(resultado_data)
+            self.write({
+                'file': resultado_data['file'],
+                'file_name': resultado_data['file_name'],
+                #'estado_tarea': 'completada'
+            })
+        elif resultado.state == 'FAILURE':
+            _logger.error(f"Error en la tarea: {resultado.info}")
+            self.write({'estado_tarea': 'fallida'})

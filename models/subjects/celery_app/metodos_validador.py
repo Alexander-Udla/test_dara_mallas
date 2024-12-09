@@ -1,4 +1,4 @@
-from . import base_external_dbsource as db
+from . import base_external_dbsource_task as db
 import pandas as pd
 
 dbsource = db.BaseExternalDbsource()
