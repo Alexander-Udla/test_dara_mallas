@@ -26,7 +26,7 @@ class Validator:
             --and a.code = '014-S01'
             )
             and pe2.name <= '%s'
-            group by a2.code,s2.code 
+            group by a2.code,s2.code limit 10
         """%(period,period)
         res = dbsource.query(sql=sql,option=self.database)
         return res if res else False

@@ -165,3 +165,4 @@ access_dara_mallas_availability_courses,dara_malla.availability_courses,model_da
 access_dara_mallas_automation,dara_malla.automation,model_dara_mallas_automation,dara_admin,1,1,1,0
 access_dara_mallas_automation_line,dara_malla.automation.line,model_dara_mallas_automation_line,dara_admin,1,1,1,0
 
+

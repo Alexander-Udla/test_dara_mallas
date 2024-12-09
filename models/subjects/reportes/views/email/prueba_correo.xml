@@ -29,24 +29,21 @@
                     </thead>
                     <tbody>
                         <!-- Iterar sobre los datos de result1 -->
-                        <t t-foreach="object.result1" t-as="line">
-                            <tr>
-                                <td><t t-esc="line.CODIGO_PROGRAMA"/></td>
-                                <td><t t-esc="line.PROGRAMA"/></td>
-                                <td><t t-esc="line.COHORTE_PROGRAMA"/></td>
-                            </tr>
-                        </t>
+                        <t t-foreach="object" t-as="line">
+                             
+
+                            <td >
+                            <dt class="text-left"><t t-esc="line.codigo"/></dt> 
+                            </td >
+                            
+                            </t>
                     </tbody>
                 </table>
 
-                        <p>Primer Registro de result1:</p>
-                        <p>Código: ${object.result1[0]['CODIGO_PROGRAMA']}</p>
-                        <p>Programa: ${object.result1[0]['PROGRAMA']}</p>
-                        <p>Cohorte: ${object.result1[0]['COHORTE_PROGRAMA']}</p>
-
+                    
                 
                 <p>Valor de prueba: ${hello_message}</p>
-                <p>Data: ${object.result1}</p> <!-- Aquí se mostrará el valor de result1 -->
+                <p>Data: ${object}</p> <!-- Aquí se mostrará el valor de result1 -->
                 
                 <p>Saludos cordiales,</p>
                 ]]>

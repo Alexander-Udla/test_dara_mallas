@@ -9,6 +9,11 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
+class Equipo:
+    def __init__(self,codigo, programa):
+        self.codigo = codigo
+        self.programa = programa
+
 class Automation(models.Model):
     _name = "dara_mallas.automation"
     _description = "Automatización: notificación de inicio de nuevas cohortes de programas de posgrado."
@@ -20,11 +25,7 @@ class Automation(models.Model):
     fecha_actual = fields.Date(string="Fecha Actual", default=fields.Date.today, readonly=True)
     
     hello_message = fields.Char(string="Mensaje", default="Hola Mundo")
-    repository = automationRepository()
-    result1 = repository.get_program_postrado(fecha_actual)   
-    print("result1 ",type(result1))
-    print("result1 ",result1)
-      
+    
     
     
     line_ids = fields.One2many(
@@ -41,7 +42,6 @@ class Automation(models.Model):
         
         #repository = automationRepository()
         result = self.repository.get_program_postrado(formatted_date)
-
         if result:       
             for record in result:            
                 # Crear una línea asociada a este registro
@@ -58,8 +58,13 @@ class Automation(models.Model):
                 'corte_programa': "Sin información",
                 'automation_id': self.id,
             })
-            
+       
     def send_email(self):
+        repository = automationRepository()
+        result1 = repository.get_program_postrado('25-NOV-2024')   
+        print("result1 ",type(result1))
+        print("result1 ",result1)
+        
         template = self.env.ref('dara_mallas.file_aproved_mail_template', raise_if_not_found=False)
         if not template:
             _logger.error('No se encontró la plantilla de correo "file_aproved_mail_template".')
@@ -75,20 +80,24 @@ class Automation(models.Model):
                 _logger.info(f"Código: {line.codigo}, Programa: {line.programa}, Cohorte: {line.corte_programa}")
             
             # Mostrar los valores de result1
-            _logger.info(f"Valor de result1: {record.result1}")
+            _logger.info(f"Valor de result1: {result1}")
             
 
             # Puedes ver cada elemento de result1 si es una lista o diccionario
-            if isinstance(record.result1, list):
-                for res in record.result1:
+            if isinstance(result1, list):
+                for res in result1:
                     _logger.info(f"Elemento de result1: {res}")  # Aquí puedes ajustar el formato según la estructura de los datos
 
+            lista =[]
             
+            for variable in result1:
+                lista.append(Equipo(variable['CODIGO_PROGRAMA'],variable['PROGRAMA']))
+                
             context = {
-                'object': record,
-                'hello_message': record.hello_message,
-                'result1': record.result1,
-                'lineIds': record.line_ids
+                'object': lista,
+                #'hello_message': record.hello_message,
+                #'result1': record.result1,
+                #'lineIds': record.line_ids
             }
 
             # Enviar el correo con el contexto
