@@ -1,54 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+ 
 <odoo>
-    <data>
-        <!-- Email template -->
+    <data > 
+            <!--Email template -->
         <record id="file_aproved_mail_template" model="mail.template">
             <field name="name">Archivo de graduados aprobado</field>
             <field name="email_from">dara@udla.edu.ec</field>
             <field name="email_to">alexander.gualotuna@udla.edu.ec</field>
-            <field name="subject">Registro de graduados</field>
+            <field name="subject">Registro de graduados</field>            
             <field name="model">dara_mallas.automation</field>
-            <field name="body_html">
-                <![CDATA[
-                <p>Estimado/a,</p>
-                <p>A continuación se detalla la información de los programas:</p>
-                <p>El archivo enviado para el período 
-                    ${object.fecha_actual} tiene errores. Por favor 
-                    revise el archivo adjunto donde encontrará el detalle de los errores detectados. 
-                    <br></br> <br></br>
+            <field name="body_html" type="html">
+                <h3>Archivo de Graduados Aprobado</h3>
+                <div style="font-size: 14px;">
+                <p>
+                                El archivo adjunto ha sido aprobado para el registro de graduados de 
                 </p>
-                <p>Valor de prueba: ${object.hello_message}</p>
-                
-                <!-- Tabla con los datos -->
-                <table border="1" cellpadding="5" cellspacing="0">
+                <br></br>
+                <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Código</th>
-                            <th>Programa</th>
-                            <th>Cohorte</th>
+                            <th><b>Código de Programa</b></th>
+                            <th><b>Programa</b></th>
+                            <th><b>Cohorte</b></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Iterar sobre los datos de result1 -->
-                        <t t-foreach="object" t-as="line">
-                             
-
-                            <td >
-                            <dt class="text-left"><t t-esc="line.codigo"/></dt> 
-                            </td >
-                            
-                            </t>
+                        <t t-foreach="object.line_ids" t-as="line">
+                            <tr>
+                                <td><t t-esc="line.codigo"/></td>
+                                <td><t t-esc="line.programa"/></td>
+                                <td><t t-esc="line.corte_programa"/></td>
+                            </tr>
+                        </t>
                     </tbody>
                 </table>
-
-                    
-                
-                <p>Valor de prueba: ${hello_message}</p>
-                <p>Data: ${object}</p> <!-- Aquí se mostrará el valor de result1 -->
-                
-                <p>Saludos cordiales,</p>
-                ]]>
+                <p> DARA</p>
+                <p>
+                                    Este es un mensaje enviado automáticamente por el Sistema de Mallas de la 
+                                    Dirección General de Asuntos Regulatorios Académicos desde una cuenta 
+                                    que no es supervisada. Por favor no responda a este correo. 
+                </p>
+                </div>
             </field>
+        </record>
+        <record id="cron_send_email" model="ir.cron">
+            <field name="name">Enviar correos automáticos</field>
+            <field name="model_id" ref="model_dara_mallas_automation"/>
+            <field name="state">code</field>
+            <field name="code">model.send_email()</field> <!-- Este es el método a ejecutar -->
+            <field name="interval_number">1</field> <!-- Cada 1 minuto -->
+            <field name="interval_type">minutes</field> <!-- Intervalo en minutos -->
+            <field name="nextcall" eval="(datetime.now() + timedelta(seconds=0)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="active">True</field> <!-- Activar cron -->
         </record>
     </data>
 </odoo>
-

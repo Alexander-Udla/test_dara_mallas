@@ -1,18 +1,10 @@
 from venv import logger
 from odoo import fields, models, api
-from datetime import datetime
+from datetime import date
 from ..repository.automation_repository import automationRepository
 import base64
 import io
 import xlsxwriter
-import logging
-_logger = logging.getLogger(__name__)
-
-
-class Equipo:
-    def __init__(self,codigo, programa):
-        self.codigo = codigo
-        self.programa = programa
 
 class Automation(models.Model):
     _name = "dara_mallas.automation"
@@ -21,27 +13,28 @@ class Automation(models.Model):
     codigo = fields.Char("CODIGO_PROGRAMA")
     programa = fields.Char("PROGRAMA")
     corte_programa = fields.Char("COHORTE_PROGRAMA")   
-
     fecha_actual = fields.Date(string="Fecha Actual", default=fields.Date.today, readonly=True)
-    
-    hello_message = fields.Char(string="Mensaje", default="Hola Mundo")
-    
-    
+    formatted_date = fields.Char(string="Formatted Date", compute='_compute_formatted_date', store=False) 
     
     line_ids = fields.One2many(
         "dara_mallas.automation.line", 
         "automation_id", 
-        string="Programas",        
+        string="Programas",
+        create=False, 
+        edit=False, 
+        delete=False,
         readonly=True
-    )
-    
+    )    
+    repository = automationRepository()
         
-    def findProgram(self):
-        today = self.fecha_actual
-        formatted_date = today.strftime('%d-%b-%Y').upper()        
+    def findProgram(self):       
         
-        #repository = automationRepository()
-        result = self.repository.get_program_postrado(formatted_date)
+        
+        result = self.repository.get_program_postrado(self.formatted_date)
+        print("Programa ",result)
+        
+        # Limpiar líneas existentes
+        self.line_ids = [(5, 0, 0)]
         if result:       
             for record in result:            
                 # Crear una línea asociada a este registro
@@ -58,88 +51,73 @@ class Automation(models.Model):
                 'corte_programa': "Sin información",
                 'automation_id': self.id,
             })
-       
-    def send_email(self):
-        repository = automationRepository()
-        result1 = repository.get_program_postrado('25-NOV-2024')   
-        print("result1 ",type(result1))
-        print("result1 ",result1)
-        
-        template = self.env.ref('dara_mallas.file_aproved_mail_template', raise_if_not_found=False)
-        if not template:
-            _logger.error('No se encontró la plantilla de correo "file_aproved_mail_template".')
-            return
-
-        for record in self:
-            _logger.info(f"Enviando correo para el registro con ID {record.id}")
-            
-            # Aquí recorremos los 'line_ids' y mostramos cada uno
-            _logger.info(f"Líneas asociadas (line_ids): {record.line_ids}")
-            for line in record.line_ids:
-                # Mostrar los valores dentro de cada línea
-                _logger.info(f"Código: {line.codigo}, Programa: {line.programa}, Cohorte: {line.corte_programa}")
-            
-            # Mostrar los valores de result1
-            _logger.info(f"Valor de result1: {result1}")
-            
-
-            # Puedes ver cada elemento de result1 si es una lista o diccionario
-            if isinstance(result1, list):
-                for res in result1:
-                    _logger.info(f"Elemento de result1: {res}")  # Aquí puedes ajustar el formato según la estructura de los datos
-
-            lista =[]
-            
-            for variable in result1:
-                lista.append(Equipo(variable['CODIGO_PROGRAMA'],variable['PROGRAMA']))
-                
-            context = {
-                'object': lista,
-                #'hello_message': record.hello_message,
-                #'result1': record.result1,
-                #'lineIds': record.line_ids
-            }
-
-            # Enviar el correo con el contexto
-            template.with_context(context).send_mail(record.id, force_send=True)
-
-
-    
-                
-    
     """
     def send_email(self):
-        print("ingreso")
-        template = self.env.ref('dara_mallas.file_aproved_mail_template', raise_if_not_found=False)
-
+        # Obtén la plantilla de correo
+        template = self.env.ref('dara_mallas.file_aproved_mail_template', False)
         # Verifica si la plantilla se cargó correctamente
         if not template:
-            _logger.error('No se encontró la plantilla de correo "file_aproved_mail_template".')
+            logger.error('No se encontró la plantilla de correo "file_aproved_mail_template".')
             return
-        print("Self ", self)
-        for record in self:
-            print("record ",record)
-            print("recordline_ids ",record.line_ids)
-            if not record.line_ids:
-                _logger.warning(f"El registro con ID {record.id} no tiene líneas asociadas para enviar en el correo.")
-                continue
-            
-            # Enviar el correo
-            template.send_mail(record.id, force_send=True)
-            print(f"Correo enviado con éxito para el registro con ID {record.id}")
+        # Enviar el correo usando la plantilla
+        template.send_mail(self.id, force_send=True)
+        print("enviado con exito")"""
 
-        #template.send_mail(self.id, force_send=True)
-        #print("enviado con exito")
-      """
 
-            
+    def send_email(self):
+        # Obtener los datos de result
+        result = self.repository.get_program_postrado(self.formatted_date)
+        #result1= self.findProgram()  # Suponiendo que la función findProgram retorna 'result'
+        print("respuesta ", result)
+        # Crear una tabla HTML con los datos de result
+        result_html = "<table class='table table-bordered'><thead><tr><th>Código de Programa</th><th>Programa</th><th>Cohorte</th></tr></thead><tbody>"
+
+        for record in result:
+            result_html += f"""
+            <tr>
+                <td>{record.get("CODIGO_PROGRAMA", "")}</td>
+                <td>{record.get("PROGRAMA", "")}</td>
+                <td>{record.get("COHORTE_PROGRAMA", "")}</td>
+            </tr>
+            """
+
+        result_html += "</tbody></table>"
+
+        # Crear el cuerpo del correo con la tabla generada
+        body_html = f"""
+        <h3>Archivo de Graduados Aprobado</h3>
+        <div style="font-size: 14px;">
+            <p>El archivo adjunto ha sido aprobado para el registro de graduados de</p>
+            {result_html}
+            <p>DARA</p>
+            <p>
+                Este es un mensaje enviado automáticamente por el Sistema de Mallas de la 
+                Dirección General de Asuntos Regulatorios Académicos desde una cuenta 
+                que no es supervisada. Por favor no responda a este correo.
+            </p>
+        </div>
+        """
+
+        # Obtén la plantilla de correo
+        template = self.env.ref('dara_mallas.file_aproved_mail_template', False)
         
+        # Verifica si la plantilla se cargó correctamente
+        if not template:
+            logger.error('No se encontró la plantilla de correo "file_aproved_mail_template".')
+            return
+        
+        # Modificar el campo body_html de la plantilla con el nuevo contenido
+        template.write({'body_html': body_html})
+        
+        # Enviar el correo usando la plantilla
+        template.send_mail(self.id, force_send=True)
+        print("Correo enviado con éxito")
+
         
         
 class AutomationLine(models.Model):
     _name = "dara_mallas.automation.line"
     _description = "Líneas de Programas"
-
     codigo = fields.Char("Código")
     programa = fields.Char("Programa")
     corte_programa = fields.Char("Cohorte")
