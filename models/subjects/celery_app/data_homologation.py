@@ -15,6 +15,7 @@ from datetime import date
 # Obtener la fecha actual
 fecha_actual = date.today()
 from celery.result import AsyncResult
+from . import celery_app
 
 
 class DataHomologation(models.Model):
@@ -290,7 +291,7 @@ class DataHomologation(models.Model):
 
     def verificar_estado_tarea(self):
 
-        resultado = AsyncResult(self.task_id)
+        resultado = celery_app.app.AsyncResult(self.task_id)
         if resultado.state == 'SUCCESS':
             resultado_data = resultado.result
             print(resultado_data)
