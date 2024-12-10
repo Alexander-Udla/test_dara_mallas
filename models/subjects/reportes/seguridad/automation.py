@@ -27,9 +27,17 @@ class Automation(models.Model):
     )    
     repository = automationRepository()
         
-    def findProgram(self):       
-        
-        
+    
+    @api.depends('fecha_actual')
+    def _compute_formatted_date(self):
+        for record in self:
+            if record.fecha_actual:
+                record.formatted_date = record.fecha_actual.strftime('%d-%b-%Y').upper()
+            else:
+                record.formatted_date = ""
+    
+    
+    def findProgram(self):      
         result = self.repository.get_program_postrado(self.formatted_date)
         print("Programa ",result)
         
