@@ -7,12 +7,12 @@
             <field name="arch" type="xml">
                 <form string="Homologación de Datos">
                     <sheet>
-                        <group>
-                            <field name="status" string="Selección de la base"/>
+                        <group col="4">
+                            <field name="status" string="Base de datos "/>
                             <field name="period_id" string="Periodo"/>
                             <field name="file" filename="file_name" readonly="1"/>
                             <field name="file_name" invisible="1"/>
-                            <field name="task_id" string="Periodo"/>
+                            <field name="task_id" string="Descarga "/>
 
                         </group>
                         
@@ -20,13 +20,13 @@
                             <button name="iniciar_proceso" 
                                     type="object" 
                                     string="Generar" 
-                                    class="btn-primary"/>
+                                    class="btn-primary" 
+                                    style="margin-right: 10px;"/> <!-- Espaciado a la derecha del botón -->
 
                             <button name="verificar_estado_tarea" 
                                     type="object" 
                                     string="Ver estado" 
                                     class="btn-primary"/>
-
                         </footer>
                     </sheet>
                 </form>
@@ -34,14 +34,14 @@
         </record>
 
         <record id="action_data_homologation_form" model="ir.actions.act_window">
-            <field name="name">Selección Base</field>
+            <field name="name">Homologación</field>
             <field name="res_model">dara_mallas.data_homologations</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="view_data_homologation_form"/>
         </record>
 
         <menuitem id="data_homologation_menu" 
-                  name="Cambio de Base" 
+                  name="Homologación" 
                   parent="dara_homologations_reports" 
                   action="action_data_homologation_form" 
                   sequence="1"/>
