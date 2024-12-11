@@ -21,7 +21,7 @@ class automationRepository:
             FROM GORSDAV
             WHERE GORSDAV_TABLE_NAME='STVCHRT'
             AND GORSDAV_ATTR_NAME='FECHA_INICIO'
-            AND TO_CHAR(SYS.ANYDATA.accessDate(GORSDAV_VALUE), 'DD-MON-YYYY')='25-NOV-2024')
-            """
+            AND TO_CHAR(SYS.ANYDATA.accessDate(GORSDAV_VALUE), 'DD-MON-YYYY')='%s')
+            """%(dateToday)
         res=dbsource.query(sql=sql,option=self.database)
         return res if res else False

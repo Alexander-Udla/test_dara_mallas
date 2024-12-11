@@ -2,9 +2,9 @@ from venv import logger
 from odoo import fields, models, api
 from datetime import date
 from ..repository.automation_repository import automationRepository
-import base64
-import io
-import xlsxwriter
+from datetime import datetime
+import logging
+_logger = logging.getLogger(__name__)
 
 class Automation(models.Model):
     _name = "dara_mallas.automation"
@@ -39,7 +39,6 @@ class Automation(models.Model):
     
     def findProgram(self):      
         result = self.repository.get_program_postrado(self.formatted_date)
-        print("Programa ",result)
         
         # Limpiar líneas existentes
         self.line_ids = [(5, 0, 0)]
@@ -59,52 +58,51 @@ class Automation(models.Model):
                 'corte_programa': "Sin información",
                 'automation_id': self.id,
             })
-    """
-    def send_email(self):
-        # Obtén la plantilla de correo
-        template = self.env.ref('dara_mallas.file_aproved_mail_template', False)
-        # Verifica si la plantilla se cargó correctamente
-        if not template:
-            logger.error('No se encontró la plantilla de correo "file_aproved_mail_template".')
-            return
-        # Enviar el correo usando la plantilla
-        template.send_mail(self.id, force_send=True)
-        print("enviado con exito")"""
 
 
     def send_email(self):
+        _logger.info("Ejecutando el método send_email desde el cron.")
         # Obtener los datos de result
-        result = self.repository.get_program_postrado(self.formatted_date)
-        #result1= self.findProgram()  # Suponiendo que la función findProgram retorna 'result'
-        print("respuesta ", result)
-        # Crear una tabla HTML con los datos de result
-        result_html = "<table class='table table-bordered'><thead><tr><th>Código de Programa</th><th>Programa</th><th>Cohorte</th></tr></thead><tbody>"
+        formatted_date = datetime.now().strftime('%d-%b-%Y').upper()
+        result = self.repository.get_program_postrado(formatted_date)
+        
+        if not result:
+        # Si result está vacío o es False, mostrar un mensaje indicando que no hay información
+            body_html = f"""
+                <h3>NOTIFICACION: PROGRAMAS DE POSTGRADO QUE INICIAN ACTIVIDADES HOY {formatted_date}</h3>
+                <div style="font-size: 14px;">
+                    <p>No hay información disponible para el día {formatted_date}.</p>
+                    <p>
+                        Este es un mensaje enviado automáticamente por el Sistema de Mallas de la 
+                        Dirección General de Asuntos Regulatorios Académicos. Por favor no responda a este correo.
+                    </p>
+                </div>
+                """
+        else:
+            # Si result tiene datos, crear la tabla HTML
+            result_html = "<table class='table table-bordered'><thead><tr><th>Código de Programa</th><th>Programa</th><th>Cohorte</th></tr></thead><tbody>"
+            for record in result:
+                result_html += f"""
+                <tr>
+                    <td>{record.get("CODIGO_PROGRAMA", "")}</td>
+                    <td>{record.get("PROGRAMA", "")}</td>
+                    <td>{record.get("COHORTE_PROGRAMA", "")}</td>
+                </tr>
+                """
+            result_html += "</tbody></table>"
 
-        for record in result:
-            result_html += f"""
-            <tr>
-                <td>{record.get("CODIGO_PROGRAMA", "")}</td>
-                <td>{record.get("PROGRAMA", "")}</td>
-                <td>{record.get("COHORTE_PROGRAMA", "")}</td>
-            </tr>
+            # Crear el cuerpo del correo con la tabla generada
+            body_html = f"""
+            <h3>NOTIFICACION: PROGRAMAS DE POSTGRADO QUE INICIAN ACTIVIDADES HOY {formatted_date}</h3>
+            <div style="font-size: 14px;">            
+                {result_html}
+                
+                <p>
+                    Este es un mensaje enviado automáticamente por el Sistema de Mallas de la 
+                    Dirección General de Asuntos Regulatorios Académicos. Por favor no responda a este correo.
+                </p>
+            </div>
             """
-
-        result_html += "</tbody></table>"
-
-        # Crear el cuerpo del correo con la tabla generada
-        body_html = f"""
-        <h3>Archivo de Graduados Aprobado</h3>
-        <div style="font-size: 14px;">
-            <p>El archivo adjunto ha sido aprobado para el registro de graduados de</p>
-            {result_html}
-            <p>DARA</p>
-            <p>
-                Este es un mensaje enviado automáticamente por el Sistema de Mallas de la 
-                Dirección General de Asuntos Regulatorios Académicos desde una cuenta 
-                que no es supervisada. Por favor no responda a este correo.
-            </p>
-        </div>
-        """
 
         # Obtén la plantilla de correo
         template = self.env.ref('dara_mallas.file_aproved_mail_template', False)
