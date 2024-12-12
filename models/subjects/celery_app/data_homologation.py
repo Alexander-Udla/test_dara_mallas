@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 from io import BytesIO
 from reportlab.pdfgen import canvas
 import pandas as pd
-from . import metodos_validador as metodos
+from . import metodos_homologation as metodos
 from . import tasks
 from datetime import date
 # Obtener la fecha actual

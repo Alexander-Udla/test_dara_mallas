@@ -4,7 +4,7 @@ import io
 import base64
 import pandas as pd
 import datetime
-from . import metodos_validador as metodos
+from . import metodos_homologation as metodos
 import logging
 from celery import shared_task
 import odoo
@@ -13,7 +13,6 @@ _logger = logging.getLogger(__name__)
 
 @celery_app.app.task(name='dara_mallas.models.subjects.celery_app.tasks.procesar_homologaciones')
 def procesar_homologaciones(database_banner, period_id_name):
-    print("holaaaaaaaaaaaaaaaaaaaaaaaaaa")
    # Nombre de la base de datos
     db_name = 'dara_mallas'
 
