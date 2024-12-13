@@ -5,7 +5,7 @@ sys.path.append('/odoo/odoo-server/odoo/addons')
 app = Celery('odoo', broker='redis://localhost:6379/0')
 app.conf.update(
     #result_backend='redis://localhost:6379/0',
-    result_backend='db+postgresql://postgres:root123@localhost/dara_mallas',
+    result_backend='db+postgresql://postgres:Cia2@22*@localhost/dara_mallas',
     #include=['tasks']
     task_serializer='json',
     accept_content=['json'],
