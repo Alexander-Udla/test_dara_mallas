@@ -19,3 +19,4 @@ from . import subject_no_course
 from . import reportes
 from . import subject_description
 from . import carga
+from . import celery_app
