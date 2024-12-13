@@ -63,4 +63,3 @@ class CreateObjects(http.Controller):
 #         return http.request.render('custom/addons/dara_rdas.object', {
 #             'object': obj
 #         })
-
