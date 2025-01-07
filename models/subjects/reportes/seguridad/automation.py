@@ -12,7 +12,7 @@ class Automation(models.Model):
     
     codigo = fields.Char("CODIGO_PROGRAMA")
     programa = fields.Char("PROGRAMA")
-    corte_programa = fields.Char("COHORTE_PROGRAMA")   
+    corte_programa = fields.Char("COHORTE_PROGRAMA")
     fecha_actual = fields.Date(string="Fecha Actual", default=fields.Date.today, readonly=True)
     formatted_date = fields.Char(string="Formatted Date", compute='_compute_formatted_date', store=False) 
     
@@ -39,7 +39,7 @@ class Automation(models.Model):
     
     def findProgram(self):      
         result = self.repository.get_program_postrado(self.formatted_date)
-        
+        prueba = self.repository.get_number_student()
         # Limpiar líneas existentes
         self.line_ids = [(5, 0, 0)]
         if result:       
@@ -64,8 +64,22 @@ class Automation(models.Model):
         _logger.info("Ejecutando el método send_email desde el cron.")
         # Obtener los datos de result
         formatted_date = datetime.now().strftime('%d-%b-%Y').upper()
-        result = self.repository.get_program_postrado(formatted_date)
-        
+        #result = self.repository.get_program_postrado(formatted_date)
+        result = self.repository.get_number_student()
+        for resp in result:
+            codigo_programa = resp.get("CODIGO_PROGRAMA", "")
+            if codigo_programa:  # Asegurarse de que no esté vacío
+                find = self.repository.get_number_cohorte(codigo_programa)
+            
+            # Buscar la posición correspondiente y añadirla al resultado
+                cohorte_programa = resp.get("COHORTE_PROGRAMA", "")  # Cohorte actual del programa
+                if find:  # Si `find` tiene datos
+                    for cohorte in find:
+                        if cohorte.get("GORSDAV_PK_PARENTTAB") == cohorte_programa:
+                            # Añadir el campo `COHORTE` con el valor de `POSICION`
+                            resp["COHORTE"] = cohorte.get("POSICION")
+                            break  # Salir del bucle una vez encontrado
+                    
         if not result:
         # Si result está vacío o es False, mostrar un mensaje indicando que no hay información
             body_html = f"""
@@ -78,15 +92,28 @@ class Automation(models.Model):
                     </p>
                 </div>
                 """
-        else:
-            # Si result tiene datos, crear la tabla HTML
-            result_html = "<table class='table table-bordered'><thead><tr><th>Código de Programa</th><th>Programa</th><th>Cohorte</th></tr></thead><tbody>"
+        else:            
+            result_html = """
+                <table class='table table-bordered'>
+                    <thead>
+                        <tr>
+                            <th>Código de Programa</th>
+                            <th>Programa</th>
+                            <th>Cohorte</th>
+                            <th> # Estudiantes</th>
+                            <th> # Cohorte</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                """
             for record in result:
                 result_html += f"""
                 <tr>
-                    <td>{record.get("CODIGO_PROGRAMA", "")}</td>
-                    <td>{record.get("PROGRAMA", "")}</td>
-                    <td>{record.get("COHORTE_PROGRAMA", "")}</td>
+                    <td style="text-align: center;">{record.get("CODIGO_PROGRAMA", "")}</td>
+                    <td style="text-align: center;">{record.get("PROGRAMA", "")}</td>
+                    <td style="text-align: center;">{record.get("COHORTE_PROGRAMA", "")}</td>
+                    <td style="text-align: center;">{record.get("NUMERO_ESTUDIANTES", "")}</td>
+                    <td style="text-align: center;">{record.get("COHORTE", "")}</td>
                 </tr>
                 """
             result_html += "</tbody></table>"
@@ -119,8 +146,7 @@ class Automation(models.Model):
         template.send_mail(self.id, force_send=True)
         print("Correo enviado con éxito")
 
-        
-        
+               
 class AutomationLine(models.Model):
     _name = "dara_mallas.automation.line"
     _description = "Líneas de Programas"

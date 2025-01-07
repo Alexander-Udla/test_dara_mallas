@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models # type: ignore
 
 class ModuloPrueba(models.Model):
     _name = "dara_mallas.prueba"
