@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+        <!-- Definición de la acción -->
+        <record id="action_dara_mallas_prueba" model="ir.actions.act_window">
+            <field name="name">Prueba</field>
+            <field name="res_model">dara_mallas.prueba</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--Muestra la informaciòn dentro de la tabla-->
+        <record id="view_tree_dara_mallas_prueba" model="ir.ui.view">
+            <field name="name">dara.mallas.prueba.tree</field>
+            <field name="model">dara_mallas.prueba</field>
+            <field name="arch" type="xml">
+                <tree string="Pruebas">
+                    <field name="numero"/>
+                    <field name="texto"/>
+                    <field name="company_id" string="Empresa"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_form_dara_mallas_prueba" model="ir.ui.view">
+            <field name="name">dara.mallas.prueba.form</field>
+            <field name="model">dara_mallas.prueba</field>
+            <field name="arch" type="xml">
+                <form string="Pruebas"  >
+                    <sheet>
+                        <group>
+                            <field name="numero"/>
+                            <field name="texto"/>                            
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Definición del menú -->
+        <record id="menu_dara_mallas_prueba" model="ir.ui.menu">
+            <field name="name">Prueba</field>
+            <field name="parent_id" ref="dara_test_menu"/>
+            <field name="action" ref="action_dara_mallas_prueba"/>
+        </record>
+
+        <!-- Definición de la regla de seguridad (IR Rule) -->
+         
+       
+        
+    </data>
+</odoo>

@@ -5,16 +5,16 @@
     <data > 
             <!--Email template -->
         <record id="file_aproved_mail_template" model="mail.template">
-            <field name="name">Archivo de graduados aprobado</field>
+            <field name="name">Archivo de correo para corte</field>
             <field name="email_from">dara@udla.edu.ec</field>
-            <field name="email_to">byron.naranjo@udla.edu.ec</field>
-            <field name="email_cc">alexander.gualotuna@udla.edu.ec</field>
+            <field name="email_to">alexander.gualotuna@udla.edu.ec</field>
+            <field name="email_cc">alex_gualotuna016@hotmail.com</field>
             <field name="subject">ALERTA POSTGRADO INICIO DE ACTIVIDADES</field>            
             <field name="model">dara_mallas.automation</field>
                
         </record>
         <record id="cron_send_email" model="ir.cron">
-            <field name="name">Enviar correos automáticos</field>
+            <field name="name">Correo de corte</field>
             <field name="model_id" ref="model_dara_mallas_automation"/>
             <field name="state">code</field>
             <field name="code">model.send_email()</field> <!-- Este es el método a ejecutar -->

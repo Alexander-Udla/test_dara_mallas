@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-<data>
-	<!-- programas -->
-	<menuitem id="dara_programs_menu" name="Programas" groups="dara_admin" sequence="1"/>
+	<data>
+		<!-- programas -->
+		<menuitem id="dara_programs_menu" name="Programas" groups="dara_admin" sequence="1"/>
 
-	<!-- mallas -->
-	<menuitem id="dara_study_plans_menu" name="Mallas" groups="dara_admin,dara_mallas_menu_study_plan" sequence="2"/>
+		<!-- mallas -->
+		<menuitem id="dara_study_plans_menu" name="Mallas" groups="dara_admin,dara_mallas_menu_study_plan" sequence="2"/>
 
-	<!-- areas -->
-	<menuitem id="dara_areas_menu" name="Areas" groups="dara_admin" sequence="3"/>
+		<!-- areas -->
+		<menuitem id="dara_areas_menu" name="Areas" groups="dara_admin" sequence="3"/>
 
-	<!-- siglas -->
-	<menuitem id="dara_subjects_menu" name="Asignaturas" groups="dara_admin,dara_mallas_menu_subjects" sequence="4"/>
+		<!-- siglas -->
+		<menuitem id="dara_subjects_menu" name="Asignaturas" groups="dara_admin,dara_mallas_menu_subjects" sequence="4"/>
 
-	<!-- configuracion -->
-	<menuitem id="dara_config_menu" name="Configuraciones" groups="dara_admin" sequence="5"/>
+		<!-- configuracion -->
+		<menuitem id="dara_config_menu" name="Configuraciones" groups="dara_admin" sequence="5"/>
 
-	<!-- reportes -->
-	<menuitem id="dara_reports_menu" name="Reportes"/>	
-		<menuitem id="dara_subjects_reports" name="Asignaturas" parent="dara_reports_menu" sequence="3" />
-		<menuitem id="dara_homologations_reports" name="Categoría" parent="dara_reports_menu" sequence="4" />
-		<menuitem id="dara_automatizacion" name="Seguridad" parent="dara_reports_menu" sequence="5"/>
+		<!-- PRUEBAS -->
+		<menuitem id="dara_test_menu" name="Pruebas" groups="dara_admin" sequence="6"/>
 
+		<!-- reportes -->
+		<menuitem id="dara_reports_menu" name="Reportes"/>	
+			<menuitem id="dara_subjects_reports" name="Asignaturas" parent="dara_reports_menu" sequence="3" />
+			<menuitem id="dara_homologations_reports" name="Categoría" parent="dara_reports_menu" sequence="4" />
+			<menuitem id="dara_automatizacion" name="Seguridad" parent="dara_reports_menu" sequence="5"/>
 
-</data>
+	</data>
 </odoo>
