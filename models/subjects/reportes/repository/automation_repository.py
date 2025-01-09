@@ -5,7 +5,7 @@ dbsource = db.BaseExternalDbsource()
 class automationRepository:
     def __init__(self):
         self.database = 'banner'
-        
+    #Cohorte    
     def get_program_postrado(self, dateToday):
         sql = """
             SELECT DISTINCT SYS.ANYDATA.accessVarchar2(GORSDAV_VALUE) CODIGO_PROGRAMA,
@@ -26,7 +26,7 @@ class automationRepository:
         res=dbsource.query(sql=sql,option=self.database)
         return res if res else False
     
-    #cantidad de alumnos
+    #Coorte màs cantidad de alumnos
     def get_number_student(self):
         sql= """
             SELECT DISTINCT 
@@ -64,6 +64,7 @@ class automationRepository:
         res=dbsource.query(sql=sql,option=self.database)
         return res if res else False
     
+    #Nùmero de cohorte
     def get_number_cohorte(self, codigo):
         sql="""
             SELECT GORSDAV_PK_PARENTTAB,

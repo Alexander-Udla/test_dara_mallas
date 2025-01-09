@@ -6,7 +6,12 @@ class area(models.Model):
     
     name=fields.Char("Nombre")
     code=fields.Char("Codigo")
- 
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 class area_homologation(models.Model):
     _name="dara_mallas.area_homologation"

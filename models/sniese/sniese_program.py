@@ -42,6 +42,13 @@ class sniese_program(models.Model):
     actualization_resolution_id = fields.Many2one('dara_mallas.resolutions','Resolución de actualización')
     resolution_to_bid_id = fields.Many2one('dara_mallas.resolutions','Resolución para ofertar')
     non_validity_resolution_id = fields.Many2one('dara_mallas.resolutions','Resolución de no vigencia')
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 
     #@api.onchange('field_wide_id','field_specific_id')
@@ -57,6 +64,13 @@ class name_approved(models.Model):
     _name="dara_mallas.name_approved"
     
     name=fields.Char("Nombre Homologado")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
     
 
 

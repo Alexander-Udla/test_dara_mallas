@@ -109,6 +109,13 @@ class study_plan(models.Model):
     # =============================================
 
     mallas_web = fields.Boolean("Publicar Mallas Web ?")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     #==================================================
     #               MALLA GRAFICA 
@@ -1390,6 +1397,11 @@ class campus(models.Model):
     name=fields.Char("Nombre")
     code=fields.Char("Code")
   
-    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
     
     
