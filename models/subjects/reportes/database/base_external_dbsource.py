@@ -205,7 +205,7 @@ class BaseExternalDbsource:
     #conexion con base de datos en formato json
     def query(self,sql='',option='',parq=[],one=False,dataframe=False,insert=False):
         if option == 'dara_mallas_dev':
-            conexion = psycopg2.connect("dbname=mallas user=alex password=root123")
+            conexion = psycopg2.connect("dbname=mallas_columna user=alex password=root123")
         if option == 'udla_mallas_dev':
             conexion = psycopg2.connect("dbname=udla_mallas user=welintong password=jde.2020")
         if option == 'silabos_dev':
