@@ -18,10 +18,12 @@
             <field name="model_id" ref="model_dara_mallas_automation"/>
             <field name="state">code</field>
             <field name="code">model.send_email()</field> <!-- Este es el método a ejecutar -->
-            <field name="interval_number">1</field> <!-- Cada 1 minuto -->
+            <field name="interval_number">2</field> <!-- Cada 1 minuto -->
             <field name="interval_type">minutes</field> <!-- Intervalo en minutos -->
-             <field name="nextcall" eval="(datetime.now() + timedelta(seconds=0)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="nextcall" eval="(datetime.now() + timedelta(seconds=0)).replace(hour=16, minute=35, second=0).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="numbercall">2</field>
             <field name="active">True</field> <!-- Activar cron -->
+            
         </record>
     </data>
 </odoo>
