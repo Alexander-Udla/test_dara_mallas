@@ -5,22 +5,24 @@
     <data > 
             <!--Email template -->
         <record id="file_aproved_mail_template" model="mail.template">
-            <field name="name">Archivo de correo para corte</field>
+            <field name="name">Archivo de correo para cohorte</field>
             <field name="email_from">dara@udla.edu.ec</field>
-            <field name="email_to">alexander.gualotuna@udla.edu.ec</field>
+            <field name="email_to">gabriela.criollo@udla.edu.ec, marco.chiluisa@udla.edu.ec, fabian.viteri.mesias@udla.edu.ec</field>
             <field name="email_cc">alex_gualotuna016@hotmail.com</field>
             <field name="subject">ALERTA POSTGRADO INICIO DE ACTIVIDADES</field>            
             <field name="model">dara_mallas.automation</field>
                
         </record>
         <record id="cron_send_email" model="ir.cron">
-            <field name="name">Correo de corte</field>
+            <field name="name">Correo de cohorte diario</field>
             <field name="model_id" ref="model_dara_mallas_automation"/>
             <field name="state">code</field>
             <field name="code">model.send_email()</field> <!-- Este es el método a ejecutar -->
             <field name="interval_number">1</field> <!-- Cada 1 minuto -->
-            <field name="interval_type">minutes</field> <!-- Intervalo en minutos -->
-             <field name="nextcall" eval="(datetime.now() + timedelta(seconds=0)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="interval_type">days</field> <!-- Intervalo en minutos -->
+            <!-- <field name="nextcall" eval="(datetime.now() + timedelta(seconds=0)).strftime('%Y-%m-%d %H:%M:%S')"/> -->
+            <field name="nextcall" eval="(datetime.now() + timedelta(days=1)).replace(hour=14, minute=0, second=0).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="numbercall">-1</field>
             <field name="active">True</field> <!-- Activar cron -->
         </record>
     </data>

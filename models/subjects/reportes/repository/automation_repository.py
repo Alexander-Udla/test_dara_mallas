@@ -27,7 +27,7 @@ class automationRepository:
         return res if res else False
     
     #cantidad de alumnos
-    def get_number_student(self):
+    def get_number_student(self, dateToday):
         sql= """
             SELECT DISTINCT 
                 SYS.ANYDATA.accessVarchar2(GORSDAV_VALUE) AS CODIGO_PROGRAMA,
@@ -59,7 +59,7 @@ class automationRepository:
                 FROM GORSDAV
                 WHERE GORSDAV_TABLE_NAME = 'STVCHRT'
                 AND GORSDAV_ATTR_NAME = 'FECHA_INICIO'
-                AND TO_CHAR(SYS.ANYDATA.accessDate(GORSDAV_VALUE), 'DD-MON-YYYY') = '25-NOV-2024')
+                AND TO_CHAR(SYS.ANYDATA.accessDate(GORSDAV_VALUE), 'DD-MON-YYYY') = '%s')
             """
         res=dbsource.query(sql=sql,option=self.database)
         return res if res else False

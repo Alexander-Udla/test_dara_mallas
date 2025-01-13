@@ -65,7 +65,12 @@ class Automation(models.Model):
         # Obtener los datos de result
         formatted_date = datetime.now().strftime('%d-%b-%Y').upper()
         #result = self.repository.get_program_postrado(formatted_date)
-        result = self.repository.get_number_student()
+        result = self.repository.get_number_student(formatted_date)
+        
+        if not result:  # Si no hay datos, salir de la función
+            _logger.info(f"No hay información disponible para el día {formatted_date}. No se enviará correo.")
+            return
+        
         for resp in result:
             codigo_programa = resp.get("CODIGO_PROGRAMA", "")
             if codigo_programa:  # Asegurarse de que no esté vacío
@@ -80,55 +85,43 @@ class Automation(models.Model):
                             resp["COHORTE"] = cohorte.get("POSICION")
                             break  # Salir del bucle una vez encontrado
                     
-        if not result:
-        # Si result está vacío o es False, mostrar un mensaje indicando que no hay información
-            body_html = f"""
-                <h3>NOTIFICACION: PROGRAMAS DE POSTGRADO QUE INICIAN ACTIVIDADES HOY {formatted_date}</h3>
-                <div style="font-size: 14px;">
-                    <p>No hay información disponible para el día {formatted_date}.</p>
-                    <p>
-                        Este es un mensaje enviado automáticamente por el Sistema de Mallas de la 
-                        Dirección General de Asuntos Regulatorios Académicos. Por favor no responda a este correo.
-                    </p>
-                </div>
-                """
-        else:            
-            result_html = """
-                <table class='table table-bordered'>
-                    <thead>
-                        <tr>
-                            <th>Código de Programa</th>
-                            <th>Programa</th>
-                            <th>Cohorte</th>
-                            <th> # Estudiantes</th>
-                            <th> # Cohorte</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                """
-            for record in result:
-                result_html += f"""
-                <tr>
-                    <td style="text-align: center;">{record.get("CODIGO_PROGRAMA", "")}</td>
-                    <td style="text-align: center;">{record.get("PROGRAMA", "")}</td>
-                    <td style="text-align: center;">{record.get("COHORTE_PROGRAMA", "")}</td>
-                    <td style="text-align: center;">{record.get("NUMERO_ESTUDIANTES", "")}</td>
-                    <td style="text-align: center;">{record.get("COHORTE", "")}</td>
-                </tr>
-                """
-            result_html += "</tbody></table>"
+                 
+        result_html = """
+            <table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <th>Código de Programa</th>
+                        <th>Programa</th>
+                        <th>Cohorte</th>
+                        <th> # Estudiantes</th>
+                        <th> # Cohorte</th>
+                    </tr>
+                </thead>
+                <tbody>
+            """
+        for record in result:
+            result_html += f"""
+            <tr>
+                <td style="text-align: center;">{record.get("CODIGO_PROGRAMA", "")}</td>
+                <td style="text-align: center;">{record.get("PROGRAMA", "")}</td>
+                <td style="text-align: center;">{record.get("COHORTE_PROGRAMA", "")}</td>
+                <td style="text-align: center;">{record.get("NUMERO_ESTUDIANTES", "")}</td>
+                <td style="text-align: center;">{record.get("COHORTE", "")}</td>
+            </tr>
+            """
+        result_html += "</tbody></table>"
 
-            # Crear el cuerpo del correo con la tabla generada
-            body_html = f"""
-            <h3>NOTIFICACION: PROGRAMAS DE POSTGRADO QUE INICIAN ACTIVIDADES HOY {formatted_date}</h3>
-            <div style="font-size: 14px;">            
-                {result_html}
-                
-                <p>
-                    Este es un mensaje enviado automáticamente por el Sistema de Mallas de la 
-                    Dirección General de Asuntos Regulatorios Académicos. Por favor no responda a este correo.
-                </p>
-            </div>
+        # Crear el cuerpo del correo con la tabla generada
+        body_html = f"""
+        <h3>NOTIFICACION: PROGRAMAS DE POSTGRADO QUE INICIAN ACTIVIDADES HOY {formatted_date}</h3>
+        <div style="font-size: 14px;">            
+            {result_html}
+            
+            <p>
+                Este es un mensaje enviado automáticamente por el Sistema de Mallas de la 
+                Dirección General de Asuntos Regulatorios Académicos. Por favor no responda a este correo.
+            </p>
+        </div>
             """
 
         # Obtén la plantilla de correo
@@ -149,7 +142,7 @@ class Automation(models.Model):
                
 class AutomationLine(models.Model):
     _name = "dara_mallas.automation.line"
-    _description = "Líneas de Programas"
+    _description = "Correo de cohorte config"
     codigo = fields.Char("Código")
     programa = fields.Char("Programa")
     corte_programa = fields.Char("Cohorte")

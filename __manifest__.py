@@ -74,7 +74,7 @@
         'models/subjects/reportes/views/automation.xml',
         'models/subjects/reportes/views/test_modulo.xml',
 
-        'models/subjects/reportes/views/email/prueba_correo.xml'
+        'models/subjects/reportes/views/email/correo_cohorte.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
