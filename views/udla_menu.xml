@@ -16,8 +16,6 @@
 		<!-- configuracion -->
 		<menuitem id="dara_config_menu" name="Configuraciones" groups="dara_admin" sequence="5"/>
 
-		<!-- PRUEBAS -->
-		<menuitem id="dara_test_menu" name="Pruebas" groups="dara_admin" sequence="6"/>
 
 		<!-- reportes -->
 		<menuitem id="dara_reports_menu" name="Reportes"/>	

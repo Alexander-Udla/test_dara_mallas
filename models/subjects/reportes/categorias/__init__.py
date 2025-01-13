@@ -4,4 +4,3 @@ from . import acronym_comparison
 from . import availability
 from . import tasks
 from . import task2
-from . import test_modulo

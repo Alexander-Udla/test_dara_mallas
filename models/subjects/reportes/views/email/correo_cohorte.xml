@@ -8,7 +8,7 @@
             <field name="name">Archivo de correo para cohorte</field>
             <field name="email_from">dara@udla.edu.ec</field>
             <field name="email_to">gabriela.criollo@udla.edu.ec, marco.chiluisa@udla.edu.ec, fabian.viteri.mesias@udla.edu.ec</field>
-            <field name="email_cc">alex_gualotuna016@hotmail.com</field>
+            <field name="email_cc">mariasol.villacis@udla.edu.ec</field>
             <field name="subject">ALERTA POSTGRADO INICIO DE ACTIVIDADES</field>            
             <field name="model">dara_mallas.automation</field>
                

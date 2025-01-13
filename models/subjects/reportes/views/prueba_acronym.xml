@@ -1,9 +1,0 @@
-<odoo>
-    <data>       
-        <menuitem id="data_acronym_comparison_menu4" 
-                  name="Comparativo de siglas prueba" 
-                  parent="dara_homologations_reports" 
-                  action="action_acronym_comparison_form" 
-                  sequence="4"/>
-        </data>
-</odoo>
