@@ -65,7 +65,7 @@ class Automation(models.Model):
         # Obtener los datos de result
         formatted_date = datetime.now().strftime('%d-%b-%Y').upper()
         #result = self.repository.get_program_postrado(formatted_date)
-        result = self.repository.get_number_student()
+        result = self.repository.get_number_student(formatted_date)
         
         if not result:  # Si no hay datos, salir de la función
             _logger.info(f"No hay información disponible para el día {formatted_date}. No se enviará correo.")
