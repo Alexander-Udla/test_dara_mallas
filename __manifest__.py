@@ -69,10 +69,8 @@
         'models/subjects/reportes/views/data_homologation.xml',
         'models/subjects/reportes/views/data_prerequisite.xml',
         'models/subjects/reportes/views/acronym_comparison.xml',
-        'models/subjects/reportes/views/prueba_acronym.xml',
         'models/subjects/reportes/views/availability.xml',
         'models/subjects/reportes/views/automation.xml',
-        'models/subjects/reportes/views/test_modulo.xml',
 
         'models/subjects/reportes/views/email/correo_cohorte.xml'
     ],
