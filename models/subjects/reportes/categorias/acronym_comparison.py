@@ -1,3 +1,4 @@
+import json
 from odoo import fields, models, api
 from ..repository.acronym_repository import acronymRepository
 
@@ -9,7 +10,6 @@ class AcronymComparison(models.Model):
     # Campos principales
     acronym1 = fields.Char("Sigla 1")
     acronym2 = fields.Char("Sigla 2")
-    result = fields.Text("Resultado")
     
     # Relación con los resultados
    
@@ -34,267 +34,57 @@ class AcronymComparison(models.Model):
         readonly=True
     )
     
+   
+
+    
     def findAcronym(self):
         acronym1 = self.acronym1
         acronym2 = self.acronym2
         
-        result_term_202210 = []
-        result_term_202310 = []
-
-         
-        if not acronym1 or not acronym2:
-            raise ValueError("Ambas siglas son necesarias para la comparación.")
-        
+        # Llamar al repositorio para obtener los datos
         repository = acronymRepository()
         result = repository.get_acronym_per_comparison(acronym1, acronym2)
-        self.result = str(result)
-       
-        if self.results_202210_ids:
-            self.results_202210_ids.unlink()
-        if self.results_202310_ids:
-            self.results_202310_ids.unlink()
-
         
+        # Asegurarse de que haya exactamente 2 valores únicos en TERM
+        unique_terms = list({item['TERM'] for item in result})
+        if len(unique_terms) != 2:
+            raise ValueError("Se esperaban exactamente 2 valores únicos de TERM")
+
+        # Inicializar diccionarios para las listas
+        separated_data = {term: [] for term in unique_terms}
+
+        # Clasificar los datos según TERM
         for item in result:
-            if item['TERM'] == '202210':
-                result_term_202210.append(item)
-            elif item['TERM'] == '202310':
-                result_term_202310.append(item)
-     
-        for record in result_term_202210:
-            cleaned_record = {}            
-            
-            for key, value in record.items():
-                if key not in ['SUBJ', 'TERM']:  
-                    key = key.strip("'")  
-                cleaned_record[key] = value
+            separated_data[item['TERM']].append(item)
+        
+        print("Datos separados por TERM:")
+        print("Grupo 1 -", unique_terms[0], ": ", separated_data[unique_terms[0]])
+        print("Grupo 2 -", unique_terms[1], ": ", separated_data[unique_terms[1]])
+        
+        # Preparar los datos para la tabla
+        group1_title = unique_terms[0]
+        group2_title = unique_terms[1]
 
-            data_to_store = {
-                'acronym_comparison_id_202210': self.id,
+        headers = set()
+        for item in separated_data[group1_title] + separated_data[group2_title]:
+            headers.update(item.keys())
+        headers = sorted(headers)
+
+        table_data = []
+        for header in headers:
+            row = {
+                "header": header,
+                "group1": next((item.get(header, "") for item in separated_data[group1_title] if header in item), ""),
+                "group2": next((item.get(header, "") for item in separated_data[group2_title] if header in item), ""),
             }
-            
-            if 'SUBJ' in cleaned_record:
-                data_to_store['subj'] = cleaned_record['SUBJ']
-            
-            if 'TERM' in cleaned_record:
-                data_to_store['term'] = cleaned_record['TERM']
-           
-            if 'HORAS_DOCENCIA' in cleaned_record:
-                data_to_store['horas_docencia'] = cleaned_record['HORAS_DOCENCIA']
-
-            if 'HORAS_DOCENCIA_PRESENCIAL_H' in cleaned_record:
-                data_to_store['horas_docencia_presencial_h'] = cleaned_record['HORAS_DOCENCIA_PRESENCIAL_H']
-
-            if 'HORAS_DOCENCIA_VIRTUAL_H' in cleaned_record:
-                data_to_store['horas_docencia_virtual_h'] = cleaned_record['HORAS_DOCENCIA_VIRTUAL_H']
-
-            if 'HORAS_DOCENCIA_O' in cleaned_record:
-                data_to_store['horas_docencia_o'] = cleaned_record['HORAS_DOCENCIA_O']
-
-            if 'HORAS_LABORATORIO_DOCENCIA' in cleaned_record:
-                data_to_store['horas_laboratorio_docencia'] = cleaned_record['HORAS_LABORATORIO_DOCENCIA']
-
-            if 'HORAS_LABORATORIO_DOCENCIA_H' in cleaned_record:
-                data_to_store['horas_laboratorio_docencia_h'] = cleaned_record['HORAS_LABORATORIO_DOCENCIA_H']
-
-            if 'HORAS_EXTERNADO_DOCENCIA' in cleaned_record:
-                data_to_store['horas_externado_docencia'] = cleaned_record['HORAS_EXTERNADO_DOCENCIA']
-
-            if 'HORAS_EXTERNADO_DOCENCIA_H' in cleaned_record:
-                data_to_store['horas_externado_docencia_h'] = cleaned_record['HORAS_EXTERNADO_DOCENCIA_H']
-
-            if 'HORAS_APLICACION' in cleaned_record:
-                data_to_store['horas_aplicacion'] = cleaned_record['HORAS_APLICACION']
-
-            if 'HORAS_APLICACION_H' in cleaned_record:
-                data_to_store['horas_aplicacion_h'] = cleaned_record['HORAS_APLICACION_H']
-
-            if 'HORAS_APLICACION_O' in cleaned_record:
-                data_to_store['horas_aplicacion_o'] = cleaned_record['HORAS_APLICACION_O']
-
-            if 'HORAS_APLICACION_LABORATORIO' in cleaned_record:
-                data_to_store['horas_aplicacion_laboratorio'] = cleaned_record['HORAS_APLICACION_LABORATORIO']
-
-            if 'HORAS_APLICACION_LAB_H' in cleaned_record:
-                data_to_store['horas_aplicacion_lab_h'] = cleaned_record['HORAS_APLICACION_LAB_H']
-
-            if 'HORAS_APLICACION_LAB_O' in cleaned_record:
-                data_to_store['horas_aplicacion_lab_o'] = cleaned_record['HORAS_APLICACION_LAB_O']
-
-            if 'HORAS_PRACT_PREPROFESIONALES' in cleaned_record:
-                data_to_store['horas_pract_preprofesionales'] = cleaned_record['HORAS_PRACT_PREPROFESIONALES']
-
-            if 'HORAS_PRACT_PREPROF_H' in cleaned_record:
-                data_to_store['horas_pract_preprof_h'] = cleaned_record['HORAS_PRACT_PREPROF_H']
-
-            if 'HORAS_PRACT_PREPROF_O' in cleaned_record:
-                data_to_store['horas_pract_preprof_o'] = cleaned_record['HORAS_PRACT_PREPROF_O']
-
-            if 'HORAS_SERVICIO_COMUNIDAD' in cleaned_record:
-                data_to_store['horas_servicio_comunidad'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD']
-
-            if 'HORAS_SERVICIO_COMUNIDAD_H' in cleaned_record:
-                data_to_store['horas_servicio_comunidad_h'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD_H']
-
-            if 'HORAS_SERVICIO_COMUNIDAD_O' in cleaned_record:
-                data_to_store['horas_servicio_comunidad_o'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD_O']
-
-            if 'TOTAL_HORAS_AUTONOMAS' in cleaned_record:
-                data_to_store['total_horas_autonomas'] = cleaned_record['TOTAL_HORAS_AUTONOMAS']
-
-            if 'TOTAL_HORAS_AUTONOMAS_H' in cleaned_record:
-                data_to_store['total_horas_autonomas_h'] = cleaned_record['TOTAL_HORAS_AUTONOMAS_H']
-
-            if 'TOTAL_HORAS_AUTONOMAS_O' in cleaned_record:
-                data_to_store['total_horas_autonomas_o'] = cleaned_record['TOTAL_HORAS_AUTONOMAS_O']
-
-            if 'HORAS_TITULACION' in cleaned_record:
-                data_to_store['horas_titulacion'] = cleaned_record['HORAS_TITULACION']
-
-            if 'HORAS_TITULACION_H' in cleaned_record:
-                data_to_store['horas_titulacion_h'] = cleaned_record['HORAS_TITULACION_H']
-
-            if 'HORAS_TITULACION_O' in cleaned_record:
-                data_to_store['horas_titulacion_o'] = cleaned_record['HORAS_TITULACION_O']
-
-            if 'SESIONES_DOCENCIA' in cleaned_record:
-                data_to_store['sesiones_docencia'] = cleaned_record['SESIONES_DOCENCIA']
-
-            if 'SESIONES_LABORATORIO' in cleaned_record:
-                data_to_store['sesiones_laboratorio'] = cleaned_record['SESIONES_LABORATORIO']
-
-            if 'SESIONES_EXTERNADO' in cleaned_record:
-                data_to_store['sesiones_externado'] = cleaned_record['SESIONES_EXTERNADO']
-
-            if 'SEMANAS_EXTERNADO' in cleaned_record:
-                data_to_store['semanas_externado'] = cleaned_record['SEMANAS_EXTERNADO']
-
-            if 'SEMANAS_LABORATORIO' in cleaned_record:
-                data_to_store['semanas_laboratorio'] = cleaned_record['SEMANAS_LABORATORIO']
-
-            if 'HORAS_ADICIONALES_SILABO' in cleaned_record:
-                data_to_store['horas_adicionales_silabo'] = cleaned_record['HORAS_ADICIONALES_SILABO']
-
-            self.env['dara_mallas.acronym_comparison_result_202210'].create(data_to_store)
-
-        for record in result_term_202310:
-            cleaned_record = {}            
-            
-            for key, value in record.items():
-                if key not in ['SUBJ', 'TERM']:  
-                    key = key.strip("'")  
-                cleaned_record[key] = value
-
-            data_to_store = {
-                'acronym_comparison_id_202310': self.id,
-            }
-            
-            if 'SUBJ' in cleaned_record:
-                data_to_store['subj'] = cleaned_record['SUBJ']
-            
-            if 'TERM' in cleaned_record:
-                data_to_store['term'] = cleaned_record['TERM']
-           
-            if 'HORAS_DOCENCIA' in cleaned_record:
-                data_to_store['horas_docencia'] = cleaned_record['HORAS_DOCENCIA']
-
-            if 'HORAS_DOCENCIA_PRESENCIAL_H' in cleaned_record:
-                data_to_store['horas_docencia_presencial_h'] = cleaned_record['HORAS_DOCENCIA_PRESENCIAL_H']
-
-            if 'HORAS_DOCENCIA_VIRTUAL_H' in cleaned_record:
-                data_to_store['horas_docencia_virtual_h'] = cleaned_record['HORAS_DOCENCIA_VIRTUAL_H']
-
-            if 'HORAS_DOCENCIA_O' in cleaned_record:
-                data_to_store['horas_docencia_o'] = cleaned_record['HORAS_DOCENCIA_O']
-
-            if 'HORAS_LABORATORIO_DOCENCIA' in cleaned_record:
-                data_to_store['horas_laboratorio_docencia'] = cleaned_record['HORAS_LABORATORIO_DOCENCIA']
-
-            if 'HORAS_LABORATORIO_DOCENCIA_H' in cleaned_record:
-                data_to_store['horas_laboratorio_docencia_h'] = cleaned_record['HORAS_LABORATORIO_DOCENCIA_H']
-
-            if 'HORAS_EXTERNADO_DOCENCIA' in cleaned_record:
-                data_to_store['horas_externado_docencia'] = cleaned_record['HORAS_EXTERNADO_DOCENCIA']
-
-            if 'HORAS_EXTERNADO_DOCENCIA_H' in cleaned_record:
-                data_to_store['horas_externado_docencia_h'] = cleaned_record['HORAS_EXTERNADO_DOCENCIA_H']
-
-            if 'HORAS_APLICACION' in cleaned_record:
-                data_to_store['horas_aplicacion'] = cleaned_record['HORAS_APLICACION']
-
-            if 'HORAS_APLICACION_H' in cleaned_record:
-                data_to_store['horas_aplicacion_h'] = cleaned_record['HORAS_APLICACION_H']
-
-            if 'HORAS_APLICACION_O' in cleaned_record:
-                data_to_store['horas_aplicacion_o'] = cleaned_record['HORAS_APLICACION_O']
-
-            if 'HORAS_APLICACION_LABORATORIO' in cleaned_record:
-                data_to_store['horas_aplicacion_laboratorio'] = cleaned_record['HORAS_APLICACION_LABORATORIO']
-
-            if 'HORAS_APLICACION_LAB_H' in cleaned_record:
-                data_to_store['horas_aplicacion_lab_h'] = cleaned_record['HORAS_APLICACION_LAB_H']
-
-            if 'HORAS_APLICACION_LAB_O' in cleaned_record:
-                data_to_store['horas_aplicacion_lab_o'] = cleaned_record['HORAS_APLICACION_LAB_O']
-
-            if 'HORAS_PRACT_PREPROFESIONALES' in cleaned_record:
-                data_to_store['horas_pract_preprofesionales'] = cleaned_record['HORAS_PRACT_PREPROFESIONALES']
-
-            if 'HORAS_PRACT_PREPROF_H' in cleaned_record:
-                data_to_store['horas_pract_preprof_h'] = cleaned_record['HORAS_PRACT_PREPROF_H']
-
-            if 'HORAS_PRACT_PREPROF_O' in cleaned_record:
-                data_to_store['horas_pract_preprof_o'] = cleaned_record['HORAS_PRACT_PREPROF_O']
-
-            if 'HORAS_SERVICIO_COMUNIDAD' in cleaned_record:
-                data_to_store['horas_servicio_comunidad'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD']
-
-            if 'HORAS_SERVICIO_COMUNIDAD_H' in cleaned_record:
-                data_to_store['horas_servicio_comunidad_h'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD_H']
-
-            if 'HORAS_SERVICIO_COMUNIDAD_O' in cleaned_record:
-                data_to_store['horas_servicio_comunidad_o'] = cleaned_record['HORAS_SERVICIO_COMUNIDAD_O']
-
-            if 'TOTAL_HORAS_AUTONOMAS' in cleaned_record:
-                data_to_store['total_horas_autonomas'] = cleaned_record['TOTAL_HORAS_AUTONOMAS']
-
-            if 'TOTAL_HORAS_AUTONOMAS_H' in cleaned_record:
-                data_to_store['total_horas_autonomas_h'] = cleaned_record['TOTAL_HORAS_AUTONOMAS_H']
-
-            if 'TOTAL_HORAS_AUTONOMAS_O' in cleaned_record:
-                data_to_store['total_horas_autonomas_o'] = cleaned_record['TOTAL_HORAS_AUTONOMAS_O']
-
-            if 'HORAS_TITULACION' in cleaned_record:
-                data_to_store['horas_titulacion'] = cleaned_record['HORAS_TITULACION']
-
-            if 'HORAS_TITULACION_H' in cleaned_record:
-                data_to_store['horas_titulacion_h'] = cleaned_record['HORAS_TITULACION_H']
-
-            if 'HORAS_TITULACION_O' in cleaned_record:
-                data_to_store['horas_titulacion_o'] = cleaned_record['HORAS_TITULACION_O']
-
-            if 'SESIONES_DOCENCIA' in cleaned_record:
-                data_to_store['sesiones_docencia'] = cleaned_record['SESIONES_DOCENCIA']
-
-            if 'SESIONES_LABORATORIO' in cleaned_record:
-                data_to_store['sesiones_laboratorio'] = cleaned_record['SESIONES_LABORATORIO']
-
-            if 'SESIONES_EXTERNADO' in cleaned_record:
-                data_to_store['sesiones_externado'] = cleaned_record['SESIONES_EXTERNADO']
-
-            if 'SEMANAS_EXTERNADO' in cleaned_record:
-                data_to_store['semanas_externado'] = cleaned_record['SEMANAS_EXTERNADO']
-
-            if 'SEMANAS_LABORATORIO' in cleaned_record:
-                data_to_store['semanas_laboratorio'] = cleaned_record['SEMANAS_LABORATORIO']
-
-            if 'HORAS_ADICIONALES_SILABO' in cleaned_record:
-                data_to_store['horas_adicionales_silabo'] = cleaned_record['HORAS_ADICIONALES_SILABO']
-
-            self.env['dara_mallas.acronym_comparison_result_202310'].create(data_to_store)
-
-
-
+            table_data.append(row)
+
+        # Guardar los datos en formato JSON en el campo 'table_data'
+        self.table_data = json.dumps({
+            "group1_title": group1_title,
+            "group2_title": group2_title,
+            "table_data": table_data,
+        })
 
 class AcronymComparisonResult(models.Model):
     _name = "dara_mallas.acronym_comparison_result_202210"
@@ -390,3 +180,6 @@ class AcronymComparisonResult(models.Model):
     semanas_externado = fields.Float("SEMANAS_EXTERNADO")
     semanas_laboratorio = fields.Float("SEMANAS_LABORATORIO")
     horas_adicionales_silabo = fields.Float("HORAS_ADICIONALES_SILABO") 
+    
+    
+    
