@@ -1,64 +1,64 @@
 <odoo>
     <data>
-
-     <record id="action_acronym_comparison_form" model="ir.actions.act_window">
-            <field name="name">Comparativa de siglas</field>
-            <field name="res_model">dara_mallas.acronym_comparison</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="view_acronym_comparison_form"/>
-        </record>
-
-        <menuitem id="data_acronym_comparison_menu" 
-                  name="Comparativo de siglas" 
-                  parent="dara_homologations_reports" 
-                  action="action_acronym_comparison_form" 
-                  sequence="3"/>
-        
-
         <record id="view_acronym_comparison_form" model="ir.ui.view">
-            <field name="name">acronym_comparison.form</field>
+            <field name="name">acronym.comparison.form</field>
             <field name="model">dara_mallas.acronym_comparison</field>
             <field name="arch" type="xml">
-                <form string="Comparativa de siglas">
+                <form string="Comparativo de siglas">
                     <sheet>
-                        <group col="2" class="oe_inline">
-                            <!-- Campos para las siglas -->
-                            <field name="acronym1" string="Sigla 1" class="oe_inline"/>
-                            <field name="acronym2" string="Sigla 2" class="oe_inline"/>
-                            <!-- Botón para ejecutar la consulta -->
-                            <button name="findAcronym" string="Ejecutar consulta" type="object" class="oe_highlight"/>
-                        </group>
-
                         <group>
-                            <h2>Resultados de la Comparativa</h2>
+                            <field name="acronym1"/>
+                            <field name="acronym2"/>
+                            <button name="findAcronym" string="Comparar" type="object" class="oe_highlight"/>
+                        </group>
+                        <group>
+                            <h2>Resultados</h2>
                             <t t-if="record.table_data">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Encabezado</th>
-                                            <th t-esc="record.table_data.group1_title"/>
-                                            <th t-esc="record.table_data.group2_title"/>
+                                            <th></th>
+                                            <t t-foreach="JSON.parse(record.table_data).headers" t-as="header">
+                                                <th t-esc="header"/>
+                                            </t>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <t t-foreach="record.table_data.table_data" t-as="row">
+                                        <t t-foreach="JSON.parse(record.table_data).rows" t-as="row">
                                             <tr>
-                                                <td t-esc="row.header"/>
-                                                <td t-esc="row.group1"/>
-                                                <td t-esc="row.group2"/>
+                                                <td t-esc="row.row_title"/>
+                                                <t t-foreach="row.values" t-as="value">
+                                                    <td t-esc="value"/>
+                                                </t>
                                             </tr>
                                         </t>
                                     </tbody>
                                 </table>
                             </t>
                             <t t-else="">
-                                <p>No hay resultados disponibles.</p>
+                                <p>No hay datos disponibles.</p>
                             </t>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
+ 
 
+
+        <!-- Acción para abrir el formulario -->
+        <record id="action_acronym_comparison_form" model="ir.actions.act_window">
+            <field name="name">Comparativo de siglas</field>
+            <field name="res_model">dara_mallas.acronym_comparison</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_acronym_comparison_form"/>
+        </record>
+
+        <!-- Menú para acceder al formulario -->
+        <menuitem id="data_acronym_comparison_menu"
+                  name="Comparativo de siglas"
+                  parent="dara_homologations_reports"
+                  action="action_acronym_comparison_form"
+                  sequence="3"/>
     </data>
 </odoo>
