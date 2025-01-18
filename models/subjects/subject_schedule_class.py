@@ -5,6 +5,13 @@ class schedule_class(models.Model):
     
     name=fields.Char("Descripcion")
     code=fields.Char("Codigo")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 class schedule_class_line(models.Model):
     _name="dara_mallas.schedule_class_line"
@@ -15,6 +22,13 @@ class schedule_class_line(models.Model):
     default=fields.Boolean("Default")
     
     schedule_class_line_subject_id=fields.Many2one("dara_mallas.schedule_class_line_subject")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def name_get(self):
         result = []
@@ -29,6 +43,13 @@ class schedule_class_line_subject(models.Model):
     subject_id=fields.Many2one('dara_mallas.subject')
     subject_code=fields.Char(related="subject_id.code")
     schedule_class_line_ids =fields.One2many("dara_mallas.schedule_class_line",inverse_name="schedule_class_line_subject_id")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def name_get(self):
         result = []

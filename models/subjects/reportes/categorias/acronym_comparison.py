@@ -34,6 +34,13 @@ class AcronymComparison(models.Model):
         readonly=True
     )
     
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+    
     def findAcronym(self):
         acronym1 = self.acronym1
         acronym2 = self.acronym2
@@ -344,6 +351,13 @@ class AcronymComparisonResult(models.Model):
     horas_adicionales_silabo = fields.Float("HORAS_ADICIONALES_SILABO")
     
     
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+    
 class AcronymComparisonResult(models.Model):
     _name = "dara_mallas.acronym_comparison_result_202310"
     _description = "Resultado de Comparativo de Siglas"
@@ -389,4 +403,11 @@ class AcronymComparisonResult(models.Model):
     sesiones_o = fields.Float("SESIONES_O")
     semanas_externado = fields.Float("SEMANAS_EXTERNADO")
     semanas_laboratorio = fields.Float("SEMANAS_LABORATORIO")
-    horas_adicionales_silabo = fields.Float("HORAS_ADICIONALES_SILABO") 
+    horas_adicionales_silabo = fields.Float("HORAS_ADICIONALES_SILABO")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )

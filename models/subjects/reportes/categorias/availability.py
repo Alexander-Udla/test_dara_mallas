@@ -14,6 +14,13 @@ class AvailabilityCourses(models.Model):
         string="Disponibilidad de : ",
         help="Seleccione el tipo de disponibilidad a buscar.")
     
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+    
     
     @api.onchange('type')
     def _onchange_type(self):

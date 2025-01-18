@@ -17,6 +17,13 @@ class subject(models.Model):
     subject_class_ids = fields.One2many("dara_mallas.subject_class",inverse_name="subject_id")
 
     new_subject = fields.Boolean("Nueva", default=True,track_visibility='always')
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     ## se controla que la longitud maxima del nombre de la asignatura sea 27 mantenimiento los 30 caracteres.
     @api.onchange('short_name')
@@ -51,6 +58,13 @@ class subject_rule(models.Model):
 
     #relacion con el espejo
     subject_rule_mirror_ids = fields.One2many("dara_mallas.subject_rule_mirror",inverse_name="subject_rule_id",string="Versiones")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 
     def write(self,vals):
@@ -144,6 +158,13 @@ class subject_rule_mirror(models.Model):
     #relacion con la tabla original
     subject_rule_id = fields.Many2one("dara_mallas.subject_rule")
     
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+    
 class homologation_mirror(models.Model):
     _name="dara_mallas.homologation_mirror"
    
@@ -159,6 +180,13 @@ class homologation_mirror(models.Model):
     max_score=fields.Integer("Puntaje maximo",track_visibility='always')
     rule_min_score_id=fields.Many2one('dara_mallas.rule_score', string="Calificacion minima")
     subject_rule_id = fields.Many2one("dara_mallas.subject_rule_mirror",track_visibility='always')
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 
 class subject_rule_line(models.Model):
@@ -170,6 +198,13 @@ class subject_rule_line(models.Model):
     name=fields.Char("Sigla",related="subject_rule_id.subject_id.code")
 
     area_homologation_id=fields.Many2one("dara_mallas.area_homologation")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def name_get(self):
         result = []
@@ -195,6 +230,13 @@ class homologation(models.Model):
     rule_min_score_id=fields.Many2one('dara_mallas.rule_score', string="Calificacion minima")
 
     subject_rule_id = fields.Many2one("dara_mallas.subject_rule",track_visibility='always')
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def _generate_order_by(self, order_spec, query):
         order_by = super(homologation, self)._generate_order_by(order_spec, query)
@@ -219,11 +261,25 @@ class group_rule(models.Model):
     _name="dara_mallas.group_rule"
     
     name=fields.Char("Agrupador")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 class rule_score(models.Model):
     _name="dara_mallas.rule_score"
     
-    name=fields.Char("Calificacion")  
+    name=fields.Char("Calificacion")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 class elective_line(models.Model):
     _name="dara_mallas.elective_line"
@@ -233,6 +289,13 @@ class elective_line(models.Model):
     subject_code=fields.Char("Code",related="subject_id.code")
 
     elective_ids=fields.One2many("dara_mallas.elective",inverse_name="elective_line_id")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
     
     def copy(self,default=None):
         new_object=super(elective_line,self).copy(default=default)
@@ -260,6 +323,13 @@ class elective(models.Model):
     elective_subject_code=fields.Char("Sigla",related="elective_subject_inherit_id.code")
 
     elective_line_id=fields.Many2one("dara_mallas.elective_line")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def name_get(self):
         result = []
@@ -274,6 +344,13 @@ class itinerary_line(models.Model):
     subject_id=fields.Many2one("dara_mallas.subject")
     subject_code=fields.Char("Code",related="subject_id.code")
     itinerary_ids=fields.One2many("dara_mallas.itinerary",inverse_name="itinerary_line_id")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def copy(self,default=None):
         new_object=super(itinerary_line,self).copy(default=default)
@@ -305,6 +382,13 @@ class itinerary(models.Model):
     specialization_id=fields.Many2one("dara_mallas.specialization")
 
     itinerary_line_id=fields.Many2one("dara_mallas.itinerary_line")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def name_get(self):
         result = []

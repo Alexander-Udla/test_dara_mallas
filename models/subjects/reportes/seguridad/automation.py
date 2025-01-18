@@ -26,6 +26,13 @@ class Automation(models.Model):
         readonly=True
     )    
     repository = automationRepository()
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
         
     
     @api.depends('fecha_actual')
@@ -149,3 +156,10 @@ class AutomationLine(models.Model):
     corte_programa = fields.Char("Cohorte")
     
     automation_id = fields.Many2one("dara_mallas.automation", string="Automatización")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )

@@ -8,6 +8,13 @@ class stop_sp_homologations(models.Model):
     _name="dara_mallas.stop_sp_homologations"
     file=fields.Binary("Reporte")
     file_name=fields.Char("Reporte de cambios en malla congelada")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def find_mirror_changed_rules_periods(self):
         mirrors = self.env['dara_mallas.subject_rule_mirror'].search([])
@@ -292,6 +299,13 @@ class curent_sp_homologations(models.Model):
     file=fields.Binary("Reporte")
     file_name=fields.Char("Reporte de cambios en malla congelada")
     period_to_report = fields.Char("Periodo a reportar")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def find_areas_by_period(self,period):
         period_id = self.env['dara_mallas.period'].search([('name', '=', period)], limit=1)

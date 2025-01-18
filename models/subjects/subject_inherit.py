@@ -217,7 +217,12 @@ class subject_inherit(models.Model):
     attr_subject_code=fields.Char(related='subject_attributes_id.subject_id.code')
     attr_subject_attributes_line_ids = fields.One2many(related="subject_attributes_id.subject_attributes_line_ids")
     
-
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
    
 
@@ -245,6 +250,13 @@ class subject_inherit_area(models.Model):
     organization_unit_id=fields.Many2one("dara_mallas.organization_unit")
     #reverse name
     area_homologation_id = fields.Many2one("dara_mallas.area_homologation")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def name_get(self): 
         result = [] 
@@ -266,6 +278,13 @@ class subject_inherit_homologation(models.Model):
     subject_inherit_id = fields.Many2one("dara_mallas.subject_inherit")
     # relacion con la ficha de asignatura historica
     subject_inherit_history_id = fields.Many2one('dara_mallas.subject_inherit_history')
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 class subject_inherit_area_history(models.Model):
     _name="dara_mallas.subject_inherit_area_history"
@@ -283,4 +302,11 @@ class subject_inherit_area_history(models.Model):
   
     #relacion reversa con el modelo del area_homo_history
     area_homologation_history_id = fields.Many2one("dara_mallas.area_homologation_history")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
  

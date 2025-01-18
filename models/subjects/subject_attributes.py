@@ -5,6 +5,13 @@ class subject_attributes(models.Model):
     
     name = fields.Char("Código")
     description = fields.Char("Descripción")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def name_get(self):
         res = []
@@ -24,12 +31,26 @@ class subject_attributes_line(models.Model):
     subject_attributes_des = fields.Char("Descripción",related="subject_attributes_id.description")
 
     subject_attributes_subject_id = fields.Many2one("dara_mallas.subject_attributes_subject")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 class subject_attributes_subject(models.Model):
     _name="dara_mallas.subject_attributes_subject" 
     
     subject_id=fields.Many2one("dara_mallas.subject")
     period_id=fields.Many2one("dara_mallas.period")
     subject_attributes_line_ids = fields.One2many("dara_mallas.subject_attributes_line",inverse_name="subject_attributes_subject_id")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def copy(self,default=None):
         new_object=super(subject_attributes_subject,self).copy(default=default)

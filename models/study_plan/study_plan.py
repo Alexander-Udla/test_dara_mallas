@@ -1372,6 +1372,13 @@ class study_plan_line(models.Model):
     #organization_unit_id=fields.Many2one("dara_mallas.organization_unit") 
     #period_id=fields.Many2one("dara_mallas.period")
     
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+    
 class study_plan_line_simple(models.Model):
     _name = "dara_mallas.study_plan_line_simple"
 
@@ -1381,7 +1388,14 @@ class study_plan_line_simple(models.Model):
     subject_id=fields.Many2one("dara_mallas.subject")
     subject_code=fields.Char(related="subject_id.code")
  
-    study_plan_id=fields.Many2one("dara_mallas.study_plan") 
+    study_plan_id=fields.Many2one("dara_mallas.study_plan")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 
    
@@ -1390,6 +1404,13 @@ class level(models.Model):
     
     name=fields.Char("Periodo")
     number=fields.Integer("Numero")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 class campus(models.Model):
     _name="dara_mallas.campus"

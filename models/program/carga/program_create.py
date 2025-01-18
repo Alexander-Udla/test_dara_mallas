@@ -21,7 +21,14 @@ class program_create(models.Model):
     name_file=fields.Char("nombre de archivo")
     result = fields.Text("Resultados")
     file_result=fields.Binary("Errores")
-    name_file_result=fields.Char("nombre de archivo error") 
+    name_file_result=fields.Char("nombre de archivo error")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
  
 
     

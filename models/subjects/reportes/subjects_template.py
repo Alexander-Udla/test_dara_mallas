@@ -20,6 +20,13 @@ class Subject_template(models.TransientModel):
     subject_id=fields.Many2many("dara_mallas.subject_inherit",default=lambda self:self.env.context.get('subject_id',False))
     file=fields.Binary("Archivo")
     file_name=fields.Char("nombre de archivo")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def merge_with_color(self,workSheet,cell_range,data,alignment=None,range_color=None):
         yFill = PatternFill("solid", fgColor=range_color)

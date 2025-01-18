@@ -137,6 +137,13 @@ class subject_scacrse(models.Model):
 
     #MENSAJE DE ERROR
     hours_validation=fields.Char("Validacion")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     #@api.constrains('subject_id','period_id')
     def save(self):

@@ -11,6 +11,13 @@ class subject_description(models.Model):
     tipo = fields.Char("Tipo")
     state=fields.Selection([('revisado','Revisado'),('por revisar','Por Revisar')], string="Estado")
     
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+    
     def name_get(self):
         result = []
         for rec in self:
