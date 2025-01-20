@@ -37,7 +37,6 @@ class AcronymComparison(models.Model):
 
         # Crear una línea para cada resultado                
         fields_to_compare = set(result[0].keys()).union(result[1].keys())  # Todos los campos únicos
-        
         for field in fields_to_compare:
             # Crear una línea con el valor de cada campo para ambas siglas
             line_values = {
@@ -46,7 +45,7 @@ class AcronymComparison(models.Model):
                 'term_acronym2': result[1].get(field, ''),  # Valor para Sigla 2
                 'comparison_id': self.id  # Relacionar con la comparación actual
             }
-            self.line_ids.append(line_values)
+            self.env['dara_mallas.acronym_comparison.line'].create(line_values)
             
 class AcronymComparisonLine(models.Model):
     _name = 'dara_mallas.acronym_comparison.line'
