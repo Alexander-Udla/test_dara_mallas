@@ -1,50 +1,33 @@
 <odoo>
     <data>
+        <!-- Definición de la vista -->
         <record id="view_acronym_comparison_form" model="ir.ui.view">
             <field name="name">acronym.comparison.form</field>
             <field name="model">dara_mallas.acronym_comparison</field>
             <field name="arch" type="xml">
                 <form string="Comparativo de siglas">
                     <sheet>
-                        <group>
-                            <field name="acronym1"/>
-                            <field name="acronym2"/>
+                        <group col="2">
+                            <field name="acronym1" placeholder="Ingrese la primera sigla"/>
+                            <field name="acronym2" placeholder="Ingrese la segunda sigla"/>
                             <button name="findAcronym" string="Comparar" type="object" class="oe_highlight"/>
                         </group>
-                        <group>
-                            <h2>Resultados</h2>
-                            <t t-if="record.table_data">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <t t-foreach="JSON.parse(record.table_data).headers" t-as="header">
-                                                <th t-esc="header"/>
-                                            </t>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <t t-foreach="JSON.parse(record.table_data).rows" t-as="row">
-                                            <tr>
-                                                <td t-esc="row.row_title"/>
-                                                <t t-foreach="row.values" t-as="value">
-                                                    <td t-esc="value"/>
-                                                </t>
-                                            </tr>
-                                        </t>
-                                    </tbody>
-                                </table>
-                            </t>
-                            <t t-else="">
-                                <p>No hay datos disponibles.</p>
-                            </t>
-                        </group>
+
+                        <notebook>
+                            <page string="Detalles Comparativos">
+                                <field name="line_ids">
+                                    <tree editable="false" create="false">
+                                        <field name="subj"/>
+                                        <field name="term_acronym2"/>
+                                        <field name="term_acronym1"/>                                        
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
         </record>
- 
-
 
         <!-- Acción para abrir el formulario -->
         <record id="action_acronym_comparison_form" model="ir.actions.act_window">
@@ -55,10 +38,7 @@
         </record>
 
         <!-- Menú para acceder al formulario -->
-        <menuitem id="data_acronym_comparison_menu"
-                  name="Comparativo de siglas"
-                  parent="dara_homologations_reports"
-                  action="action_acronym_comparison_form"
-                  sequence="3"/>
+        <menuitem id="data_acronym_comparison_menu" name="Comparativo de siglas" parent="dara_homologations_reports" action="action_acronym_comparison_form" sequence="3"/>
     </data>
 </odoo>
+
