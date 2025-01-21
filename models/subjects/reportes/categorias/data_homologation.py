@@ -10,7 +10,7 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 import pandas as pd
 from ..repository import metodos_validador as metodos
-from . import task2
+
 from datetime import date
 # Obtener la fecha actual
 fecha_actual = date.today()
@@ -276,7 +276,7 @@ class DataHomologation(models.Model):
         # Envía la tarea a Celery
         try:
             database_banner = 'banner' if self.status == 'produccion' else 'banner_test'
-            resultado = task2.procesar_homologaciones.delay(database_banner, self.period_id.name)
+            
             _logger.info(f"Tarea enviada: {resultado.id}")
             #self.env['tarea.celery'].create({
             #    'task_id': resultado.id,

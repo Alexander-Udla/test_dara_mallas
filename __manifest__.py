@@ -66,8 +66,7 @@
         'models/subjects/reportes/views/acronym_comparison.xml',
         'models/subjects/reportes/views/scadtl_report.xml',
         
-        'models/subjects/reportes/views/data_homologation.xml',
-        'models/subjects/reportes/views/data_prerequisite.xml',
+        
         'models/subjects/reportes/views/acronym_comparison.xml',
         'models/subjects/reportes/views/availability.xml',
         'models/subjects/reportes/views/automation.xml',
