@@ -1,0 +1,49 @@
+<odoo>
+    <data>  
+
+        <record id="model_dara_mallas_automation" model="ir.model">
+            <field name="name">dara_mallas.automation</field>
+            <field name="model">dara_mallas.automation</field>
+        </record>
+
+        <record id="view_automation_form" model="ir.ui.view">
+            <field name="name">dara_mallas.automation.form</field>
+            <field name="model">dara_mallas.automation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>                            
+                            <field name="fecha_actual"/>
+                            <button name="findProgram" type="object" string="Buscar Programas" class="btn-primary"/>
+                        </group>
+
+                         <footer>
+                            <button name="send_email" type="object" string="Enviar Correo" class="btn-primary" />
+                        </footer>
+
+                       <field name="line_ids">
+                            <tree>
+                                <field name="codigo" string="Código"/>
+                                <field name="programa" string="Programa"/>
+                                <field name="corte_programa" string="Cohorte"/>
+                            </tree>
+                        </field>                    
+                    </sheet>
+                </form>
+            </field>
+        </record> 
+
+         <record id="action_automation" model="ir.actions.act_window">
+            <field name="name">Automatización de Cohortes</field>
+            <field name="res_model">dara_mallas.automation</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_automation_form"/>
+        </record>        
+
+        <menuitem id="data_automation" 
+                  name="Automatizaciòn" 
+                  parent="dara_automatizacion" 
+                  action="action_automation" 
+                  sequence="1"/>  
+    </data>
+</odoo>

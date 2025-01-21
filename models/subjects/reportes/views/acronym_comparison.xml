@@ -1,0 +1,118 @@
+<odoo>
+    <data>        
+        <record id="action_acronym_comparison_form" model="ir.actions.act_window">
+            <field name="name">Comparativa de siglas</field>
+            <field name="res_model">dara_mallas.acronym_comparison</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_acronym_comparison_form"/>
+        </record>
+
+        <menuitem id="data_acronym_comparison_menu" 
+                  name="Comparativo de siglas" 
+                  parent="dara_homologations_reports" 
+                  action="action_acronym_comparison_form" 
+                  sequence="3"/>
+        
+        
+        <record id="view_acronym_comparison_form" model="ir.ui.view">
+            <field name="name">acronym_comparison.form</field>
+            <field name="model">dara_mallas.acronym_comparison</field>
+            <field name="arch" type="xml">
+                <form string="Comparativa de siglas">
+                    <sheet>
+                        <group col="2" class="oe_inline">
+                            <!-- Campos para las siglas -->
+                            <field name="acronym1" string="Sigla 1" class="oe_inline"/>
+                            <field name="acronym2" string="Sigla 2" class="oe_inline"/>                            
+                            <!-- Botón para ejecutar la consulta -->
+                            <button name="findAcronym" string="Ejecutar consulta" type="object" class="oe_highlight"/>
+                        </group>              
+                         
+                        <field name="results_202210_ids" string="Materias" widget="one2many_list" create="false" edit="false" delete="false">
+                            <tree string="Materias" limit="10">                                
+                                <field name="subj" string="Subj"/>
+                                <field name="term" string="Term"/>
+                                <field name="horas_docencia" string="Horas Docencia"/>
+                                <field name="horas_docencia_presencial_h" string="Horas Docencia Presencial H"/>
+                                <field name="horas_docencia_virtual_h" string="Horas Docencia Virtual H"/>
+                                <field name="horas_docencia_o" string="Horas Docencia O"/>
+                                <field name="horas_laboratorio_docencia" string="Horas Laboratorio Docencia"/>
+                                <field name="horas_laboratorio_docencia_h" string="Horas Laboratorio Docencia H"/>
+                                <field name="horas_externado_docencia" string="Horas Externado Docencia"/>
+                                <field name="horas_externado_docencia_h" string="Horas Externado Docencia H"/>
+                                <field name="horas_aplicacion" string="Horas Aplicación"/>
+                                <field name="horas_aplicacion_h" string="Horas Aplicación H"/>
+                                <field name="horas_aplicacion_o" string="Horas Aplicación O"/>
+                                <field name="horas_aplicacion_laboratorio" string="Horas Aplicación Laboratorio"/>
+                                <field name="horas_aplicacion_lab_h" string="Horas Aplicación Lab H"/>
+                                <field name="horas_aplicacion_lab_o" string="Horas Aplicación Lab O"/>
+                                <field name="horas_pract_preprofesionales" string="Horas Prácticas Preprofesionales"/>
+                                <field name="horas_pract_preprof_h" string="Horas Prácticas Preprof H"/>
+                                <field name="horas_pract_preprof_o" string="Horas Prácticas Preprof O"/>
+                                <field name="horas_servicio_comunidad" string="Horas Servicio Comunidad"/>
+                                <field name="horas_servicio_comunidad_h" string="Horas Servicio Comunidad H"/>
+                                <field name="horas_servicio_comunidad_o" string="Horas Servicio Comunidad O"/>
+                                <field name="total_horas_autonomas" string="Total Horas Autónomas"/>
+                                <field name="total_horas_autonomas_h" string="Total Horas Autónomas H"/>
+                                <field name="total_horas_autonomas_o" string="Total Horas Autónomas O"/>
+                                <field name="horas_titulacion" string="Horas Titulación"/>
+                                <field name="horas_titulacion_h" string="Horas Titulación H"/>
+                                <field name="horas_titulacion_o" string="Horas Titulación O"/>
+                                <field name="sesiones_docencia" string="Sesiones Docencia"/>
+                                <field name="sesiones_laboratorio" string="Sesiones Laboratorio"/>
+                                <field name="sesiones_externado" string="Sesiones Externado"/>
+                                <field name="sesiones_o" string="Sesiones O"/>
+                                <field name="semanas_externado" string="Semanas Externado"/>
+                                <field name="semanas_laboratorio" string="Semanas Laboratorio"/>
+                                <field name="horas_adicionales_silabo" string="Horas Adicionales Silabo"/>
+                            </tree>
+                        </field>
+                
+                         <field name="results_202310_ids" string="Materias 2023" widget="one2many_list" create="false" edit="false" delete="false">
+                            <tree string="Materias 2023" limit="10">
+                                <field name="subj" string="Subj"/>
+                                <field name="term" string="Term"/>
+                                <field name="horas_docencia" string="Horas Docencia"/>
+                                <field name="horas_docencia_presencial_h" string="Horas Docencia Presencial H"/>
+                                <field name="horas_docencia_virtual_h" string="Horas Docencia Virtual H"/>
+                                <field name="horas_docencia_o" string="Horas Docencia O"/>
+                                <field name="horas_laboratorio_docencia" string="Horas Laboratorio Docencia"/>
+                                <field name="horas_laboratorio_docencia_h" string="Horas Laboratorio Docencia H"/>
+                                <field name="horas_externado_docencia" string="Horas Externado Docencia"/>
+                                <field name="horas_externado_docencia_h" string="Horas Externado Docencia H"/>
+                                <field name="horas_aplicacion" string="Horas Aplicación"/>
+                                <field name="horas_aplicacion_h" string="Horas Aplicación H"/>
+                                <field name="horas_aplicacion_o" string="Horas Aplicación O"/>
+                                <field name="horas_aplicacion_laboratorio" string="Horas Aplicación Laboratorio"/>
+                                <field name="horas_aplicacion_lab_h" string="Horas Aplicación Lab H"/>
+                                <field name="horas_aplicacion_lab_o" string="Horas Aplicación Lab O"/>
+                                <field name="horas_pract_preprofesionales" string="Horas Prácticas Preprofesionales"/>
+                                <field name="horas_pract_preprof_h" string="Horas Prácticas Preprof H"/>
+                                <field name="horas_pract_preprof_o" string="Horas Prácticas Preprof O"/>
+                                <field name="horas_servicio_comunidad" string="Horas Servicio Comunidad"/>
+                                <field name="horas_servicio_comunidad_h" string="Horas Servicio Comunidad H"/>
+                                <field name="horas_servicio_comunidad_o" string="Horas Servicio Comunidad O"/>
+                                <field name="total_horas_autonomas" string="Total Horas Autónomas"/>
+                                <field name="total_horas_autonomas_h" string="Total Horas Autónomas H"/>
+                                <field name="total_horas_autonomas_o" string="Total Horas Autónomas O"/>
+                                <field name="horas_titulacion" string="Horas Titulación"/>
+                                <field name="horas_titulacion_h" string="Horas Titulación H"/>
+                                <field name="horas_titulacion_o" string="Horas Titulación O"/>
+                                <field name="sesiones_docencia" string="Sesiones Docencia"/>
+                                <field name="sesiones_laboratorio" string="Sesiones Laboratorio"/>
+                                <field name="sesiones_externado" string="Sesiones Externado"/>
+                                <field name="sesiones_o" string="Sesiones O"/>
+                                <field name="semanas_externado" string="Semanas Externado"/>
+                                <field name="semanas_laboratorio" string="Semanas Laboratorio"/>
+                                <field name="horas_adicionales_silabo" string="Horas Adicionales Silabo"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        
+    </data>
+</odoo>
