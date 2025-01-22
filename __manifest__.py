@@ -63,7 +63,9 @@
         'models/study_plan/views/graphic_study_plan_report_V2_.xml',
         'models/subjects/reportes/views/current_homologations.xml',
         'models/subjects/reportes/views/stop_homologations.xml',
-        'models/subjects/reportes/views/scadtl_report.xml'
+        'models/subjects/reportes/views/scadtl_report.xml',
+        
+        'models/subjects/reportes/views/acronym_comparison.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
