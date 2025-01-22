@@ -1,10 +1,7 @@
-from ..database import base_external_dbsource as db
-
-dbsource = db.BaseExternalDbsource()
-
-class automationRepository:
-    def __init__(self):
-        self.database = 'banner'
+class automationRepository:   
+    
+    def __init__(self, env):
+        self.env = env  # Guarda el contexto de Odoo
         
     def get_program_postrado(self, dateToday):
         sql = """
@@ -21,9 +18,12 @@ class automationRepository:
             FROM GORSDAV
             WHERE GORSDAV_TABLE_NAME='STVCHRT'
             AND GORSDAV_ATTR_NAME='FECHA_INICIO'
-            AND TO_CHAR(SYS.ANYDATA.accessDate(GORSDAV_VALUE), 'DD-MON-YYYY')='%s')
-            """%(dateToday)
-        res=dbsource.query(sql=sql,option=self.database)
+            AND TO_CHAR(SYS.ANYDATA.accessDate(GORSDAV_VALUE), 'DD-MON-YYYY')=:date_today)
+            """     
+        dbsource=self.env['base.external.dbsource'].search([('enabled','=',True)])
+        if not dbsource:
+            return False
+        res = dbsource.execute(sql, {'date_today': dateToday})
         return res if res else False
     
     #cantidad de alumnos
@@ -59,9 +59,12 @@ class automationRepository:
                 FROM GORSDAV
                 WHERE GORSDAV_TABLE_NAME = 'STVCHRT'
                 AND GORSDAV_ATTR_NAME = 'FECHA_INICIO'
-                AND TO_CHAR(SYS.ANYDATA.accessDate(GORSDAV_VALUE), 'DD-MON-YYYY') = '%s')
+                AND TO_CHAR(SYS.ANYDATA.accessDate(GORSDAV_VALUE), 'DD-MON-YYYY') = :date_today)
             """
-        res=dbsource.query(sql=sql,option=self.database)
+        dbsource=self.env['base.external.dbsource'].search([('enabled','=',True)])
+        if not dbsource:
+            return False
+        res = dbsource.execute(sql, {'date_today': dateToday})
         return res if res else False
     
     def get_number_cohorte(self, codigo):
@@ -70,7 +73,10 @@ class automationRepository:
             ROW_NUMBER() OVER (ORDER BY TO_DATE(SUBSTR(REGEXP_REPLACE(GORSDAV_PK_PARENTTAB, '[^0-9]', ''), 3, 4) || '-' || SUBSTR(REGEXP_REPLACE(GORSDAV_PK_PARENTTAB, '[^0-9]', ''), 1, 2), 'YYYY-MM') ) AS POSICION
             FROM GORSDAV 
             WHERE GORSDAV_TABLE_NAME = 'STVCHRT' 
-            AND SYS.ANYDATA.accessVarchar2(GORSDAV_VALUE) = '%s'        
-            """%(codigo)
-        res=dbsource.query(sql=sql,option=self.database)
+            AND SYS.ANYDATA.accessVarchar2(GORSDAV_VALUE) = :codigo        
+            """
+        dbsource=self.env['base.external.dbsource'].search([('enabled','=',True)])
+        if not dbsource:
+            return False
+        res = dbsource.execute(sql, {'codigo': codigo})
         return res if res else False

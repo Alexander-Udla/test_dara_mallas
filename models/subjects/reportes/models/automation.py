@@ -6,7 +6,7 @@ from datetime import datetime
 import logging
 _logger = logging.getLogger(__name__)
 
-class Automation(models.Model):
+class Automation(models.TransientModel):
     _name = "dara_mallas.automation"
     _description = "Automatización: notificación de inicio de nuevas cohortes de programas de posgrado."
     
@@ -25,7 +25,7 @@ class Automation(models.Model):
         delete=False,
         readonly=True
     )    
-    repository = automationRepository()
+    
         
     
     @api.depends('fecha_actual')
@@ -35,55 +35,33 @@ class Automation(models.Model):
                 record.formatted_date = record.fecha_actual.strftime('%d-%b-%Y').upper()
             else:
                 record.formatted_date = ""
-    
-    
-    def findProgram(self):      
-        result = self.repository.get_program_postrado(self.formatted_date)
-        prueba = self.repository.get_number_student()
-        # Limpiar líneas existentes
-        self.line_ids = [(5, 0, 0)]
-        if result:       
-            for record in result:            
-                # Crear una línea asociada a este registro
-                self.env["dara_mallas.automation.line"].create({
-                    'codigo': record.get("CODIGO_PROGRAMA", ""),
-                    'programa': record.get("PROGRAMA", ""),
-                    'corte_programa': record.get("COHORTE_PROGRAMA", ""),
-                    'automation_id': self.id,
-                })
-        else:            
-            self.env["dara_mallas.automation.line"].create({
-                'codigo': "Sin información",
-                'programa': "Sin información",
-                'corte_programa': "Sin información",
-                'automation_id': self.id,
-            })
 
 
-    def send_email(self):
-        _logger.info("Ejecutando el método send_email desde el cron.")
-        # Obtener los datos de result
-        formatted_date = datetime.now().strftime('%d-%b-%Y').upper()
-        #result = self.repository.get_program_postrado(formatted_date)
-        result = self.repository.get_number_student(formatted_date)
+    def send_email(self):      
+        formatted_date = datetime.now().strftime('%d-%b-%Y').upper()        
+        repository = automationRepository(self.env)
+        result = repository.get_number_student(formatted_date)
         
         if not result:  # Si no hay datos, salir de la función
             _logger.info(f"No hay información disponible para el día {formatted_date}. No se enviará correo.")
             return
         
+        keys = ["CODIGO_PROGRAMA", "PROGRAMA", "COHORTE_PROGRAMA", "NUMERO_ESTUDIANTES"]
+        result = [dict(zip(keys, row)) for row in result]
+        
         for resp in result:
             codigo_programa = resp.get("CODIGO_PROGRAMA", "")
             if codigo_programa:  # Asegurarse de que no esté vacío
-                find = self.repository.get_number_cohorte(codigo_programa)
+                find = repository.get_number_cohorte(codigo_programa)
             
-            # Buscar la posición correspondiente y añadirla al resultado
-                cohorte_programa = resp.get("COHORTE_PROGRAMA", "")  # Cohorte actual del programa
-                if find:  # Si `find` tiene datos
-                    for cohorte in find:
-                        if cohorte.get("GORSDAV_PK_PARENTTAB") == cohorte_programa:
-                            # Añadir el campo `COHORTE` con el valor de `POSICION`
+                cohorte_programa = resp.get("COHORTE_PROGRAMA", "")
+                if find:
+                    keys = ["GORSDAV_PK_PARENTTAB", "POSICION"]
+                    find_dicts = [dict(zip(keys, cohorte)) for cohorte in find]
+                    for cohorte in find_dicts:
+                        if cohorte.get("GORSDAV_PK_PARENTTAB") == cohorte_programa:                            
                             resp["COHORTE"] = cohorte.get("POSICION")
-                            break  # Salir del bucle una vez encontrado
+                            break 
                     
                  
         result_html = """
@@ -111,7 +89,6 @@ class Automation(models.Model):
             """
         result_html += "</tbody></table>"
 
-        # Crear el cuerpo del correo con la tabla generada
         body_html = f"""
         <h3>NOTIFICACION: PROGRAMAS DE POSTGRADO QUE INICIAN ACTIVIDADES HOY {formatted_date}</h3>
         <div style="font-size: 14px;">            
@@ -124,23 +101,18 @@ class Automation(models.Model):
         </div>
             """
 
-        # Obtén la plantilla de correo
         template = self.env.ref('dara_mallas.file_aproved_mail_template', False)
         
-        # Verifica si la plantilla se cargó correctamente
+        
         if not template:
             logger.error('No se encontró la plantilla de correo "file_aproved_mail_template".')
             return
         
-        # Modificar el campo body_html de la plantilla con el nuevo contenido
         template.write({'body_html': body_html})
-        
-        # Enviar el correo usando la plantilla
         template.send_mail(self.id, force_send=True)
-        print("Correo enviado con éxito")
 
                
-class AutomationLine(models.Model):
+class AutomationLine(models.TransientModel):
     _name = "dara_mallas.automation.line"
     _description = "Correo de cohorte config"
     codigo = fields.Char("Código")
