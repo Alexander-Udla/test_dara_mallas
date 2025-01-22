@@ -4,3 +4,4 @@ from . import subject_study_plan_report
 from . import scadtl_report
 from . import models
 from . import repository
+
