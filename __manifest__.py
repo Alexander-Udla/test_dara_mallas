@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['base', 'mail'],
 
     # always loaded
     'data': [
@@ -63,7 +63,9 @@
         'models/study_plan/views/graphic_study_plan_report_V2_.xml',
         'models/subjects/reportes/views/current_homologations.xml',
         'models/subjects/reportes/views/stop_homologations.xml',
-        'models/subjects/reportes/views/scadtl_report.xml'
+        'models/subjects/reportes/views/scadtl_report.xml',
+        
+        'models/subjects/reportes/views/email_cohorte.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
