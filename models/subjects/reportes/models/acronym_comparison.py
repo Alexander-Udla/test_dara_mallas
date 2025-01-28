@@ -1,5 +1,6 @@
 from odoo import fields, models, api
 from ..repository.acronym_repository import acronymRepository
+from odoo.exceptions import UserError
 
 
 class AcronymComparison(models.TransientModel):
@@ -28,13 +29,7 @@ class AcronymComparison(models.TransientModel):
         print("Resultado ", result)
 
         # Verificar si hay datos suficientes
-        if not result or len(result) < 2:
-            self.line_ids = []  # Si no hay datos, no se muestran filas
-            self.env.user.notify_warning(
-                message="No se encontraron resultados suficientes para las siglas proporcionadas.",
-                title="Sin resultados",
-            )
-            return
+        
 
         # Definir los nombres de las columnas según el orden de los datos
         column_names = [
