@@ -8,14 +8,24 @@ class AcronymComparison(models.TransientModel):
     _description = "Comparativo de siglas"
     
     # Campos principales
-    acronym1 = fields.Char("Sigla 1")
-    acronym2 = fields.Char("Sigla 2")
+    acronym1 = fields.Char("Sigla 2")
+    acronym2 = fields.Char("Sigla 1")
     
     line_ids = fields.One2many(
-        'dara_mallas.acronym_comparison.line',  # Modelo secundario
-        'comparison_id',                       # Campo Many2one en el modelo secundario
+        'dara_mallas.acronym_comparison.line',  
+        'comparison_id',
         string="Detalles Comparativos"
     )
+
+    @api.onchange('acronym1')
+    def _onchange_acronym1(self):
+        if self.acronym1:
+            self.acronym1 = self.acronym1.upper()
+
+    @api.onchange('acronym2')
+    def _onchange_acronym2(self):
+        if self.acronym2:
+            self.acronym2 = self.acronym2.upper()
     
     
     # Relación con los resultad    
@@ -25,11 +35,19 @@ class AcronymComparison(models.TransientModel):
 
         # Llamar al repositorio para obtener los datos
         repository = acronymRepository(self.env)
-        result = repository.get_acronym_per_comparison(acronym1, acronym2)
-        print("Resultado ", result)
+        result = repository.get_acronym_per_comparison(acronym1, acronym2)   
 
         # Verificar si hay datos suficientes
-        
+        if len(result) > 2:
+            raise UserError("Se encontraron más de 2 resultados, lo cual no es permitido.")
+
+        if acronym1 == acronym2:
+            raise UserError("Inserte siglas diferentes")
+
+ 
+        if not result:
+            self.line_ids = []  # Si no hay datos, limpiar las líneas
+            return  # No seguir ejecutando
 
         # Definir los nombres de las columnas según el orden de los datos
         column_names = [
@@ -47,22 +65,43 @@ class AcronymComparison(models.TransientModel):
             'horas_adicionales_silabo'
         ]
 
-        # Convertir las tuplas en diccionarios
         result_dicts = [dict(zip(column_names, row)) for row in result]
-
-        # Crear las líneas de comparación para la vista
         lines = []
-        fields_to_compare = set(result_dicts[0].keys()).union(result_dicts[1].keys())
-        for field in fields_to_compare:
-            line = {
-                'subj': field,
-                'term_acronym1': result_dicts[0].get(field, ''),  # Valor para Sigla 1
-                'term_acronym2': result_dicts[1].get(field, ''),  # Valor para Sigla 2
-            }
-            lines.append((0, 0, line))  # Agregar una línea temporal (no persistente)
 
-        # Asignar las líneas al campo One2many
+        if len(result_dicts) == 1:  # Si solo hay un resultado
+            single_result = result_dicts[0]
+            term_value = single_result.get("subj", "")
+
+            # Definir qué columna ocupará el resultado basado en 'term'
+            if term_value == acronym1:                
+                term_acronym1_data = single_result
+                term_acronym2_data = {}  # Vacío
+            else:                
+                term_acronym1_data = {}
+                term_acronym2_data = single_result
+
+            fields_to_compare = set(single_result.keys())
+            for field in fields_to_compare:
+                line = {
+                    'subj': field,
+                    'term_acronym1': term_acronym1_data.get(field, ''),
+                    'term_acronym2': term_acronym2_data.get(field, ''),
+                }
+                lines.append((0, 0, line))
+
+        elif len(result_dicts) == 2:  # Si hay dos resultados
+            fields_to_compare = set(result_dicts[0].keys()).union(result_dicts[1].keys())
+            for field in fields_to_compare:
+                line = {
+                    'subj': field,
+                    'term_acronym1': result_dicts[0].get(field, ''),
+                    'term_acronym2': result_dicts[1].get(field, ''),
+                }
+                lines.append((0, 0, line))
+
         self.line_ids = lines
+        self.env.context = dict(self.env.context, acronym1_name=acronym1, acronym2_name=acronym2)
+
             
 class AcronymComparisonLine(models.TransientModel):
     _name = 'dara_mallas.acronym_comparison.line'
@@ -76,5 +115,5 @@ class AcronymComparisonLine(models.TransientModel):
 
     # Campos de los resultados
     subj = fields.Char(string='Campo')
-    term_acronym1 = fields.Char(string='Sigla 2')  # Para el valor de la primera sigla
-    term_acronym2 = fields.Char(string='Sigla 1')  # Para el valor de la segunda sigla
+    term_acronym1 = fields.Char(string='Sigla 1') 
+    term_acronym2 = fields.Char(string='Sigla 2') 

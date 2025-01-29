@@ -8,22 +8,20 @@
                 <form string="Comparativo de siglas">
                     <sheet>
                         <group col="2">
-                            <field name="acronym1" placeholder="Ingrese la primera sigla"/>
-                            <field name="acronym2" placeholder="Ingrese la segunda sigla"/>
+                            <field name="acronym2" placeholder="Ingrese la primera sigla"/>
+                            <field name="acronym1" placeholder="Ingrese la segunda sigla"/>                            
                             <button name="findAcronym" string="Comparar" type="object" class="oe_highlight"/>
                         </group>
 
-                        <notebook>
-                            <page string="Detalles Comparativos">
-                                <field name="line_ids">
-                                    <tree editable="false" create="false">
-                                        <field name="subj"/>
-                                        <field name="term_acronym2"/>
-                                        <field name="term_acronym1"/>                                        
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
+                                            
+                        <field name="line_ids">
+                            <tree editable="false" create="false" delete="false" limit="18">
+                                <field name="subj"/>
+                                <field name="term_acronym2" string="Sigla 1"/>
+                                <field name="term_acronym1" string="Sigla 2"/>                                                                                
+                            </tree>
+                        </field>                            
+                        
                     </sheet>
                 </form>
             </field>
@@ -38,6 +36,6 @@
         </record>
 
         <!-- Menú para acceder al formulario -->
-        <menuitem id="data_acronym_comparison_menu" name="Comparativo de siglas" parent="dara_homologations_reports" action="action_acronym_comparison_form" sequence="3"/>
+        <menuitem id="data_acronym_comparison_menu" name="Comparativo de siglas" parent="dara_homologations_reports" action="action_acronym_comparison_form" sequence="3"/>    
     </data>
 </odoo>
