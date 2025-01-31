@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <!-- Vista de formulario para tu modelo -->
+        <record id="view_main_homologacion_form" model="ir.ui.view">
+            <field name="name">main.homologacion.form</field>
+            <field name="model">dara_mallas.main_homologacion</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_execute_code" string="Ejecutar Código Externo" type="object" class="btn-primary"/>
+                    </header>
+                    <!-- Otros elementos de la vista -->
+                </form>
+            </field>
+        </record>
+        <!-- Acción para la vista de formulario -->
+        <record id="action_main_homologacion" model="ir.actions.act_window">
+            <field name="name">Main Homologacion</field>
+            <field name="res_model">dara_mallas.main_homologacion</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_main_homologacion_form"/>
+        </record>
+        <menuitem id="data_homologation_menu" 
+                name="PRUEBA SCRIPT" 
+                parent="dara_homologations_reports" 
+                action="action_main_homologacion" 
+                sequence="1"/>
+    </data>
+</odoo>

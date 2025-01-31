@@ -66,6 +66,7 @@
         'models/subjects/reportes/views/scadtl_report.xml',
         
         'models/subjects/reportes/views/email_cohorte.xml',
+        'models/subjects/reportes/views/main_homologacion_view.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
