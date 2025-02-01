@@ -6,10 +6,20 @@
             <field name="model">dara_mallas.main_homologacion</field>
             <field name="arch" type="xml">
                 <form>
-                    <header>
-                        <button name="action_execute_code" string="Ejecutar Código Externo" type="object" class="btn-primary"/>
-                    </header>
-                    <!-- Otros elementos de la vista -->
+                    <group>
+                        <field name="period_id"/>
+                    </group>
+
+                    <footer>
+                        <button name="action_execute_code" string="Buscar" type="object" class="btn-primary"/>
+                        <button name="update_file_links" string="Actualizar Lista" type="object" class="btn-secondary"/>
+                    </footer>
+                    
+                    <div style="margin-bottom: 30px;"></div>
+
+                    <group>
+                        <field name="file_links" widget="html" force_save="1"/>                        
+                    </group>
                 </form>
             </field>
         </record>
