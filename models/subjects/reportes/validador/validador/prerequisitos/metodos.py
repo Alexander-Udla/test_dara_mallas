@@ -16,8 +16,8 @@ class Validator:
     #extra el detalle de los prerequisitos
     def get_prerequisito_odoo_detail(self,subject_code=None,period=None):
         sql = """
-           select case when pr.conector = 'Y' then 'A' else pr.conector end as conector,
-           pr.lparen,pr.test_code,pr.test_score,spre.code as prerequisite_subject_code,rs.name as rule_score,pr.rparen,pr.seq
+            select case when pr.conector = 'Y' then 'A' else pr.conector end as conector,
+            pr.lparen,pr.test_code,pr.test_score,spre.code as prerequisite_subject_code,rs.name as rule_score,pr.rparen,pr.seq
             from dara_mallas_prerequisite pr
             left join dara_mallas_prerequisite_line prl on pr.prerequisite_line_id = prl.id
             left join dara_mallas_subject s on prl.subject_id = s.id
@@ -26,6 +26,7 @@ class Validator:
             left join dara_mallas_rule_score rs on pr.score_id = rs.id
             where s.code = '%s' and pe.name = '%s' 
             order by 8
+            limit 10
         """%(subject_code,period)
         res = dbsource.query(sql=sql,option=self.database_odoo,dataframe=True)
         return res
@@ -33,11 +34,12 @@ class Validator:
     def get_subject_prerequisito_odoo_per_period(self,period=None):
         # trae todas las siglas de prerequisito por periodo
         sql = """
-           select s.code as subject_code ,pe.name as period from dara_mallas_prerequisite_line pl
+            select s.code as subject_code ,pe.name as period from dara_mallas_prerequisite_line pl
             left join dara_mallas_subject s on pl.subject_id = s.id
             left join dara_mallas_period pe on pl.period_id = pe.id
             where pe.name = '%s'
             order by 1
+            limit 10
         """%(period)
         res = dbsource.query(sql=sql,option=self.database_odoo,dataframe=True)
         return res
@@ -45,17 +47,18 @@ class Validator:
     #extrae el id de la cabecera
     def get_id_prerequisito_odoo_head(self,periodo=None,subject_code=None):
         sql = """
-           select distinct prl.id from dara_mallas_prerequisite_line prl 
+            select distinct prl.id from dara_mallas_prerequisite_line prl 
             left join dara_mallas_subject s on prl.subject_id = s.id          
             left join dara_mallas_period pe on prl.period_id = pe.id    
             where s.code = '%s' and pe.name = '%s'
+            limit 10
         """%(subject_code,periodo)
         res = dbsource.query(sql=sql,option=self.database_odoo)
         return res if res else False
 
     def get_prerequisitos_banner_detail(self,subject_code,period):
         sql = """  
-                 SELECT  SCRRTST_SEQNO as seq
+                SELECT  SCRRTST_SEQNO as seq
                 ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
                 ,COALESCE(SCRRTST_CONNECTOR,'') as conector
                 ,COALESCE(SCRRTST_LPAREN,'') as lparen
@@ -67,9 +70,10 @@ class Validator:
                 ,SCRRTST_TERM_CODE_EFF as period 
                 FROM SCRRTST
                 where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
-                   and SCRRTST_TERM_CODE_EFF =:2
-                ORDER BY 2,1"""
-       
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                """
         
         result = dbsource.query(sql=sql,option=self.database_banner,parq=[subject_code,period],dataframe=True)
         return result
@@ -97,6 +101,7 @@ class Validator:
                 left join udla_mallas_rule_score sc on p.score_id = sc.id
                 where s.code = %s
                 order by s.code, p.seq
+                limit 10
         """
         
         result = dbsource.get_dataframe_from_postgres(sql,[subject_code])
@@ -125,7 +130,7 @@ class Validator:
         if period == 0:
             period = '000000'
         sql = """
-             select 
+            select 
                     SMRARUL_TERM_CODE_EFF as PERIODO
                     ,smrarul_area AS AREA
                     ,smrarul_key_rule AS REGLA
@@ -142,6 +147,7 @@ class Validator:
                     and smrarul_key_rule = '%s'
                     and SMRARUL_TERM_CODE_EFF='%s'
                     order by 2,4
+                    limit 10
         """%(area,subject_code,period)
         res = dbsource.query(sql=sql,option='banner')
         return res if res else False

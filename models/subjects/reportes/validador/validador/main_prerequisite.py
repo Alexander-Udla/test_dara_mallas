@@ -5,11 +5,12 @@ from datetime import date
 fecha_actual = date.today()
 
 class Validar_Prerequisitos:
-    def __init__(self) -> None:
+    def __init__(self, period: str) -> None:
         self.metodos = metodos.Validator()
         self.df_results=pd.DataFrame(columns=['period','subject_code','status','banner','odoo'])
-        self.periodo = '202310'
+        #self.periodo = '202310'
         self.fecha = fecha_actual.strftime("%d%m%Y")
+        self.period = period
 
         pass
 
@@ -163,7 +164,6 @@ class Validar_Prerequisitos:
             banner_preq= ' '.join(str(x) for x in banner_prereq)
             odoo_preq = ' '.join (str(x) for x in odoo_prereq)
             if banner_prereq != odoo_prereq:
-                print("Error en la sigla %s"%subject_code)
                 self.df_results=self.df_results.append({
                                             'period':period
                                             ,'subject_code':subject_code
@@ -177,7 +177,6 @@ class Validar_Prerequisitos:
                                             ,'status':'OK'
                                             ,'banner':''
                                             ,'odoo':''},ignore_index=True)
-            print(banner_prereq,odoo_prereq)
         except Exception as e:
             self.df_results=self.df_results.append({
                                             'period':period
@@ -189,14 +188,15 @@ class Validar_Prerequisitos:
     def execute(self):
         #parametros
         subject_codes = []
-        period = '202320'
+        period = self.period
+        #period = '202320'
         #df = self.read_xls('or_prerequisites202420_cargaOdoo.xlsx')
         df = self.metodos.get_subject_prerequisito_odoo_per_period(period=period)
         for i, item_subject in df.iterrows():
+            print(f"Procesando fila {i + 1} de {len(df)}")
             if item_subject['subject_code'] not in subject_codes:
                 self.compare_to(subject_code=item_subject['subject_code'],period=item_subject['period'])
                 subject_codes.append(item_subject['subject_code'])
-        self.df_results.to_csv('./validador/prerequisitos/source/resultados_validacion_scapreq-%s-%s.csv'%(self.fecha,period))
+        self.df_results.to_csv('/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/prerequisitos/source/resultados_validacion_scapreq-%s-%s.csv'%(self.fecha,period))
 
-        
         

@@ -1,12 +1,15 @@
 import pandas as pd
 from validador.homologaciones import metodos
 from datetime import date
+import sys
 # Obtener la fecha actual
 fecha_actual = date.today()
 class Validador_Homologaciones:
-    def __init__(self) -> None:
+    
+    def __init__(self, period: str) -> None:
         self.data = []
         #self.period = "202220"
+        self.period = period
         pass
 
     def read_csv(self):
@@ -181,14 +184,15 @@ class Validador_Homologaciones:
 
     def execute(self):
         validador = metodos.Validator()
-        period = '202520'
+        #period = '202520'
+        period=self.period
         #res = self.read_csv()
         res = validador.get_homologations_for_period(period=period)
         subjects_odoo_empty = []
         subjects_banner_empty = []
         #for i,item in res.iterrows():
         for index, item in zip(range(0,len(res)),res):
-            print("%s de %s"%(str(index),len(res)))
+            print("%s de %s"%(str(index),len(res)))            
             homologaciones_odoo = validador.get_homologations_for_subject_period_area(
                 subject_code=item['REGLA'],
                 period=item['PERIODO'],

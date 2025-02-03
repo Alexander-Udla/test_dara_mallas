@@ -1,0 +1,171 @@
+,period,subject_code,status,banner,odoo
+0,202310,EHTZ3397,Fail,"Execution failed on sql '  
+                SELECT  SCRRTST_SEQNO as seq
+                ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
+                ,COALESCE(SCRRTST_CONNECTOR,'') as conector
+                ,COALESCE(SCRRTST_LPAREN,'') as lparen
+                ,COALESCE(SCRRTST_TESC_CODE,'') as test_code
+                ,COALESCE( SCRRTST_TEST_SCORE,'') as test_score
+                ,COALESCE(SCRRTST_SUBJ_CODE_PREQ||SCRRTST_CRSE_NUMB_PREQ ,'')as prerequisite_subject_code
+                ,COALESCE(SCRRTST_MIN_GRDE,'') as rule_score
+                ,COALESCE(SCRRTST_RPAREN,'') as rparen
+                ,SCRRTST_TERM_CODE_EFF as period 
+                FROM SCRRTST
+                where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                ': ORA-00933: SQL command not properly ended",
+1,202310,FISZ0121,Fail,"Execution failed on sql '  
+                SELECT  SCRRTST_SEQNO as seq
+                ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
+                ,COALESCE(SCRRTST_CONNECTOR,'') as conector
+                ,COALESCE(SCRRTST_LPAREN,'') as lparen
+                ,COALESCE(SCRRTST_TESC_CODE,'') as test_code
+                ,COALESCE( SCRRTST_TEST_SCORE,'') as test_score
+                ,COALESCE(SCRRTST_SUBJ_CODE_PREQ||SCRRTST_CRSE_NUMB_PREQ ,'')as prerequisite_subject_code
+                ,COALESCE(SCRRTST_MIN_GRDE,'') as rule_score
+                ,COALESCE(SCRRTST_RPAREN,'') as rparen
+                ,SCRRTST_TERM_CODE_EFF as period 
+                FROM SCRRTST
+                where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                ': ORA-00933: SQL command not properly ended",
+2,202310,IAGI3565,Fail,"Execution failed on sql '  
+                SELECT  SCRRTST_SEQNO as seq
+                ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
+                ,COALESCE(SCRRTST_CONNECTOR,'') as conector
+                ,COALESCE(SCRRTST_LPAREN,'') as lparen
+                ,COALESCE(SCRRTST_TESC_CODE,'') as test_code
+                ,COALESCE( SCRRTST_TEST_SCORE,'') as test_score
+                ,COALESCE(SCRRTST_SUBJ_CODE_PREQ||SCRRTST_CRSE_NUMB_PREQ ,'')as prerequisite_subject_code
+                ,COALESCE(SCRRTST_MIN_GRDE,'') as rule_score
+                ,COALESCE(SCRRTST_RPAREN,'') as rparen
+                ,SCRRTST_TERM_CODE_EFF as period 
+                FROM SCRRTST
+                where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                ': ORA-00933: SQL command not properly ended",
+3,202310,IAGI3566,Fail,"Execution failed on sql '  
+                SELECT  SCRRTST_SEQNO as seq
+                ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
+                ,COALESCE(SCRRTST_CONNECTOR,'') as conector
+                ,COALESCE(SCRRTST_LPAREN,'') as lparen
+                ,COALESCE(SCRRTST_TESC_CODE,'') as test_code
+                ,COALESCE( SCRRTST_TEST_SCORE,'') as test_score
+                ,COALESCE(SCRRTST_SUBJ_CODE_PREQ||SCRRTST_CRSE_NUMB_PREQ ,'')as prerequisite_subject_code
+                ,COALESCE(SCRRTST_MIN_GRDE,'') as rule_score
+                ,COALESCE(SCRRTST_RPAREN,'') as rparen
+                ,SCRRTST_TERM_CODE_EFF as period 
+                FROM SCRRTST
+                where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                ': ORA-00933: SQL command not properly ended",
+4,202310,IAGI3572,Fail,"Execution failed on sql '  
+                SELECT  SCRRTST_SEQNO as seq
+                ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
+                ,COALESCE(SCRRTST_CONNECTOR,'') as conector
+                ,COALESCE(SCRRTST_LPAREN,'') as lparen
+                ,COALESCE(SCRRTST_TESC_CODE,'') as test_code
+                ,COALESCE( SCRRTST_TEST_SCORE,'') as test_score
+                ,COALESCE(SCRRTST_SUBJ_CODE_PREQ||SCRRTST_CRSE_NUMB_PREQ ,'')as prerequisite_subject_code
+                ,COALESCE(SCRRTST_MIN_GRDE,'') as rule_score
+                ,COALESCE(SCRRTST_RPAREN,'') as rparen
+                ,SCRRTST_TERM_CODE_EFF as period 
+                FROM SCRRTST
+                where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                ': ORA-00933: SQL command not properly ended",
+5,202310,IBIO1612,Fail,"Execution failed on sql '  
+                SELECT  SCRRTST_SEQNO as seq
+                ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
+                ,COALESCE(SCRRTST_CONNECTOR,'') as conector
+                ,COALESCE(SCRRTST_LPAREN,'') as lparen
+                ,COALESCE(SCRRTST_TESC_CODE,'') as test_code
+                ,COALESCE( SCRRTST_TEST_SCORE,'') as test_score
+                ,COALESCE(SCRRTST_SUBJ_CODE_PREQ||SCRRTST_CRSE_NUMB_PREQ ,'')as prerequisite_subject_code
+                ,COALESCE(SCRRTST_MIN_GRDE,'') as rule_score
+                ,COALESCE(SCRRTST_RPAREN,'') as rparen
+                ,SCRRTST_TERM_CODE_EFF as period 
+                FROM SCRRTST
+                where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                ': ORA-00933: SQL command not properly ended",
+6,202310,IBIO3707,Fail,"Execution failed on sql '  
+                SELECT  SCRRTST_SEQNO as seq
+                ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
+                ,COALESCE(SCRRTST_CONNECTOR,'') as conector
+                ,COALESCE(SCRRTST_LPAREN,'') as lparen
+                ,COALESCE(SCRRTST_TESC_CODE,'') as test_code
+                ,COALESCE( SCRRTST_TEST_SCORE,'') as test_score
+                ,COALESCE(SCRRTST_SUBJ_CODE_PREQ||SCRRTST_CRSE_NUMB_PREQ ,'')as prerequisite_subject_code
+                ,COALESCE(SCRRTST_MIN_GRDE,'') as rule_score
+                ,COALESCE(SCRRTST_RPAREN,'') as rparen
+                ,SCRRTST_TERM_CODE_EFF as period 
+                FROM SCRRTST
+                where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                ': ORA-00933: SQL command not properly ended",
+7,202310,IBIO3708,Fail,"Execution failed on sql '  
+                SELECT  SCRRTST_SEQNO as seq
+                ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
+                ,COALESCE(SCRRTST_CONNECTOR,'') as conector
+                ,COALESCE(SCRRTST_LPAREN,'') as lparen
+                ,COALESCE(SCRRTST_TESC_CODE,'') as test_code
+                ,COALESCE( SCRRTST_TEST_SCORE,'') as test_score
+                ,COALESCE(SCRRTST_SUBJ_CODE_PREQ||SCRRTST_CRSE_NUMB_PREQ ,'')as prerequisite_subject_code
+                ,COALESCE(SCRRTST_MIN_GRDE,'') as rule_score
+                ,COALESCE(SCRRTST_RPAREN,'') as rparen
+                ,SCRRTST_TERM_CODE_EFF as period 
+                FROM SCRRTST
+                where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                ': ORA-00933: SQL command not properly ended",
+8,202310,IBIO3709,Fail,"Execution failed on sql '  
+                SELECT  SCRRTST_SEQNO as seq
+                ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
+                ,COALESCE(SCRRTST_CONNECTOR,'') as conector
+                ,COALESCE(SCRRTST_LPAREN,'') as lparen
+                ,COALESCE(SCRRTST_TESC_CODE,'') as test_code
+                ,COALESCE( SCRRTST_TEST_SCORE,'') as test_score
+                ,COALESCE(SCRRTST_SUBJ_CODE_PREQ||SCRRTST_CRSE_NUMB_PREQ ,'')as prerequisite_subject_code
+                ,COALESCE(SCRRTST_MIN_GRDE,'') as rule_score
+                ,COALESCE(SCRRTST_RPAREN,'') as rparen
+                ,SCRRTST_TERM_CODE_EFF as period 
+                FROM SCRRTST
+                where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                ': ORA-00933: SQL command not properly ended",
+9,202310,IBIO3710,Fail,"Execution failed on sql '  
+                SELECT  SCRRTST_SEQNO as seq
+                ,SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB as subject_code
+                ,COALESCE(SCRRTST_CONNECTOR,'') as conector
+                ,COALESCE(SCRRTST_LPAREN,'') as lparen
+                ,COALESCE(SCRRTST_TESC_CODE,'') as test_code
+                ,COALESCE( SCRRTST_TEST_SCORE,'') as test_score
+                ,COALESCE(SCRRTST_SUBJ_CODE_PREQ||SCRRTST_CRSE_NUMB_PREQ ,'')as prerequisite_subject_code
+                ,COALESCE(SCRRTST_MIN_GRDE,'') as rule_score
+                ,COALESCE(SCRRTST_RPAREN,'') as rparen
+                ,SCRRTST_TERM_CODE_EFF as period 
+                FROM SCRRTST
+                where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
+                and SCRRTST_TERM_CODE_EFF =:2
+                ORDER BY 2,1
+                limit 10
+                ': ORA-00933: SQL command not properly ended",
