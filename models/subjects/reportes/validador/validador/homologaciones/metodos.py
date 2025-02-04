@@ -4,8 +4,9 @@ import pandas as pd
 dbsource = db.BaseExternalDbsource('mallas_13','dara_mallas')
 
 class Validator:
-    def __init__(self) -> None:
+    def __init__(self, env) -> None:
         self.database = 'dara_mallas_dev'
+        self.databasebanner = env
     
     def get_homologations_for_period(self,period='000000'):
         sql = """
@@ -25,8 +26,9 @@ class Validator:
             )
             and pe2.name <= '%s'
             group by a2.code,s2.code
-            limit 10
+            limit 180
         """%(period,period)
+        print("Database parametro ", self.database)
         res = dbsource.query(sql=sql,option=self.database)
         return res if res else False
 
@@ -84,7 +86,8 @@ class Validator:
                     and SMRARUL_TERM_CODE_EFF='%s'
                     order by 2,4
         """%(area,subject_code,period)
-        res = dbsource.query(sql=sql,option='banner')
+        #res = dbsource.query(sql=sql,option='banner')
+        res = dbsource.query(sql=sql,option=self.databasebanner)
         return res if res else False
 
 

@@ -6,10 +6,11 @@ import sys
 fecha_actual = date.today()
 class Validador_Homologaciones:
     
-    def __init__(self, period: str) -> None:
+    def __init__(self, period: str, base_datos: str) -> None:
         self.data = []
         #self.period = "202220"
         self.period = period
+        self.base_datos = base_datos
         pass
 
     def read_csv(self):
@@ -183,7 +184,7 @@ class Validador_Homologaciones:
 
 
     def execute(self):
-        validador = metodos.Validator()
+        validador = metodos.Validator(self.base_datos)
         #period = '202520'
         period=self.period
         #res = self.read_csv()

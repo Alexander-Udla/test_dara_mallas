@@ -12,7 +12,13 @@ class MainHomologacion(models.Model):
     _description =("Validador homologaciòn y prerequisitos.")
 
     period_id=fields.Many2one("dara_mallas.period", string='Periodo')
-    type = fields.Selection(selection=[("1", "Homologaciòn"), ("2", "Prerequisito")], string="Seleccione validador")
+    type = fields.Selection(selection=[("1", "Homologaciòn"), ("2", "Prerequisito")], string="Seleccione validador:")
+    data_base = fields.Selection(selection=[("banner_test", "Banner-Pruebas"), 
+                                            ("banner", "Banner-Producciòn"),
+                                            ("banner_devl", "Banner-Devl"),
+                                            ("banner_migr", "Banner-Migr")], 
+                                            string="Base de datos:")
+
     file_links = fields.Html(string="Archivos Generados", compute="_compute_file_links")
     
     def action_execute_code(self):
@@ -29,8 +35,9 @@ class MainHomologacion(models.Model):
             
 
         # Ruta completa a la carpeta del proyecto
-        ruta_proyecto = '/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador'
+        ruta_proyecto = '/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador'        
         ruta_script = os.path.join(ruta_proyecto, 'main.py')
+
 
         # Verificar si el archivo existe
         if not os.path.exists(ruta_script):
@@ -39,7 +46,7 @@ class MainHomologacion(models.Model):
         # Ejecutar el script con Python
         try:
             process = subprocess.Popen(
-                ["python3", ruta_script, str(self.type), str(self.period_id.name)],
+                ["python3", ruta_script, str(self.type), str(self.period_id.name), str(self.data_base)],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 close_fds=True  # Liberar recursos del proceso padre

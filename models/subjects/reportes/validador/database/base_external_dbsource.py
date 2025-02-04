@@ -205,6 +205,7 @@ class BaseExternalDbsource:
     #conexion con base de datos en formato json
     def query(self,sql='',option='',parq=[],one=False,dataframe=False,insert=False):
         if option == 'dara_mallas_dev':
+            print("========================INGRESO ODOO DE PRUEBA")
             conexion = psycopg2.connect("dbname=dara_mallas user=odoo password=root123")
             #conexion = psycopg2.connect("dbname=dara_mallas_test user=welintong password=jde.2020")
         if option == 'udla_mallas_dev':
@@ -216,15 +217,19 @@ class BaseExternalDbsource:
         if option == 'udla_mallas':
             conexion = psycopg2.connect("host=192.168.5.217 dbname=udla_mallas user=wcabascango password=Swealhack99")
         if option == 'banner':
+            print("========================INGRESO BANNER PRODUCCION")
             dsnStr = cx_Oracle.makedsn(host="ocora02.udla-ec.int", port= "1521", service_name="DBPROD_BA.db.bannerredprod.oraclevcn.com")
             conexion = cx_Oracle.connect( user='INT_MALLAS', password='8jAbdj4TWRX8@3q*', dsn=dsnStr)
         if option == 'banner_test':
+            print("========================INGRESO BANNER PRUEBA")
             dsnStr = cx_Oracle.makedsn("10.1.2.108", "1521", "TEST")
             conexion = cx_Oracle.connect( user='INT_MALLAS', password='123456', dsn=dsnStr)
         if option == 'banner_devl':
+            print("========================INGRESO BANNER DEVL")
             dsnStr = cx_Oracle.makedsn("sntsora02.udla-ec.int", "1521", "DEVL")
             conexion = cx_Oracle.connect( user='INT_MALLAS', password='SJA3Da/T*M}Z\j[', dsn=dsnStr)
         if option == 'banner_migr':
+            print("========================INGRESO BANNER MIGR")
             dsnStr = cx_Oracle.makedsn("sntsora02.udla-ec.int", "1521", "MIGR")
             conexion = cx_Oracle.connect( user='MIGRACION', password='u_pick_it', dsn=dsnStr)
         if dataframe:

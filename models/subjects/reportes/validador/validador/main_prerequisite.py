@@ -5,13 +5,12 @@ from datetime import date
 fecha_actual = date.today()
 
 class Validar_Prerequisitos:
-    def __init__(self, period: str) -> None:
-        self.metodos = metodos.Validator()
+    def __init__(self, period: str, base_datos: str) -> None:
+        self.metodos = metodos.Validator(base_datos)
         self.df_results=pd.DataFrame(columns=['period','subject_code','status','banner','odoo'])
         #self.periodo = '202310'
         self.fecha = fecha_actual.strftime("%d%m%Y")
         self.period = period
-
         pass
 
     def read_xls(self,name):

@@ -4,9 +4,9 @@ import pandas as pd
 dbsource = db.BaseExternalDbsource('mallas_13','dara_mallas')
 
 class Validator:
-    def __init__(self) -> None:
+    def __init__(self, env) -> None:
         self.database_odoo = "dara_mallas_dev"
-        self.database_banner = "banner"
+        self.database_banner = env
         
 
     def delete_detail(self,id):

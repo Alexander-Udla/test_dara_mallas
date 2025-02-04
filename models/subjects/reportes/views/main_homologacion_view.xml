@@ -6,7 +6,8 @@
             <field name="model">dara_mallas.main_homologacion</field>
             <field name="arch" type="xml">
                 <form>
-                    <group col="4">
+                    <group col="6">
+                        <field name="data_base" required="1"/>
                         <field name="type" required="1"/>
                         <field name="period_id"/>
                     </group>
