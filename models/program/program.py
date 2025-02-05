@@ -21,6 +21,13 @@ class program_code(models.Model):
     mode_id=fields.Many2one("dara_mallas.mode")
     saes_code_id=fields.Many2one("dara_mallas.saes_code")
     program_id=fields.Many2one("dara_mallas.program")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
     
     @api.onchange('type','journey_id','mode_id','saes_code_id') 
     def onchange_code(self):
@@ -49,9 +56,23 @@ class program(models.Model):
     # ======================================
     duration_type = fields.Char("Tipo duración")
     period_id=fields.Many2one("dara_mallas.period","Periodo de catálogo")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
     
     
 class saes_code(models.Model):
     _name="dara_mallas.saes_code"
     
     name=fields.Char("Codigo SAES")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )

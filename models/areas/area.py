@@ -6,6 +6,13 @@ class area(models.Model):
     
     name=fields.Char("Nombre")
     code=fields.Char("Codigo")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
  
 
 class area_homologation(models.Model):
@@ -21,6 +28,13 @@ class area_homologation(models.Model):
     file_name=fields.Char("Reporte de cambios")
 
     history_ids = fields.One2many('dara_mallas.area_homologation_history', 'area_homologation_id', string='Historial de Homologación')
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 
     #@api.onchange('subject_inherit_area_ids') 
@@ -576,3 +590,10 @@ class area_homologation_history(models.Model):
     area_id = fields.Many2one('dara_mallas.area', string='Area')
     dinamic = fields.Boolean(string='Dinamic')
     subject_inherit_area_ids = fields.One2many('dara_mallas.subject_inherit_area_history',inverse_name='area_homologation_history_id',string='Asignaturas') 
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )

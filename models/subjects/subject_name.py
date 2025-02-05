@@ -11,3 +11,10 @@ class subject_name(models.Model):
     
     name=fields.Char("Nombre")
     code=fields.Char("Codigo")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
