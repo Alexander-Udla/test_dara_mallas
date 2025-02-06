@@ -15,7 +15,7 @@
 
                                             
                         <field name="line_ids">
-                            <tree editable="false" create="false" delete="false" limit="18">
+                            <tree editable="false" create="false" delete="false" limit="20">
                                 <field name="subj"/>
                                 <field name="term_acronym2" string="Sigla 1"/>
                                 <field name="term_acronym1" string="Sigla 2"/>                                                                                

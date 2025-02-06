@@ -35,7 +35,7 @@ class AcronymComparison(models.TransientModel):
 
         # Llamar al repositorio para obtener los datos
         repository = acronymRepository(self.env)
-        result = repository.get_acronym_per_comparison(acronym1, acronym2)   
+        result = repository.get_acronym_per_comparison(acronym1, acronym2)
 
         # Verificar si hay datos suficientes
         if len(result) > 2:
@@ -50,8 +50,11 @@ class AcronymComparison(models.TransientModel):
             return  # No seguir ejecutando
 
         # Definir los nombres de las columnas según el orden de los datos
+
         column_names = [
-            'subj', 'term', 'horas_docencia', 'horas_docencia_presencial_h',
+            'titulo', 'credito', 'cobro', 'horas_contacto',
+            'subj', 'term', 
+            'horas_docencia', 'horas_docencia_presencial_h',
             'horas_docencia_virtual_h', 'horas_docencia_o', 'horas_laboratorio_docencia',
             'horas_laboratorio_docencia_h', 'horas_externado_docencia',
             'horas_externado_docencia_h', 'horas_aplicacion', 'horas_aplicacion_h',
@@ -64,6 +67,8 @@ class AcronymComparison(models.TransientModel):
             'sesiones_externado', 'sesiones_o', 'semanas_externado', 'semanas_laboratorio',
             'horas_adicionales_silabo'
         ]
+
+
 
         result_dicts = [dict(zip(column_names, row)) for row in result]
         lines = []
@@ -80,8 +85,8 @@ class AcronymComparison(models.TransientModel):
                 term_acronym1_data = {}
                 term_acronym2_data = single_result
 
-            fields_to_compare = set(single_result.keys())
-            for field in fields_to_compare:
+            fields_to_compare = [col for col in column_names if col in single_result]
+            for field in column_names:
                 line = {
                     'subj': field,
                     'term_acronym1': term_acronym1_data.get(field, ''),
@@ -91,7 +96,7 @@ class AcronymComparison(models.TransientModel):
 
         elif len(result_dicts) == 2:  # Si hay dos resultados
             fields_to_compare = set(result_dicts[0].keys()).union(result_dicts[1].keys())
-            for field in fields_to_compare:
+            for field in column_names:
                 line = {
                     'subj': field,
                     'term_acronym1': result_dicts[0].get(field, ''),
