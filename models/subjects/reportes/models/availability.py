@@ -9,7 +9,7 @@ class AvailabilityCourses(models.TransientModel):
     result = fields.Char(string="Respuesta", readonly=True)
     
     type = fields.Selection(
-        selection=[("asignatura","Asignatura"),("corte","Corte")],
+        selection=[("subject","Subject"),("asignatura","Asignatura"), ("cohorte","Cohorte")],
         required=True,
         string="Disponibilidad de : ",
         help="Seleccione el tipo de disponibilidad a buscar.")
@@ -27,18 +27,18 @@ class AvailabilityCourses(models.TransientModel):
             self.subject = self.subject.upper()
             
     
-    def findAsignature(self):
-        subject = self.subject        
-        
+    def findAsignature(self):       
         repository = availabilityRepository(self.env)
         result = None    
             
-        if self.type == 'asignatura':
-            result = repository.get_availability_couses(subject)               
-        else:
-            result = repository.get_availability_curriculum(subject)            
+        if self.type == 'subject':
+            result = repository.get_availability_subject(self.subject)
+        elif self.type == 'asignatura':
+            result = repository.get_availability_asignature(self.subject)
+        elif self.type == 'cohorte':
+            result = repository.get_availability_curriculum(self.subject)
         
-        self.result = "Disponible" if result else "No Disponible"
+        self.result = "No Disponible" if result else "Disponible"
 
 
     def action_search_availability(self):           
