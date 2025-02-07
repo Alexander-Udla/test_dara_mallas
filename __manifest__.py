@@ -67,6 +67,7 @@
         
         'models/subjects/reportes/views/acronym_comparison.xml',  
         'models/subjects/reportes/views/email_cohorte.xml',
+        'models/subjects/reportes/views/suplementario.xml',
 
     ],
     # only loaded in demonstration mode
