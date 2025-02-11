@@ -8,6 +8,7 @@ class SuplementarioValidador(models.TransientModel):
 
     period_id=fields.Many2one("dara_mallas.period", string='Periodo')
     resultado = fields.Char(string = "resultado")
+    resultado_odoo = fields.Char(string = "resultado_odoo")
 
     def execute(self):
         print("VALOR SELECCIONADO " , self.period_id.name)
@@ -18,5 +19,15 @@ class SuplementarioValidador(models.TransientModel):
         result = repository.get_information_banner(self.period_id.name)
         print("===========RESULTADO ", result)
 
-        self.write({"resultado": result})
+        coincidencias = []
 
+        for item in result:
+            codigo = item[0]  # Suponiendo que el código está en la primera columna
+            result_odoo = repository.get_information_odoo(codigo)
+            print("=======CODIGO",codigo, "================ENCONTRADO ", result_odoo)
+
+
+        self.write({
+            "resultado": str(result),
+            "resultado_odoo": str(result_odoo),
+        })
