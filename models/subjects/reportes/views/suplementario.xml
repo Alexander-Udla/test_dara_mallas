@@ -8,11 +8,17 @@
                 <form string="Validador Suplementario">
                     <group>
                         <field name="period_id"/>
-                        <button name="execute" string="Buscar" type="object" class="oe_highlight"/>
-                    </group>
-                    <group col="2">
                         <field name="resultado_odoo" widget="html" readonly="1" nolabel="1"/>
                     </group>
+
+                    <group attrs="{'invisible': [('excel_file', '=', False)]}">
+                        <field name="excel_filename" readonly="1"/>
+                        <field name="excel_file" filename="excel_filename" widget="binary"/>
+                    </group>
+
+                    <footer>
+                        <button name="execute" string="Buscar" type="object" class="oe_highlight"/>                        
+                    </footer>
                 </form>
             </field>
         </record>

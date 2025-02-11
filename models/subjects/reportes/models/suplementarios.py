@@ -1,6 +1,9 @@
-from odoo import fields, models, api
+from odoo import fields, models
 from ..repository.suplementario_repository import suplemetarioRepository
 from odoo.exceptions import UserError
+import base64
+import io
+import pandas as pd
 
 class SuplementarioValidador(models.TransientModel):
     _name = "dara_mallas.validador_suplementario"
@@ -9,6 +12,8 @@ class SuplementarioValidador(models.TransientModel):
     period_id=fields.Many2one("dara_mallas.period", string='Periodo')
     resultado = fields.Char(string = "resultado")
     resultado_odoo = fields.Html(string = "resultado_odoo")
+    excel_file = fields.Binary(string="Archivo Excel", readonly=True)
+    excel_filename = fields.Char(string="Nombre del archivo")
 
     def execute(self):
 
@@ -16,9 +21,9 @@ class SuplementarioValidador(models.TransientModel):
             raise UserError("Debe seleccionar un período antes de ejecutar la consulta.")
 
         repository = suplemetarioRepository(self.env)
-        result = repository.get_information_banner(self.period_id.name)
+        result = repository.get_information_banner(self.period_id.name)        
 
-        diferencias_texto = []
+        diferencias_lista = []
 
         for item in result:
             codigo = item[0] 
@@ -29,29 +34,40 @@ class SuplementarioValidador(models.TransientModel):
             else:
                 clean_result_odoo = ("Sin datos",) * len(item)
 
-            # Comparar campo por campo y guardar solo las diferencias
-            diferencias_campos = []
+            diferencia = {
+                "Código": codigo,
+                "Periodo": clean_result_odoo[1] if item[1] != clean_result_odoo[1] else "",
+                "Ponderación": clean_result_odoo[2] if item[2] != clean_result_odoo[2] else "",
+                "Coordinador": clean_result_odoo[3] if item[3] != clean_result_odoo[3] else "",
+                "Programa": clean_result_odoo[4] if item[4] != clean_result_odoo[4] else "",
+            }
 
-            if item[1] != clean_result_odoo[1]:  # Comparación del periodo
-                diferencias_campos.append(f"    - Periodo: Banner → {item[1]}, Odoo → {clean_result_odoo[1]}")
 
-            if item[2] != clean_result_odoo[2]:  # Comparación de ponderación
-                diferencias_campos.append(f"    - Ponderación: Banner → {item[2]}, Odoo → {clean_result_odoo[2]}")
+            if any(value for key, value in diferencia.items() if key != "Código"):
+                diferencias_lista.append(diferencia)
 
-            if item[3] != clean_result_odoo[3]:  # Comparación de coordinador
-                diferencias_campos.append(f"    - Coordinador: Banner → {item[3]}, Odoo → {clean_result_odoo[3]}")
+        if diferencias_lista:
+            df = pd.DataFrame(diferencias_lista)
+            df = df.loc[:, (df != "").any(axis=0)]
+        else:
+            df = pd.DataFrame(columns=["Código", "Periodo", "Ponderación", "Coordinador", "Programa"])
 
-            if item[4] != clean_result_odoo[4]:  # Comparación de programa
-                diferencias_campos.append(f"    - Programa: Banner → {item[4]}, Odoo → {clean_result_odoo[4]}")
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+            df.to_excel(writer, sheet_name="Diferencias", index=False)
 
-            # Si hay diferencias, agregarlas a la lista
-            if diferencias_campos:
-                diferencias_texto.append(f"Código: {codigo}\n" + "\n".join(diferencias_campos) + "\n")
+        output.seek(0)  # Regresar al inicio del archivo para lectura
 
-        diferencias_final = "<br/>".join(diferencias_texto) if diferencias_texto else "No se encontraron diferencias."
+        # Convertir a Base64
+        file_data = base64.b64encode(output.read())
 
-        print("DESPUES ", diferencias_final)
-        # Guardar el resultado en el campo resultado_odoo
+        # Nombre del archivo con fecha actual
+        fecha = fields.Datetime.now().strftime("%d%m%Y")
+        filename = f"Validador_{fecha}.xlsx"
+    
+        # Guardar en el modelo para la descarga
         self.write({
-            "resultado_odoo": diferencias_final
+            "excel_file": file_data,
+            "excel_filename": filename,
+            "resultado_odoo": "Archivo generado correctamente." if diferencias_lista else "No se encontraron diferencias."
         })
