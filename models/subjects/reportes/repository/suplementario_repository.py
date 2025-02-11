@@ -34,10 +34,10 @@ class suplemetarioRepository:
         sql = """
             SELECT DISTINCT 
                 dms.code, 
-                dmp.name AS periodo, 
-                SPLIT_PART(dmw.name, '(', 1) AS ponderacion, 
-                dmc.idbanner AS coordinador, 
-                dmpc.name AS programa
+                MAX(dmp.name) AS periodo, 
+                MAX(SPLIT_PART(dmw.name, '(', 1)) AS ponderacion, 
+                MAX(dmc.idbanner) AS coordinador, 
+                MAX(dmpc.name) AS programa
             FROM dara_mallas_subject dms
             JOIN dara_mallas_subject_scadtl dmssc ON dms.id = dmssc.subject_id
             JOIN dara_mallas_weighing dmw ON dmw.id = dmssc.weighing_id
@@ -45,6 +45,7 @@ class suplemetarioRepository:
             JOIN dara_mallas_program_code dmpc ON dmpc.id = dmssc.program_code_id
             JOIN dara_mallas_period dmp ON dmp.id = dmssc.period_id
             WHERE dms.code = %s
+            GROUP BY dms.code
             """
         self.env.cr.execute(sql, (code,))
         result = self.env.cr.fetchall()  # Lista de tuplas con los datos
