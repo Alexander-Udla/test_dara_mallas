@@ -21,7 +21,7 @@ class suplemetarioRepository:
             AND A.SCBSUPP_CRSE_NUMB = B.SCBSUPP_CRSE_NUMB
             AND A.SCBSUPP_EFF_TERM =  B.TERM
             WHERE SSBSECT_TERM_CODE=:period
-            FETCH FIRST 20 ROWS ONLY
+            
             """
         dbsource=self.env['base.external.dbsource'].search([('enabled','=',True)])
         if not dbsource:
@@ -32,12 +32,12 @@ class suplemetarioRepository:
 
     def get_information_odoo(self, code="000000"):
         sql = """
-            SELECT DISTINCT 
+            SELECT 
                 dms.code, 
-                MAX(dmp.name) AS periodo, 
-                MAX(SPLIT_PART(dmw.name, '(', 1)) AS ponderacion, 
-                MAX(dmc.idbanner) AS coordinador, 
-                MAX(dmpc.name) AS programa
+                dmp.name AS periodo,
+                SPLIT_PART(dmw.name, '(', 1) AS ponderacion, 
+                dmc.idbanner AS coordinador, 
+                dmpc.name AS programa
             FROM dara_mallas_subject dms
             JOIN dara_mallas_subject_scadtl dmssc ON dms.id = dmssc.subject_id
             JOIN dara_mallas_weighing dmw ON dmw.id = dmssc.weighing_id
@@ -45,7 +45,12 @@ class suplemetarioRepository:
             JOIN dara_mallas_program_code dmpc ON dmpc.id = dmssc.program_code_id
             JOIN dara_mallas_period dmp ON dmp.id = dmssc.period_id
             WHERE dms.code = %s
-            GROUP BY dms.code
+            AND dmp.name = (
+                SELECT MAX(dmp2.name)
+                FROM dara_mallas_subject_scadtl dmssc2
+                JOIN dara_mallas_period dmp2 ON dmp2.id = dmssc2.period_id
+                WHERE dmssc2.subject_id = dms.id
+            );
             """
         self.env.cr.execute(sql, (code,))
         result = self.env.cr.fetchall()  # Lista de tuplas con los datos
