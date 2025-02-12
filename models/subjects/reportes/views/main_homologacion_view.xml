@@ -10,11 +10,13 @@
                         <field name="data_base" required="1"/>
                         <field name="type" required="1"/>
                         <field name="period_id"/>
+                        <field name="state" readonly="1"/>
                     </group>
 
                     <footer>
                         <button name="action_execute_code" string="Buscar" type="object" class="btn-primary"/>
                         <button name="update_file_links" string="Actualizar Lista" type="object" class="btn-secondary"/>
+                        <button name="update_status" string="Actualizar Estado" type="object" class="btn-secondary"/>
                     </footer>
                     
                     <div style="margin-bottom: 30px;"></div>

@@ -72,7 +72,6 @@ class Validator:
                 where SCRRTST_SUBJ_CODE||SCRRTST_CRSE_NUMB =:1 
                 and SCRRTST_TERM_CODE_EFF =:2
                 ORDER BY 2,1
-                limit 10
                 """
         
         result = dbsource.query(sql=sql,option=self.database_banner,parq=[subject_code,period],dataframe=True)
@@ -101,7 +100,6 @@ class Validator:
                 left join udla_mallas_rule_score sc on p.score_id = sc.id
                 where s.code = %s
                 order by s.code, p.seq
-                limit 10
         """
         
         result = dbsource.get_dataframe_from_postgres(sql,[subject_code])
@@ -147,7 +145,6 @@ class Validator:
                     and smrarul_key_rule = '%s'
                     and SMRARUL_TERM_CODE_EFF='%s'
                     order by 2,4
-                    limit 10
         """%(area,subject_code,period)
         res = dbsource.query(sql=sql,option='banner')
         return res if res else False
