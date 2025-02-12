@@ -3,6 +3,9 @@ from odoo import fields, models, api
 from datetime import date
 from ..repository.automation_repository import automationRepository
 from datetime import datetime
+from datetime import datetime
+import locale
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -37,13 +40,18 @@ class Automation(models.TransientModel):
                 record.formatted_date = ""
 
 
-    def send_email(self):      
-        formatted_date = datetime.now().strftime('%d-%b-%Y').upper()        
+    def send_email(self):         
+        #Español
+        formatted_date_esp = datetime.now().strftime('%d-%b-%Y').upper()        
+        #Ingles
+        locale.setlocale(locale.LC_TIME, "en_US.utf8")
+        fecha_actual = datetime.now()   
+        formatted_date = fecha_actual.strftime("%d-%b-%Y").upper()
         repository = automationRepository(self.env)
         result = repository.get_number_student(formatted_date)
         
         if not result:  # Si no hay datos, salir de la función
-            _logger.info(f"No hay información disponible para el día {formatted_date}. No se enviará correo.")
+            _logger.info(f"No hay información disponible para el día {formatted_date_esp}. No se enviará correo.")
             return
         
         keys = ["CODIGO_PROGRAMA", "PROGRAMA", "COHORTE_PROGRAMA", "NUMERO_ESTUDIANTES"]
@@ -63,7 +71,6 @@ class Automation(models.TransientModel):
                             resp["COHORTE"] = cohorte.get("POSICION")
                             break 
                     
-                 
         result_html = """
             <table class='table table-bordered'>
                 <thead>
@@ -90,7 +97,7 @@ class Automation(models.TransientModel):
         result_html += "</tbody></table>"
 
         body_html = f"""
-        <h3>NOTIFICACION: PROGRAMAS DE POSTGRADO QUE INICIAN ACTIVIDADES HOY {formatted_date}</h3>
+        <h3>NOTIFICACION: PROGRAMAS DE POSTGRADO QUE INICIAN ACTIVIDADES HOY {formatted_date_esp}</h3>
         <div style="font-size: 14px;">            
             {result_html}
             
