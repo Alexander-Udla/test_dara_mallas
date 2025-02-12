@@ -21,6 +21,7 @@ class suplemetarioRepository:
             AND A.SCBSUPP_CRSE_NUMB = B.SCBSUPP_CRSE_NUMB
             AND A.SCBSUPP_EFF_TERM =  B.TERM
             WHERE SSBSECT_TERM_CODE=:period
+            
             """
         dbsource=self.env['base.external.dbsource'].search([('enabled','=',True)])
         if not dbsource:
