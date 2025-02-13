@@ -63,85 +63,6 @@ class MainHomologacion(models.Model):
     
         return True
     
-    """
-    def _compute_file_links(self):
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-
-        for record in self:
-            if not record.type:
-                record.file_links = "<p>Seleccione un validador.</p>"
-                continue
-
-            # Definir la ruta correcta según el tipo de validador
-            if record.type == "1":
-                print("=======ENVIAR HOMOLOGACIÒN")
-                csv_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/homologaciones/source/"
-            elif record.type == "2":
-                print("=======ENVIAR PREREQUISITO")
-                csv_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/prerequisitos/source/"
-            else:
-                print("=======SIN SELECCION")
-                record.file_links = "<p>Tipo de validador desconocido.</p>"
-                continue
-
-            if not os.path.exists(csv_directory):
-                record.file_links = "<p>No hay archivos disponibles.</p>"
-                continue
-
-            # Generar enlaces de descarga desde static/csv/source/
-            files = [
-                f'<a href="{base_url}/dara_mallas/static/csv/source/{file}" target="_blank">{file}</a>'
-                for file in os.listdir(csv_directory) if file.endswith('.csv')
-            ]
-
-            record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
-    """
-
-
-
-    """
-    def _compute_file_links(self):
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-
-        for record in self:
-            if not record.type:
-                record.file_links = "<p>Seleccione un validador.</p>"
-                continue
-
-            # Rutas de los archivos generados
-            if record.type == "1":
-                source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/homologaciones/source/"
-            elif record.type == "2":
-                source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/prerequisitos/source/"
-            else:
-                record.file_links = "<p>Tipo de validador desconocido.</p>"
-                continue
-
-            static_directory = "/odoo/custom/addons/dara_mallas/static/csv/source/"
-
-            if not os.path.exists(static_directory):
-                os.makedirs(static_directory)  # Crear si no existe
-
-            if not os.path.exists(source_directory):
-                record.file_links = "<p>No hay archivos disponibles.</p>"
-                continue
-
-            files = []
-            for file in os.listdir(source_directory):
-                if file.endswith('.xlsx'):
-                    source_file = os.path.join(source_directory, file)
-                    target_file = os.path.join(static_directory, file)
-
-                    # Copiar solo si el archivo ha cambiado
-                    if not os.path.exists(target_file) or os.path.getmtime(source_file) > os.path.getmtime(target_file):
-                        shutil.copy2(source_file, target_file)
-
-                    # Generar enlaces de descarga
-                    file_url = f"{base_url}/dara_mallas/static/csv/source/{file}"
-                    files.append(f'<a href="{file_url}" target="_blank">{file}</a>')
-
-            record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
-    """
     def _compute_file_links(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
@@ -182,15 +103,7 @@ class MainHomologacion(models.Model):
             record.write({})  # Forzar actualización
 
 
-
-
-    """
-    def update_file_links(self):
-        self._compute_file_links()
-    """
-
     def _compute_status(self):
-        """Revisar el estado del procesamiento."""
         for record in self:
             if not record.period_id:
                 record.state = "Desconocido"
@@ -206,7 +119,6 @@ class MainHomologacion(models.Model):
                     record.state = f.read().strip()
 
     def update_status(self):
-        """Actualiza el estado del archivo y muestra una notificación."""
         for record in self:
             record._compute_status()
         
