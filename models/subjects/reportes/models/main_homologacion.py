@@ -95,7 +95,11 @@ class MainHomologacion(models.Model):
             ]
 
             record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
-"""
+    """
+
+
+
+    """
     def _compute_file_links(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
@@ -137,11 +141,53 @@ class MainHomologacion(models.Model):
                     files.append(f'<a href="{file_url}" target="_blank">{file}</a>')
 
             record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
+    """
+    def _compute_file_links(self):
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+
+        for record in self:
+            if not record.type:
+                record.file_links = "<p>Seleccione un validador.</p>"
+                continue
+
+            # Definir la ruta correcta según el tipo de validador
+            if record.type == "1":
+                source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/homologaciones/source/"
+                url_directory = f"{base_url}/dara_mallas/static/csv/source/"
+                
+            elif record.type == "2":
+                source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/prerequisitos/source/"
+                url_directory = f"{base_url}/dara_mallas/static/csv/source"
+            else:
+                record.file_links = "<p>Tipo de validador desconocido.</p>"
+                continue
+
+            if not os.path.exists(source_directory):
+                record.file_links = "<p>No hay archivos disponibles.</p>"
+                continue
+
+            # Generar enlaces de descarga directamente
+            files = [
+                f'<a href="{url_directory}{file}" target="_blank">{file}</a>'
+                for file in os.listdir(source_directory) if file.endswith('.xlsx') or file.endswith('.csv')
+            ]
+
+            record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
 
 
-    
+
+    def update_file_links(self):
+        for record in self:
+            record._compute_file_links()
+            record.write({})  # Forzar actualización
+
+
+
+
+    """
     def update_file_links(self):
         self._compute_file_links()
+    """
 
     def _compute_status(self):
         """Revisar el estado del procesamiento."""
