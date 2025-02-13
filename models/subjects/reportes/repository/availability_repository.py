@@ -8,7 +8,7 @@ class availabilityRepository:
             FROM SCBCRSE
             WHERE SCBCRSE_SUBJ_CODE=:subject
             """
-        dbsource=self.env['base.external.dbsource'].search([('enabled','=',True)])
+        dbsource=self.env['base.external.dbsource'].search([('name','=','PRODUCCION')])
         if not dbsource:
             return False
         res = dbsource.execute(sql, {'subject': subject})
@@ -19,7 +19,7 @@ class availabilityRepository:
             SELECT DISTINCT SUBSTR(STVCHRT_CODE,1,4)
             FROM STVCHRT WHERE STVCHRT_CODE LIKE :subject
             """
-        dbsource=self.env['base.external.dbsource'].search([('enabled','=',True)])
+        dbsource=self.env['base.external.dbsource'].search([('name','=','PRODUCCION')])
         if not dbsource:
             return False
         res = dbsource.execute(sql, {'subject': subject})
@@ -29,7 +29,7 @@ class availabilityRepository:
         sql = """
             SELECT DISTINCT SCBCRSE_SUBJ_CODE||SCBCRSE_CRSE_NUMB FROM SCBCRSE WHERE SCBCRSE_SUBJ_CODE||SCBCRSE_CRSE_NUMB=:subject
             """
-        dbsource=self.env['base.external.dbsource'].search([('enabled','=',True)])
+        dbsource=self.env['base.external.dbsource'].search([('name','=','PRODUCCION')])
         if not dbsource:
             return False
         res = dbsource.execute(sql, {'subject': subject})

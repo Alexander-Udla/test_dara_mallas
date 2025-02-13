@@ -28,9 +28,9 @@
         </record>         
 
         <menuitem id="data_availability" 
-                  name="Disponibilidad" 
-                  parent="dara_homologations_reports" 
-                  action="action_availability_form" 
-                  sequence="5"/>  
+            name="Disponibilidades" 
+            parent="dara_homologations_reports" 
+            action="action_availability_form" 
+            sequence="2"/>  
     </data>
 </odoo>
