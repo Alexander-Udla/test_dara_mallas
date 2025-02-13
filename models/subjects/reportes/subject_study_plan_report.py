@@ -70,6 +70,15 @@ class subjectMallasDeSigla(models.TransientModel):
     _name="dara_mallas.subject_mallas_sigla"
     subject_id=fields.Many2many("dara_mallas.subject_pivot",default=lambda self:self.env.context.get('subject_id',False),string="Asignaturas")
     #subject_id=fields.Char("dara_mallas.subject")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+    
+
     @api.onchange('subject_id')
     def get_data(self):
         self.env['dara_mallas.subject_pivot'].get_data_subject()
@@ -97,6 +106,13 @@ class subject_pivot(models.Model):
     name = fields.Char("Nombre Asignatura")
     code = fields.Char("Codigo")
 
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+
     def _select(self):
         select_str = """
             select s.code as code
@@ -111,6 +127,5 @@ class subject_pivot(models.Model):
     def get_data_subject(self):
         self.env.cr.execute("""INSERT INTO %s(code,name)
             %s 
-          
 
             """ % (self._table, self._select()))

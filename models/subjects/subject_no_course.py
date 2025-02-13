@@ -10,7 +10,12 @@ class subject_no_course(models.Model):
     study_plan_id=fields.Many2one("dara_mallas.study_plan")
     #no_course_document_id = fields.One2many("dara_mallas.no_course_document",inverse_name="subject_no_course_id")
 
-
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
     
     def name_get(self):
         res = []
@@ -30,6 +35,13 @@ class subject_attributes_no_course(models.Model):
     name = fields.Char("Código")
     description = fields.Char("Descripción")
 
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+
     
     def name_get(self):
         res = []
@@ -48,3 +60,10 @@ class no_course_document(models.Model):
     date_solicitud = fields.Date("Fecha de solicitud")
     date_acept = fields.Date("Fecha de aceptacion")
     subject_no_course_id = fields.Many2one("dara_mallas.subject_no_course")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )

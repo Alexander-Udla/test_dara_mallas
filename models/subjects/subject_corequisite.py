@@ -14,6 +14,13 @@ class corequisite(models.Model):
 
     corequisite_line_id=fields.Many2one("dara_mallas.corequisite_line")
 
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+
 
     def name_get(self):
         result = []
@@ -27,6 +34,13 @@ class corequisite_line(models.Model):
     subject_id=fields.Many2one("dara_mallas.subject",'Asignatura')
     subject_code=fields.Char(related="subject_id.code")
     corequisite_ids=fields.One2many("dara_mallas.corequisite",inverse_name="corequisite_line_id",string="Correquisitos")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def copy(self,default=None):
         new_subject_corequisite_line=super(corequisite_line,self).copy(default=default)

@@ -10,3 +10,10 @@ class mode(models.Model):
     
     name=fields.Char("Modalidad")
     code=fields.Char("codigo")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )

@@ -13,6 +13,13 @@ class subject_prerequisite_line(models.Model):
     subject_code=fields.Char(related="subject_id.code")
     subject_prerequisite_ids = fields.One2many("dara_mallas.prerequisite",inverse_name="prerequisite_line_id",string="Prerrequisitos")
     prerequisites_check = fields.Text(string="Comment")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
     
     def copy(self,default=None):
         new_subject_prerequisite_line=super(subject_prerequisite_line,self).copy(default=default)
@@ -155,6 +162,13 @@ class subject_prerequisite(models.Model):
     prerequsite_type=fields.Selection([('malla','Malla'),('homologacion','Homologacion')],"Tipo",default='malla')
 
     prerequisite_line_id=fields.Many2one("dara_mallas.prerequisite_line")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def name_get(self):
         result = []

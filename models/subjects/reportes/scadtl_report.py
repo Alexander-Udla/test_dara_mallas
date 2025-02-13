@@ -12,7 +12,12 @@ class scadtl_report(models.Model):
     subject = fields.Many2one("dara_mallas.subject")
     period = fields.Many2one("dara_mallas.period")
 
-
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def get_sup_data(self, subj_code):
         """
