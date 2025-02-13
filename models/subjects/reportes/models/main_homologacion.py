@@ -72,12 +72,15 @@ class MainHomologacion(models.Model):
                 continue
 
             # Definir la ruta correcta según el tipo de validador
+            """"""
             if record.type == "1":
-                source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/homologaciones/source/"
+                source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/homologacions/source/"
+                print("============== HOMOLOGACION ")
                 url_directory = f"{base_url}/dara_mallas/static/csv/source/"
                 
             elif record.type == "2":
-                source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/prerequisitos/source/"
+                source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/"
+                print("============== PREREQUISITO ")
                 url_directory = f"{base_url}/dara_mallas/static/csv/source"
             else:
                 record.file_links = "<p>Tipo de validador desconocido.</p>"
@@ -86,7 +89,7 @@ class MainHomologacion(models.Model):
             if not os.path.exists(source_directory):
                 record.file_links = "<p>No hay archivos disponibles.</p>"
                 continue
-
+            """"""
             # Generar enlaces de descarga directamente
             files = [
                 f'<a href="{url_directory}{file}" target="_blank">{file}</a>'
@@ -94,7 +97,49 @@ class MainHomologacion(models.Model):
             ]
 
             record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
+    
+    """   
 
+    def _compute_file_links(self):
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+
+        for record in self:
+            if not record.type:
+                record.file_links = "<p>Seleccione un validador.</p>"
+                continue
+
+            # Directorio de origen donde se generan los archivos
+            source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/"
+
+            # Directorio donde Odoo sirve archivos estáticos
+            static_directory = "/odoo/custom/addons/dara_mallas/static/csv/source/"
+            url_directory = f"{base_url}/web/static/dara_mallas/csv/source/"
+
+            # Asegurar que la carpeta estática exista
+            if not os.path.exists(static_directory):
+                os.makedirs(static_directory)
+
+            # Mover archivos desde el directorio fuente al directorio estático
+            moved_files = []
+            for file in os.listdir(source_directory):
+                if file.endswith('.xlsx') or file.endswith('.csv'):
+                    source_path = os.path.join(source_directory, file)
+                    destination_path = os.path.join(static_directory, file)
+
+                    try:
+                        shutil.move(source_path, destination_path)
+                        moved_files.append(file)
+                    except Exception as e:
+                        _logger.error(f"Error al mover {file}: {str(e)}")
+
+            # Generar enlaces de descarga
+            files = [
+                f'<a href="{url_directory}{file}" target="_blank">{file}</a>'
+                for file in os.listdir(static_directory) if file.endswith('.xlsx') or file.endswith('.csv')
+            ]
+
+            record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
+    """
 
 
     def update_file_links(self):

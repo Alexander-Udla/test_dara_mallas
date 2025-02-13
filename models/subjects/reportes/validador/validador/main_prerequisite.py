@@ -196,6 +196,6 @@ class Validar_Prerequisitos:
             if item_subject['subject_code'] not in subject_codes:
                 self.compare_to(subject_code=item_subject['subject_code'],period=item_subject['period'])
                 subject_codes.append(item_subject['subject_code'])
-        self.df_results.to_csv('/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/prerequisitos/source/validacion_scapreq-%s-%s.csv'%(self.fecha,period))
+        self.df_results.to_csv('/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/prerequisitos-%s-%s.csv'%(self.fecha,period))
 
         
