@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
- 
- 
 <odoo>
     <data > 
             <!--Email template -->
@@ -11,7 +9,7 @@
             <field name="email_cc">mariasol.villacis@udla.edu.ec</field>
             <field name="subject">ALERTA POSTGRADO INICIO DE ACTIVIDADES</field>            
             <field name="model">dara_mallas.automation</field>
-               
+
         </record>
         <record id="cron_send_email" model="ir.cron">
             <field name="name">Correo de cohorte diario</field>
