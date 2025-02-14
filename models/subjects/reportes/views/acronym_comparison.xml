@@ -7,9 +7,12 @@
             <field name="arch" type="xml">
                 <form string="Comparativo de siglas">
                     <sheet>
-                        <group col="2">
-                            <field name="acronym2" placeholder="Ingrese la primera sigla"/>
-                            <field name="acronym1" placeholder="Ingrese la segunda sigla"/>                            
+                        <group col="5">
+                            <field name="acronym1" placeholder="Ingrese la primera sigla"/>
+                            <field name="acronym2" placeholder="Ingrese la segunda sigla"/>                          
+                        </group>
+                            
+                        <group>
                             <button name="findAcronym" string="Comparar" type="object" class="oe_highlight"/>
                         </group>
 
@@ -17,8 +20,8 @@
                         <field name="line_ids">
                             <tree editable="false" create="false" delete="false" limit="20">
                                 <field name="subj"/>
-                                <field name="term_acronym2" string="Sigla 1"/>
-                                <field name="term_acronym1" string="Sigla 2"/>                                                                                
+                                <field name="term_acronym1" string="Sigla 1"/>
+                                <field name="term_acronym2" string="Sigla 2"/>                                                                                
                             </tree>
                         </field>                            
                         
@@ -36,6 +39,10 @@
         </record>
 
         <!-- Menú para acceder al formulario -->
-        <menuitem id="data_acronym_comparison_menu" name="Comparativo de siglas" parent="dara_homologations_reports" action="action_acronym_comparison_form" sequence="3"/>    
+        <menuitem id="data_acronym_comparison_menu" 
+                name="Comparativo de siglas" 
+                parent="dara_homologations_reports" 
+                action="action_acronym_comparison_form" 
+                sequence="1"/>    
     </data>
 </odoo>
