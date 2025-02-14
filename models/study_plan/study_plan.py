@@ -114,6 +114,13 @@ class study_plan(models.Model):
     #               MALLA GRAFICA 
     #==================================================
 
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+
     def graphic_plan(self):
         return {
             'type': 'ir.actions.act_window',
@@ -1364,6 +1371,13 @@ class study_plan_line(models.Model):
     #study_plan_program_id=fields.Char("programa", related="study_plan_id.program_id.name")
     #organization_unit_id=fields.Many2one("dara_mallas.organization_unit") 
     #period_id=fields.Many2one("dara_mallas.period")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
     
 class study_plan_line_simple(models.Model):
     _name = "dara_mallas.study_plan_line_simple"
@@ -1376,6 +1390,13 @@ class study_plan_line_simple(models.Model):
  
     study_plan_id=fields.Many2one("dara_mallas.study_plan") 
 
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+
 
    
 class level(models.Model):
@@ -1384,11 +1405,25 @@ class level(models.Model):
     name=fields.Char("Periodo")
     number=fields.Integer("Numero")
 
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+
 class campus(models.Model):
     _name="dara_mallas.campus"
     
     name=fields.Char("Nombre")
     code=fields.Char("Code")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
   
     
     
