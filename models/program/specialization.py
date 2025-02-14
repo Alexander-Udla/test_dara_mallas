@@ -20,6 +20,14 @@ class specializations(models.Model):
     code_ids=fields.One2many(related="program_id.code_ids")
     sniese_title_ids=fields.One2many("dara_mallas.title", inverse_name="specialization_id")
     saes_speciality_plan_code=fields.Char("Codigo especializacion + plan SAES")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+
 class specialization_major(models.Model):
     _name="dara_mallas.specialization_major"
     
@@ -30,7 +38,9 @@ class specialization_major(models.Model):
     specialization_id=fields.Many2one("dara_mallas.specialization")
     saes_code_id=fields.Many2one("dara_mallas.saes_code")
     
-
-
-       
-    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
