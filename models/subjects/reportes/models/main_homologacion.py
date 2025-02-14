@@ -23,6 +23,13 @@ class MainHomologacion(models.Model):
     file_links = fields.Html(string="Archivos Generados", compute="_compute_file_links")
     state = fields.Char(string="Estado", compute="_compute_status")
 
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+
     
     def action_execute_code(self):
         if self.period_id:
@@ -62,45 +69,6 @@ class MainHomologacion(models.Model):
             raise UserError("Error al iniciar el script externo.")
     
         return True
-    """
-    def _compute_file_links(self):
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-
-        for record in self:
-            if not record.type:
-                record.file_links = "<p>Seleccione un validador.</p>"
-                continue
-
-            # Definir la ruta correcta según el tipo de validador
-            """"""
-            if record.type == "1":
-                source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/homologacions/source/"
-                print("============== HOMOLOGACION ")
-                url_directory = f"{base_url}/dara_mallas/static/csv/source/"
-                
-            elif record.type == "2":
-                source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/"
-                print("============== PREREQUISITO ")
-                url_directory = f"{base_url}/dara_mallas/static/csv/source"
-            else:
-                record.file_links = "<p>Tipo de validador desconocido.</p>"
-                continue
-
-            if not os.path.exists(source_directory):
-                record.file_links = "<p>No hay archivos disponibles.</p>"
-                continue
-            """"""
-            # Generar enlaces de descarga directamente
-            files = [
-                f'<a href="{url_directory}{file}" target="_blank">{file}</a>'
-                for file in os.listdir(source_directory) if file.endswith('.xlsx') or file.endswith('.csv')
-            ]
-
-            record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
-    
-    """ 
-
-
 
     def _compute_file_links(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
@@ -108,10 +76,9 @@ class MainHomologacion(models.Model):
             raise UserError("Seleccione un validador")
         else:
             if self.type == "1":
-                csv_directory = '/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/'
-            else:                
-                csv_directory = '/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/'
-        
+                csv_directory = '/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/homologaciones/source/'
+            else: 
+                csv_directory = '/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/prerequisitos/source/'
 
         for record in self:
             if not os.path.exists(csv_directory):
@@ -126,86 +93,30 @@ class MainHomologacion(models.Model):
 
             record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
 
-
-
-
-    """  
-
-    def _compute_file_links(self):
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-
-        for record in self:
-            if not record.type:
-                record.file_links = "<p>Seleccione un validador.</p>"
-                continue
-
-            # Directorio de origen donde se generan los archivos
-            source_directory = "/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/"
-
-            # Directorio donde Odoo sirve archivos estáticos
-            static_directory = "/odoo/custom/addons/dara_mallas/static/csv/source/"
-            url_directory = f"{base_url}/web/static/dara_mallas/csv/source/"
-
-            # Asegurar que la carpeta estática exista
-            if not os.path.exists(static_directory):
-                os.makedirs(static_directory)
-
-            # Mover archivos desde el directorio fuente al directorio estático
-            moved_files = []
-            for file in os.listdir(source_directory):
-                if file.endswith('.xlsx') or file.endswith('.csv'):
-                    source_path = os.path.join(source_directory, file)
-                    destination_path = os.path.join(static_directory, file)
-
-                    try:
-                        shutil.move(source_path, destination_path)
-                        moved_files.append(file)
-                    except Exception as e:
-                        _logger.error(f"Error al mover {file}: {str(e)}")
-
-            # Generar enlaces de descarga
-            files = [
-                f'<a href="{url_directory}{file}" target="_blank">{file}</a>'
-                for file in os.listdir(static_directory) if file.endswith('.xlsx') or file.endswith('.csv')
-            ]
-
-            record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
-    """
-
     def update_file_links(self):
-        print("====ACTUALIZAR LINKS")
-        self._compute_file_links()
+        self._compute_file_links()   
 
-
-    """
-    def update_file_links(self):
-        for record in self:
-            record._compute_file_links()
-            record.write({})  # Forzar actualización
-    """
-
+    
     def _compute_status(self):
         for record in self:
             if not record.period_id:
                 record.state = "Desconocido"
                 continue
 
-            # Ruta del estado
             status_file = f"/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/status/status_{record.period_id.name}.txt"
-
-            if not os.path.exists(status_file):
-                record.state = "Pendiente"
-            else:
-                with open(status_file, "r") as f:
-                    record.state = f.read().strip()
+            record.state = "Pendiente" if not os.path.exists(status_file) else open(status_file).read().strip()
 
     def update_status(self):
         for record in self:
             record._compute_status()
-        
-        message = f"Estado actualizado: {self.state}"  
+
         return {
             'type': 'ir.actions.client',
-            'tag': 'reload',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Informaciòn',
+                'message': f'Estado actual: {self.state}',
+                'sticky': False,
+            }
         }
 

@@ -26,7 +26,6 @@ class Validator:
             left join dara_mallas_rule_score rs on pr.score_id = rs.id
             where s.code = '%s' and pe.name = '%s' 
             order by 8
-            limit 10
         """%(subject_code,period)
         res = dbsource.query(sql=sql,option=self.database_odoo,dataframe=True)
         return res
@@ -39,7 +38,6 @@ class Validator:
             left join dara_mallas_period pe on pl.period_id = pe.id
             where pe.name = '%s'
             order by 1
-            limit 10
         """%(period)
         res = dbsource.query(sql=sql,option=self.database_odoo,dataframe=True)
         return res
@@ -51,7 +49,6 @@ class Validator:
             left join dara_mallas_subject s on prl.subject_id = s.id          
             left join dara_mallas_period pe on prl.period_id = pe.id    
             where s.code = '%s' and pe.name = '%s'
-            limit 10
         """%(subject_code,periodo)
         res = dbsource.query(sql=sql,option=self.database_odoo)
         return res if res else False

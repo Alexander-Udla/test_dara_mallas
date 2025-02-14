@@ -26,7 +26,6 @@ class Validator:
             )
             and pe2.name <= '%s'
             group by a2.code,s2.code
-            limit 10
         """%(period,period)
         print("Database parametro ", self.database)
         res = dbsource.query(sql=sql,option=self.database)

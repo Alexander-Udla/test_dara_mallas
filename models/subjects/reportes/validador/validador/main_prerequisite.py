@@ -188,14 +188,12 @@ class Validar_Prerequisitos:
         #parametros
         subject_codes = []
         period = self.period
-        #period = '202320'
-        #df = self.read_xls('or_prerequisites202420_cargaOdoo.xlsx')
         df = self.metodos.get_subject_prerequisito_odoo_per_period(period=period)
         for i, item_subject in df.iterrows():
             print(f"Procesando fila {i + 1} de {len(df)}")
             if item_subject['subject_code'] not in subject_codes:
                 self.compare_to(subject_code=item_subject['subject_code'],period=item_subject['period'])
                 subject_codes.append(item_subject['subject_code'])
-        self.df_results.to_csv('/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/prerequisitos-%s-%s.csv'%(self.fecha,period))
+        self.df_results.to_csv('/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/prerequisitos/source/prerequisitos-%s-%s.csv'%(self.fecha,period))
 
         

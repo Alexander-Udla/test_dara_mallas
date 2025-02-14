@@ -236,4 +236,4 @@ class Validador_Homologaciones:
                 pass
         resultado = pd.DataFrame(self.data)
         fecha = fecha_actual.strftime("%d%m%Y")
-        resultado.to_csv('/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/homologaciones-%s-%s.csv'%(fecha,period))
+        resultado.to_csv('/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/homologaciones/source/homologaciones-%s-%s.csv'%(fecha,period))
