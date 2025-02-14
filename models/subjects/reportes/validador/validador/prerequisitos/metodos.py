@@ -5,7 +5,7 @@ dbsource = db.BaseExternalDbsource('mallas_13','dara_mallas')
 
 class Validator:
     def __init__(self, env) -> None:
-        self.database_odoo = "dara_mallas_dev"
+        self.database_odoo = "dara_mallas"
         self.database_banner = env
         
 

@@ -5,7 +5,7 @@ dbsource = db.BaseExternalDbsource('mallas_13','dara_mallas')
 
 class Validator:
     def __init__(self, env) -> None:
-        self.database = 'dara_mallas_dev'
+        self.database = 'dara_mallas'
         self.databasebanner = env
     
     def get_homologations_for_period(self,period='000000'):
