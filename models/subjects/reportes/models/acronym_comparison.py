@@ -17,6 +17,13 @@ class AcronymComparison(models.TransientModel):
         string="Detalles Comparativos"
     )
 
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+
     @api.onchange('acronym1')
     def _onchange_acronym1(self):
         if self.acronym1:
@@ -26,7 +33,7 @@ class AcronymComparison(models.TransientModel):
     def _onchange_acronym2(self):
         if self.acronym2:
             self.acronym2 = self.acronym2.upper()
-            
+
 
     def findAcronym(self):
         acronym1 = self.acronym1
