@@ -19,14 +19,13 @@ class METODOS_GET:
             left join dara_mallas_coordinator co on sca.coordinador_id = co.id
             left join dara_mallas_program_code prc on sca.program_code_id = prc.id
             left join dara_mallas_weighing we on sca.weighing_id = we.id
-            limit 10
         """
         res = dbsource.query(sql=sql,option='dara_mallas')
         return res if res else False
     #extrae todos lo ssubjects de scadtl odoo
     def get_subjects_scadtl_odoo_per_params(self,subject='',period=000000):
         sql = """
-           select 
+            select 
             we.code as ponderacion 
             ,co.idbanner as COORDINADOR
             ,prc.name as PROGRAMA
@@ -37,7 +36,6 @@ class METODOS_GET:
             left join dara_mallas_program_code prc on sca.program_code_id = prc.id
             left join dara_mallas_weighing we on sca.weighing_id = we.id
             where s.code = '%s' and pe.name='%s'
-            limit 10
         """%(subject,period)
         res = dbsource.query(sql=sql,option='dara_mallas',dataframe=True)
         return res 
@@ -51,7 +49,6 @@ class METODOS_GET:
                     FROM SCBSUPP S1
                     WHERE CONCAT(SCBSUPP_SUBJ_CODE, SCBSUPP_CRSE_NUMB)  ='%s'
                     AND SCBSUPP_EFF_TERM ='%s'
-                    limit 10
             """%(subject,period)
         res = dbsource.query(sql=sql,option='banner',dataframe=True)
         return res 
