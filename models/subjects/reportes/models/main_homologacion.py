@@ -62,7 +62,7 @@ class MainHomologacion(models.Model):
             raise UserError("Error al iniciar el script externo.")
     
         return True
-    
+    """
     def _compute_file_links(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
@@ -98,7 +98,38 @@ class MainHomologacion(models.Model):
 
             record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
     
-    """   
+    """ 
+
+
+
+    def _compute_file_links(self):
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        if not self.type:
+            raise UserError("Seleccione un validador")
+        else:
+            if self.type == "1":
+                csv_directory = '/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/'
+            else:                
+                csv_directory = '/odoo/custom/addons/dara_mallas/models/subjects/reportes/validador/validador/source/'
+        
+
+        for record in self:
+            if not os.path.exists(csv_directory):
+                record.file_links = "<p>No hay archivos disponibles.</p>"
+                continue
+
+            # Generar enlaces de descarga desde static/csv/
+            files = [
+                f'<a href="{base_url}/dara_mallas/static/csv/source/{file}" target="_blank">{file}</a>'
+                for file in os.listdir(csv_directory) if file.endswith('.csv')
+            ]
+
+            record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
+
+
+
+
+    """  
 
     def _compute_file_links(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
@@ -141,12 +172,17 @@ class MainHomologacion(models.Model):
             record.file_links = "<br/>".join(files) if files else "<p>No hay archivos disponibles.</p>"
     """
 
+    def update_file_links(self):
+        print("====ACTUALIZAR LINKS")
+        self._compute_file_links()
 
+
+    """
     def update_file_links(self):
         for record in self:
             record._compute_file_links()
             record.write({})  # Forzar actualización
-
+    """
 
     def _compute_status(self):
         for record in self:
