@@ -6,19 +6,21 @@
             <field name="model">dara_mallas.validador_suplementario</field>
             <field name="arch" type="xml">
                 <form string="Validador Suplementario">
-                    <group>
-                        <field name="period_id"/>
-                        <field name="resultado_odoo" widget="html" readonly="1" nolabel="1"/>
-                    </group>
+                    <sheet>
+                        <group>
+                            <field name="period_id"/>
+                            <field name="resultado_odoo" widget="html" readonly="1" nolabel="1"/>
+                        </group>
 
-                    <group attrs="{'invisible': [('excel_file', '=', False)]}">
-                        <field name="excel_filename" readonly="1"/>
-                        <field name="excel_file" filename="excel_filename" widget="binary"/>
-                    </group>
+                        <group attrs="{'invisible': [('excel_file', '=', False)]}">
+                            <field name="excel_filename" readonly="1"/>
+                            <field name="excel_file" filename="excel_filename" widget="binary"/>
+                        </group>
 
-                    <footer>
-                        <button name="execute" string="Buscar" type="object" class="oe_highlight"/>                        
-                    </footer>
+                        <footer>
+                            <button name="execute" string="Buscar" type="object" class="oe_highlight"/>                        
+                        </footer>
+                    </sheet>
                 </form>
             </field>
         </record>
@@ -30,6 +32,6 @@
             <field name="view_id" ref="view_validador_suplementario_form"/>
         </record>
 
-        <menuitem id="suplementario_vista" name="Validador suplementario siglas" parent="dara_homologations_reports" action="action_validador_suplementario_form" sequence="4"/>
+        <menuitem id="suplementario_vista" name="Validador suplementario odoo-banner" parent="dara_homologations_reports" action="action_validador_suplementario_form" sequence="4"/>
     </data>
 </odoo>

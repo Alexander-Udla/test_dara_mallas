@@ -9,15 +9,14 @@ class SuplementarioValidador(models.TransientModel):
     _name = "dara_mallas.validador_suplementario"
     _description = "Validador suplementario de siglas"
 
-    period_id=fields.Many2one("dara_mallas.period", string='Periodo')
+    period_id=fields.Many2one("dara_mallas.period", string='Periodo de programación académica banner')
     resultado = fields.Char(string = "resultado")
     resultado_odoo = fields.Html(string = "resultado_odoo")
     excel_file = fields.Binary(string="Archivo Excel", readonly=True)
     excel_filename = fields.Char(string="Nombre del archivo")
 
 
-    def son_ponderaciones_iguales(self, valor1, valor2):
-        """ Verifica si dos valores de ponderación son equivalentes. """
+    def son_ponderaciones_iguales(self, valor1, valor2)
         equivalencias = {
             "P-AR": "Ponderación Aprueba/Reprueba",
             "Ponderación Aprueba/Reprueba": "P-AR"
@@ -36,31 +35,32 @@ class SuplementarioValidador(models.TransientModel):
         #for item in result:
         for idx, item in enumerate(result, start=1): 
             codigo = item[0] 
-            print(f"{idx}. CODIGO: {codigo}") 
             result_odoo = repository.get_information_odoo(codigo)
-            print("=======RESULTADO CONSULTA ODOO: ", result_odoo)
             if result_odoo:
                 clean_result_odoo = tuple(val.strip() if isinstance(val, str) else val for val in result_odoo[0])
             else:
                 clean_result_odoo = ("Sin datos",) * len(item)
 
+            hay_diferencias = any([
+                not self.son_ponderaciones_iguales(item[2], clean_result_odoo[2]),
+                item[3] != clean_result_odoo[3],
+                item[4] != clean_result_odoo[4]
+            ])
+
             diferencia = {
                 "Código": codigo,
-                # Siempre mostrar el periodo si hay una diferencia en cualquier otro campo
-                "Periodo": clean_result_odoo[1] if item[1] != clean_result_odoo[1] or any([
-                    not self.son_ponderaciones_iguales(item[2], clean_result_odoo[2]),
-                    item[3] != clean_result_odoo[3],
-                    item[4] != clean_result_odoo[4]
-                ]) else "",
-                "Ponderación": clean_result_odoo[2] if not self.son_ponderaciones_iguales(item[2], clean_result_odoo[2]) else "",
-                "Coordinador": clean_result_odoo[3] if item[3] != clean_result_odoo[3] else "",
-                "Programa": clean_result_odoo[4] if item[4] != clean_result_odoo[4] else "",
+                "Periodo Banner": item[1] if item[1] != clean_result_odoo[1] or hay_diferencias else "",
+                "Periodo Odoo": clean_result_odoo[1] if item[1] != clean_result_odoo[1] or hay_diferencias else "",
+                "Ponderación Banner": item[2] if not self.son_ponderaciones_iguales(item[2], clean_result_odoo[2]) else "",
+                "Ponderación Odoo": clean_result_odoo[2] if not self.son_ponderaciones_iguales(item[2], clean_result_odoo[2]) else "",
+                "Coordinador Banner": item[3] if item[3] != clean_result_odoo[3] else "",
+                "Coordinador Odoo": clean_result_odoo[3] if item[3] != clean_result_odoo[3] else "",
+                "Programa Banner": item[4] if item[4] != clean_result_odoo[4] else "",
+                "Programa Odoo": clean_result_odoo[4] if item[4] != clean_result_odoo[4] else "",
             }
 
 
-
             if any(value for key, value in diferencia.items() if key != "Código"):
-                print(f">>> REGISTRO {idx} ENTRA A diferencias_lista:", diferencia)
                 diferencias_lista.append(diferencia)
 
         if diferencias_lista:
@@ -80,7 +80,7 @@ class SuplementarioValidador(models.TransientModel):
 
         # Nombre del archivo con fecha actual
         fecha = fields.Datetime.now().strftime("%d%m%Y")
-        filename = f"Validador_{fecha}.xlsx"
+        filename = f"Validador_{self.period_id.name}_{fecha}.xlsx"
     
         # Guardar en el modelo para la descarga
         self.write({
