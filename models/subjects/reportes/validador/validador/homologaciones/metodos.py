@@ -5,7 +5,7 @@ dbsource = db.BaseExternalDbsource('mallas_13','dara_mallas')
 
 class Validator:
     def __init__(self, env) -> None:
-        self.database = 'dara_mallas'
+        self.database = 'dara_mallas_dev'
         self.databasebanner = env
     
     def get_homologations_for_period(self,period='000000'):
@@ -26,8 +26,8 @@ class Validator:
             )
             and pe2.name <= '%s'
             group by a2.code,s2.code
+            limit 10
         """%(period,period)
-        print("Database parametro ", self.database)
         res = dbsource.query(sql=sql,option=self.database)
         return res if res else False
 

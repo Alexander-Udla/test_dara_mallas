@@ -5,7 +5,7 @@ dbsource = db.BaseExternalDbsource('mallas_13','dara_mallas')
 
 class Validator:
     def __init__(self, env) -> None:
-        self.database_odoo = "dara_mallas"
+        self.database_odoo = "dara_mallas_dev"
         self.database_banner = env
         
 
@@ -38,6 +38,7 @@ class Validator:
             left join dara_mallas_period pe on pl.period_id = pe.id
             where pe.name = '%s'
             order by 1
+            limit 10
         """%(period)
         res = dbsource.query(sql=sql,option=self.database_odoo,dataframe=True)
         return res
