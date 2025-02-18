@@ -14,6 +14,13 @@ class SuplementarioValidador(models.TransientModel):
     resultado_odoo = fields.Html(string = "resultado_odoo")
     excel_file = fields.Binary(string="Archivo Excel", readonly=True)
     excel_filename = fields.Char(string="Nombre del archivo")
+    
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
 
     def son_ponderaciones_iguales(self, valor1, valor2)
