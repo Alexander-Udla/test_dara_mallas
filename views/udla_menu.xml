@@ -21,6 +21,7 @@
 	<menuitem id="dara_subjects_reports" name="Asignaturas" parent="dara_reports_menu" sequence="3" />
 	<menuitem id="dara_homologations_reports" name="Categoría" parent="dara_reports_menu" sequence="4" />
 	
+
 </data>
 
 </odoo>

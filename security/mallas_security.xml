@@ -77,7 +77,682 @@
             <field name="name">Silabos</field>
             <field name="category_id" ref="dara_mallas_traslate_group"/>
         </record>
-         
+
+        <!-- Multiuniversidad-->
+        
+        <record id="dara_mallas_area_rule_company" model="ir.rule">
+            <field name="name">Regla area</field>
+            <field name="model_id" ref="model_dara_mallas_area"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_area_homologation_rule_company" model="ir.rule">
+            <field name="name">Regla area homologation</field>
+            <field name="model_id" ref="model_dara_mallas_area_homologation"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_area_homologation_history_rule_company" model="ir.rule">
+            <field name="name">Regla area homologation history</field>
+            <field name="model_id" ref="model_dara_mallas_area_homologation_history"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_banner_grade_rule_company" model="ir.rule">
+            <field name="name">Regla banner grade</field>
+            <field name="model_id" ref="model_dara_mallas_banner_grade"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_billed_rule_company" model="ir.rule">
+            <field name="name">Regla billed</field>
+            <field name="model_id" ref="model_dara_mallas_billed"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_campus_rule_company" model="ir.rule">
+            <field name="name">Regla campus</field>
+            <field name="model_id" ref="model_dara_mallas_campus"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_college_rule_company" model="ir.rule">
+            <field name="name">Regla college</field>
+            <field name="model_id" ref="model_dara_mallas_college"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_coordinator_rule_company" model="ir.rule">
+            <field name="name">Regla coordinator</field>
+            <field name="model_id" ref="model_dara_mallas_coordinator"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_corequisite_rule_company" model="ir.rule">
+            <field name="name">Regla corequisite</field>
+            <field name="model_id" ref="model_dara_mallas_corequisite"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_corequisite_line_rule_company" model="ir.rule">
+            <field name="name">Regla corequisite line</field>
+            <field name="model_id" ref="model_dara_mallas_corequisite_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_current_sp_homologations_rule_company" model="ir.rule">
+            <field name="name">Regla current sp homologations</field>
+            <field name="model_id" ref="model_dara_mallas_current_sp_homologations"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_elective_rule_company" model="ir.rule">
+            <field name="name">Regla elective</field>
+            <field name="model_id" ref="model_dara_mallas_elective"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_elective_line_rule_company" model="ir.rule">
+            <field name="name">Regla elective line</field>
+            <field name="model_id" ref="model_dara_mallas_elective_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_field_detailed_rule_company" model="ir.rule">
+            <field name="name">Regla field detailed</field>
+            <field name="model_id" ref="model_dara_mallas_field_detailed"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_field_specific_rule_company" model="ir.rule">
+            <field name="name">Regla field specific</field>
+            <field name="model_id" ref="model_dara_mallas_field_specific"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_field_wide_rule_company" model="ir.rule">
+            <field name="name">Regla field wide</field>
+            <field name="model_id" ref="model_dara_mallas_field_wide"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_grade_rule_company" model="ir.rule">
+            <field name="name">Regla grade</field>
+            <field name="model_id" ref="model_dara_mallas_grade"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_grade_line_rule_company" model="ir.rule">
+            <field name="name">Regla grade line</field>
+            <field name="model_id" ref="model_dara_mallas_grade_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_grade_line_subject_rule_company" model="ir.rule">
+            <field name="name">Regla grade line subject</field>
+            <field name="model_id" ref="model_dara_mallas_grade_line_subject"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_grade_mode_rule_company" model="ir.rule">
+            <field name="name">Regla grade mode</field>
+            <field name="model_id" ref="model_dara_mallas_grade_mode"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_grade_mode_line_rule_company" model="ir.rule">
+            <field name="name">Regla grade mode line</field>
+            <field name="model_id" ref="model_dara_mallas_grade_mode_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_grade_mode_line_subject_rule_company" model="ir.rule">
+            <field name="name">Regla grade mode line subject</field>
+            <field name="model_id" ref="model_dara_mallas_grade_mode_line_subject"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_graduation_mode_rule_company" model="ir.rule">
+            <field name="name">Regla graduation mode</field>
+            <field name="model_id" ref="model_dara_mallas_graduation_mode"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_graduation_mode_data_rule_company" model="ir.rule">
+            <field name="name">Regla graduation mode data</field>
+            <field name="model_id" ref="model_dara_mallas_graduation_mode_data"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_group_rule_rule_company" model="ir.rule">
+            <field name="name">Regla group rule</field>
+            <field name="model_id" ref="model_dara_mallas_group_rule"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_homologation_rule_company" model="ir.rule">
+            <field name="name">Regla homologation</field>
+            <field name="model_id" ref="model_dara_mallas_homologation"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_homologation_mirror_rule_company" model="ir.rule">
+            <field name="name">Regla homologation mirror</field>
+            <field name="model_id" ref="model_dara_mallas_homologation_mirror"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_itinerary_rule_company" model="ir.rule">
+            <field name="name">Regla itinerary</field>
+            <field name="model_id" ref="model_dara_mallas_itinerary"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_itinerary_line_rule_company" model="ir.rule">
+            <field name="name">Regla itinerary line</field>
+            <field name="model_id" ref="model_dara_mallas_itinerary_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_journey_rule_company" model="ir.rule">
+            <field name="name">Regla journey</field>
+            <field name="model_id" ref="model_dara_mallas_journey"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_level_rule_company" model="ir.rule">
+            <field name="name">Regla level</field>
+            <field name="model_id" ref="model_dara_mallas_level"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_mode_rule_company" model="ir.rule">
+            <field name="name">Regla mode</field>
+            <field name="model_id" ref="model_dara_mallas_mode"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_name_approved_rule_company" model="ir.rule">
+            <field name="name">Regla name approved</field>
+            <field name="model_id" ref="model_dara_mallas_name_approved"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_no_course_document_rule_company" model="ir.rule">
+            <field name="name">Regla no course document</field>
+            <field name="model_id" ref="model_dara_mallas_no_course_document"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_organization_unit_rule_company" model="ir.rule">
+            <field name="name">Regla organization unit</field>
+            <field name="model_id" ref="model_dara_mallas_organization_unit"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_period_rule_company" model="ir.rule">
+            <field name="name">Regla period</field>
+            <field name="model_id" ref="model_dara_mallas_period"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_prerequisite_rule_company" model="ir.rule">
+            <field name="name">Regla prerequisite</field>
+            <field name="model_id" ref="model_dara_mallas_prerequisite"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_prerequisite_line_rule_company" model="ir.rule">
+            <field name="name">Regla prerequisite line</field>
+            <field name="model_id" ref="model_dara_mallas_prerequisite_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_program_rule_company" model="ir.rule">
+            <field name="name">Regla program</field>
+            <field name="model_id" ref="model_dara_mallas_program"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_program_code_rule_company" model="ir.rule">
+            <field name="name">Regla program code</field>
+            <field name="model_id" ref="model_dara_mallas_program_code"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_program_create_rule_company" model="ir.rule">
+            <field name="name">Regla program create</field>
+            <field name="model_id" ref="model_dara_mallas_program_create"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_resolutions_rule_company" model="ir.rule">
+            <field name="name">Regla resolutions</field>
+            <field name="model_id" ref="model_dara_mallas_resolutions"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_rule_score_rule_company" model="ir.rule">
+            <field name="name">Regla rule score</field>
+            <field name="model_id" ref="model_dara_mallas_rule_score"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_saes_code_rule_company" model="ir.rule">
+            <field name="name">Regla saes code</field>
+            <field name="model_id" ref="model_dara_mallas_saes_code"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_scadtl_report_rule_company" model="ir.rule">
+            <field name="name">Regla scadtl report</field>
+            <field name="model_id" ref="model_dara_mallas_scadtl_report"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_schedule_class_rule_company" model="ir.rule">
+            <field name="name">Regla schedule class</field>
+            <field name="model_id" ref="model_dara_mallas_schedule_class"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_schedule_class_line_rule_company" model="ir.rule">
+            <field name="name">Regla schedule class line</field>
+            <field name="model_id" ref="model_dara_mallas_schedule_class_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_schedule_class_line_subject_rule_company" model="ir.rule">
+            <field name="name">Regla schedule class line subject</field>
+            <field name="model_id" ref="model_dara_mallas_schedule_class_line_subject"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_sniese_program_rule_company" model="ir.rule">
+            <field name="name">Regla sniese program</field>
+            <field name="model_id" ref="model_dara_mallas_sniese_program"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_specialization_rule_company" model="ir.rule">
+            <field name="name">Regla specialization</field>
+            <field name="model_id" ref="model_dara_mallas_specialization"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_specialization_major_rule_company" model="ir.rule">
+            <field name="name">Regla specialization major</field>
+            <field name="model_id" ref="model_dara_mallas_specialization_major"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_stop_sp_homologations_rule_company" model="ir.rule">
+            <field name="name">Regla stop sp homologations</field>
+            <field name="model_id" ref="model_dara_mallas_stop_sp_homologations"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_study_field_rule_company" model="ir.rule">
+            <field name="name">Regla study field</field>
+            <field name="model_id" ref="model_dara_mallas_study_field"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_study_plan_rule_company" model="ir.rule">
+            <field name="name">Regla study plan</field>
+            <field name="model_id" ref="model_dara_mallas_study_plan"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_study_plan_class_rule_company" model="ir.rule">
+            <field name="name">Regla study plan class</field>
+            <field name="model_id" ref="model_dara_mallas_study_plan_class"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_study_plan_line_rule_company" model="ir.rule">
+            <field name="name">Regla study plan line</field>
+            <field name="model_id" ref="model_dara_mallas_study_plan_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_study_plan_line_simple_rule_company" model="ir.rule">
+            <field name="name">Regla study plan line simple</field>
+            <field name="model_id" ref="model_dara_mallas_study_plan_line_simple"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_rule_company" model="ir.rule">
+            <field name="name">Regla subject</field>
+            <field name="model_id" ref="model_dara_mallas_subject"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_attributes_rule_company" model="ir.rule">
+            <field name="name">Regla subject attributes</field>
+            <field name="model_id" ref="model_dara_mallas_subject_attributes"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_attributes_line_rule_company" model="ir.rule">
+            <field name="name">Regla subject attributes line</field>
+            <field name="model_id" ref="model_dara_mallas_subject_attributes_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_attributes_no_course_rule_company" model="ir.rule">
+            <field name="name">Regla subject attributes no course</field>
+            <field name="model_id" ref="model_dara_mallas_subject_attributes_no_course"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_attributes_subject_rule_company" model="ir.rule">
+            <field name="name">Regla subject attributes subject</field>
+            <field name="model_id" ref="model_dara_mallas_subject_attributes_subject"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_class_rule_company" model="ir.rule">
+            <field name="name">Regla subject class</field>
+            <field name="model_id" ref="model_dara_mallas_subject_class"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_class_name_rule_company" model="ir.rule">
+            <field name="name">Regla subject class name</field>
+            <field name="model_id" ref="model_dara_mallas_subject_class_name"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_create_rule_company" model="ir.rule">
+            <field name="name">Regla subject create</field>
+            <field name="model_id" ref="model_dara_mallas_subject_create"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_department_rule_company" model="ir.rule">
+            <field name="name">Regla subject department</field>
+            <field name="model_id" ref="model_dara_mallas_subject_department"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_description_line_rule_company" model="ir.rule">
+            <field name="name">Regla subject description line</field>
+            <field name="model_id" ref="model_dara_mallas_subject_description_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_inherit_rule_company" model="ir.rule">
+            <field name="name">Regla subject inherit</field>
+            <field name="model_id" ref="model_dara_mallas_subject_inherit"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_inherit_area_rule_company" model="ir.rule">
+            <field name="name">Regla subject inherit area</field>
+            <field name="model_id" ref="model_dara_mallas_subject_inherit_area"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_inherit_area_history_rule_company" model="ir.rule">
+            <field name="name">Regla subject inherit area history</field>
+            <field name="model_id" ref="model_dara_mallas_subject_inherit_area_history"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_inherit_homologation_rule_company" model="ir.rule">
+            <field name="name">Regla subject inherit homologation</field>
+            <field name="model_id" ref="model_dara_mallas_subject_inherit_homologation"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_name_rule_company" model="ir.rule">
+            <field name="name">Regla subject name</field>
+            <field name="model_id" ref="model_dara_mallas_subject_name"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_no_course_rule_company" model="ir.rule">
+            <field name="name">Regla subject no course</field>
+            <field name="model_id" ref="model_dara_mallas_subject_no_course"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_pivot_rule_company" model="ir.rule">
+            <field name="name">Regla subject pivot</field>
+            <field name="model_id" ref="model_dara_mallas_subject_pivot"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_rule_rule_company" model="ir.rule">
+            <field name="name">Regla subject rule</field>
+            <field name="model_id" ref="model_dara_mallas_subject_rule"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_rule_line_rule_company" model="ir.rule">
+            <field name="name">Regla subject rule line</field>
+            <field name="model_id" ref="model_dara_mallas_subject_rule_line"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_rule_mirror_rule_company" model="ir.rule">
+            <field name="name">Regla subject rule mirror</field>
+            <field name="model_id" ref="model_dara_mallas_subject_rule_mirror"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_scacrse_rule_company" model="ir.rule">
+            <field name="name">Regla subject scacrse</field>
+            <field name="model_id" ref="model_dara_mallas_subject_scacrse"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_scadtl_rule_company" model="ir.rule">
+            <field name="name">Regla subject scadtl</field>
+            <field name="model_id" ref="model_dara_mallas_subject_scadtl"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_status_rule_company" model="ir.rule">
+            <field name="name">Regla subject status</field>
+            <field name="model_id" ref="model_dara_mallas_subject_status"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_subject_study_plan_report_rule_company" model="ir.rule">
+            <field name="name">Regla subject study plan report</field>
+            <field name="model_id" ref="model_dara_mallas_subject_study_plan_report"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_title_rule_company" model="ir.rule">
+            <field name="name">Regla title</field>
+            <field name="model_id" ref="model_dara_mallas_title"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_uec_credit_rule_company" model="ir.rule">
+            <field name="name">Regla uec credit</field>
+            <field name="model_id" ref="model_dara_mallas_uec_credit"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="dara_mallas_weighing_rule_company" model="ir.rule">
+            <field name="name">Regla weighing</field>
+            <field name="model_id" ref="model_dara_mallas_weighing"/>
+            <field name="domain_force">[('company_id', '=', company_id)]</field>
+            <field name="groups" eval="[]"/>
+            <field name="global" eval="True"/>
+        </record>
+
+
     
     </data>
 </odoo>

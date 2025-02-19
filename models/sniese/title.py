@@ -14,7 +14,14 @@ class title(models.Model):
     genre=fields.Selection([('femenino','Femenino'),('masculino','Masculino')],"Genero")
     grade_id=fields.Many2one("dara_mallas.grade")
     
-    specialization_id=fields.Many2one("dara_mallas.specialization") 
+    specialization_id=fields.Many2one("dara_mallas.specialization")
+
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
 
     def name_get(self):
         result = []

@@ -15,6 +15,13 @@ class subject_scadtl(models.Model):
     program_code_id = fields.Many2one('dara_mallas.program_code','Codigo Programa')
     period_id=fields.Many2one("dara_mallas.period",'Periodo')
 
+    company_id = fields.Many2one(
+        'res.company',
+        string = 'Empresa',
+        default=lambda self: self.env.company,
+        help = 'La empresa pertenece a este registro'
+    )
+
     def name_get(self):
         result = []
         for rec in self:

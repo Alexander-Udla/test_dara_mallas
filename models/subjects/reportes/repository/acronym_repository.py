@@ -65,7 +65,7 @@ class acronymRepository:
             AND AUX_GORSDAV.TERM=SCBCRSE_EFF_TERM
             AND AUX_GORSDAV.SUBJ IN (:acronym1, :acronym2)
             """       
-        dbsource=self.env['base.external.dbsource'].search([('enabled','=',True)])
+        dbsource=self.env['base.external.dbsource'].search([('name','=','PRODUCCION')])
         if not dbsource:
             return False
         res = dbsource.execute(sql, {'acronym1': acronym1, 'acronym2':acronym2})
