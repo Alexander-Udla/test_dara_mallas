@@ -23,7 +23,7 @@ class SuplementarioValidador(models.TransientModel):
     )
 
 
-    def son_ponderaciones_iguales(self, valor1, valor2)
+    def son_ponderaciones_iguales(self, valor1, valor2):
         equivalencias = {
             "P-AR": "Ponderación Aprueba/Reprueba",
             "Ponderación Aprueba/Reprueba": "P-AR"
