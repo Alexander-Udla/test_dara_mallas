@@ -36,13 +36,14 @@ class suplemetarioRepository:
                 dmp.name AS periodo,
                 SPLIT_PART(dmw.name, '(', 1) AS ponderacion, 
                 dmc.idbanner AS coordinador, 
-                dmpc.name AS programa
+                --dmpc.name AS programa
+                COALESCE(dmpc.name, 'Sin Programa') AS programa
             FROM dara_mallas_subject dms
-            JOIN dara_mallas_subject_scadtl dmssc ON dms.id = dmssc.subject_id
-            JOIN dara_mallas_weighing dmw ON dmw.id = dmssc.weighing_id
-            JOIN dara_mallas_coordinator dmc ON dmc.id = dmssc.coordinador_id
-            JOIN dara_mallas_program_code dmpc ON dmpc.id = dmssc.program_code_id
-            JOIN dara_mallas_period dmp ON dmp.id = dmssc.period_id
+            LEFT JOIN dara_mallas_subject_scadtl dmssc ON dms.id = dmssc.subject_id
+            LEFT JOIN dara_mallas_weighing dmw ON dmw.id = dmssc.weighing_id
+            LEFT JOIN dara_mallas_coordinator dmc ON dmc.id = dmssc.coordinador_id
+            LEFT JOIN dara_mallas_program_code dmpc ON dmpc.id = dmssc.program_code_id
+            LEFT JOIN dara_mallas_period dmp ON dmp.id = dmssc.period_id
             WHERE dms.code = %s
             AND dmp.name = (
                 SELECT MAX(dmp2.name)
